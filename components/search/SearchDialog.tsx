@@ -16,7 +16,7 @@ type SearchDialogProps = {
 
 export function SearchDialog({ open, onClose, ...rest }: SearchDialogProps) {
   return (
-    <Modal open={open} onClose={onClose} title="Notlarda ara" width="max-w-lg">
+    <Modal open={open} onClose={onClose} title="Search notes" width="max-w-lg">
       <SearchBody onClose={onClose} {...rest} />
     </Modal>
   );
@@ -37,7 +37,7 @@ function SearchBody({
   }, [subjects]);
 
   const results = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase("tr");
+    const needle = query.trim().toLowerCase();
     const pool = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
     if (!needle) return pool.slice(0, 6);
@@ -46,7 +46,7 @@ function SearchBody({
       .filter((note) => {
         const subject = subjectById.get(note.subjectId);
         const haystack = `${note.title} ${note.body} ${subject?.name ?? ""}`;
-        return haystack.toLocaleLowerCase("tr").includes(needle);
+        return haystack.toLowerCase().includes(needle);
       })
       .slice(0, 20);
   }, [notes, query, subjectById]);
@@ -69,8 +69,8 @@ function SearchBody({
               openNote(results[0]);
             }
           }}
-          placeholder="Başlık, not veya ders…"
-          aria-label="Arama"
+          placeholder="Title, note or subject…"
+          aria-label="Search"
           autoFocus
           className="w-full rounded-lg border border-rule bg-paper py-2.5 pr-3 pl-9 text-sm outline-none transition focus:border-ink/40 focus:ring-2 focus:ring-ink/10"
         />
@@ -79,7 +79,7 @@ function SearchBody({
       <div className="mt-3 max-h-[55dvh] space-y-1 overflow-y-auto">
         {results.length === 0 ? (
           <p className="px-1 py-6 text-center text-sm text-ink-soft">
-            Eşleşen not yok.
+            No matching notes.
           </p>
         ) : (
           results.map((note) => {
@@ -99,7 +99,7 @@ function SearchBody({
                 <span className="min-w-0 flex-1">
                   <span className="flex items-baseline justify-between gap-3">
                     <span className="truncate text-sm font-medium">
-                      {note.title || "Başlıksız sayfa"}
+                      {note.title || "Untitled page"}
                     </span>
                     <span className="shrink-0 text-[11px] text-ink-soft">
                       {formatShort(note.updatedAt)}
@@ -107,7 +107,7 @@ function SearchBody({
                   </span>
                   <span className="mt-0.5 block truncate text-xs text-ink-soft">
                     {subject?.name} ·{" "}
-                    {note.body.replace(/\s+/g, " ").trim() || "Boş sayfa"}
+                    {note.body.replace(/\s+/g, " ").trim() || "Empty page"}
                   </span>
                 </span>
               </button>

@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Capacitor / statik barındırma için: sunucu tarafı yok.
+  // Capacitor / static hosting: no server side.
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },

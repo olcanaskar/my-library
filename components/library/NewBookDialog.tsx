@@ -12,14 +12,14 @@ type NewBookDialogProps = {
 
 export function NewBookDialog({ open, onClose, onCreate }: NewBookDialogProps) {
   return (
-    <Modal open={open} onClose={onClose} title="Yeni kitap">
+    <Modal open={open} onClose={onClose} title="New book">
       <NewBookForm onClose={onClose} onCreate={onCreate} />
     </Modal>
   );
 }
 
 /**
- * Modal kapalıyken hiç mount edilmez; bu yüzden her açılışta form temiz başlar.
+ * Never mounted while the modal is closed, so the form starts clean every time.
  */
 function NewBookForm({
   onClose,
@@ -43,13 +43,13 @@ function NewBookForm({
           htmlFor="book-name"
           className="mb-1.5 block text-xs font-medium tracking-wide text-ink-soft uppercase"
         >
-          Ders adı
+          Subject name
         </label>
         <input
           id="book-name"
           value={name}
           onChange={(event) => setName(event.target.value)}
-          placeholder="Örn. Kimya"
+          placeholder="e.g. Chemistry"
           autoFocus
           maxLength={40}
           className="w-full rounded-lg border border-rule bg-paper px-3 py-2.5 text-sm outline-none transition focus:border-ink/40 focus:ring-2 focus:ring-ink/10"
@@ -58,7 +58,7 @@ function NewBookForm({
 
       <div>
         <span className="mb-1.5 block text-xs font-medium tracking-wide text-ink-soft uppercase">
-          Sırt rengi
+          Spine color
         </span>
         <div className="flex flex-wrap gap-2">
           {SUBJECT_COLORS.map((option) => (
@@ -66,7 +66,7 @@ function NewBookForm({
               key={option}
               type="button"
               onClick={() => setColor(option)}
-              aria-label={`Renk ${option}`}
+              aria-label={`Color ${option}`}
               aria-pressed={color === option}
               className={`h-8 w-8 rounded-full transition ${
                 color === option
@@ -81,7 +81,7 @@ function NewBookForm({
 
       <div>
         <span className="mb-1.5 block text-xs font-medium tracking-wide text-ink-soft uppercase">
-          Defter kağıdı
+          Notebook paper
         </span>
         <div className="grid grid-cols-2 gap-2">
           {PAPERS.map((option) => (
@@ -119,14 +119,14 @@ function NewBookForm({
           onClick={onClose}
           className="rounded-lg px-3 py-2 text-sm text-ink-soft transition hover:bg-ink/5 hover:text-ink"
         >
-          Vazgeç
+          Cancel
         </button>
         <button
           type="submit"
           disabled={!name.trim()}
           className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Rafa ekle
+          Add to shelf
         </button>
       </div>
     </form>

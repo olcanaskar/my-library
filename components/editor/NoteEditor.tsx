@@ -61,7 +61,7 @@ export function NoteEditor({
           <button
             type="button"
             onClick={onBack}
-            aria-label="Deftere dön"
+            aria-label="Back to notebook"
             className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
           >
             <ArrowLeftIcon className="h-5 w-5" />
@@ -86,13 +86,13 @@ export function NoteEditor({
                 status === "saved" ? "bg-emerald-500" : "bg-amber-500"
               }`}
             />
-            {status === "saved" ? "Kaydedildi" : "Yazıyor…"}
+            {status === "saved" ? "Saved" : "Saving…"}
           </span>
 
           <button
             type="button"
             onClick={onDelete}
-            aria-label="Sayfayı sil"
+            aria-label="Delete page"
             className="rounded-lg p-2 text-ink-soft transition hover:bg-red-500/10 hover:text-red-600"
           >
             <TrashIcon className="h-5 w-5" />
@@ -106,15 +106,15 @@ export function NoteEditor({
             <input
               value={note.title}
               onChange={(event) => handleChange({ title: event.target.value })}
-              placeholder="Sayfa başlığı"
-              aria-label="Sayfa başlığı"
+              placeholder="Page title"
+              aria-label="Page title"
               maxLength={80}
               autoFocus={!note.title}
               className="w-full bg-transparent font-hand text-3xl leading-tight outline-none sm:text-4xl"
             />
             <div className="mt-2 flex items-center justify-between text-[11px] text-ink-soft">
               <span>{formatDay(note.createdAt)}</span>
-              <span className="truncate pl-3">{subject.name} defteri</span>
+              <span className="truncate pl-3">{subject.name} notebook</span>
             </div>
           </div>
 
@@ -127,8 +127,8 @@ export function NoteEditor({
               ref={bodyRef}
               value={note.body}
               onChange={(event) => handleChange({ body: event.target.value })}
-              placeholder="Buraya yaz…"
-              aria-label="Not içeriği"
+              placeholder="Start writing…"
+              aria-label="Note content"
               spellCheck
               className="block min-h-[46dvh] w-full resize-none overflow-hidden border-0 bg-transparent px-5 py-0 text-[16px] text-ink outline-none sm:px-14"
               style={{ lineHeight: "32px" }}
@@ -137,7 +137,7 @@ export function NoteEditor({
 
           <div className="flex items-center justify-between gap-3 px-5 py-3 text-[11px] text-ink-soft sm:px-14">
             <span className="truncate">
-              {subject.name} · {pageNo}. sayfa
+              {subject.name} · page {pageNo}
             </span>
             <span className="shrink-0 font-mono tabular-nums">
               {pageNo} / {totalPages}
@@ -146,7 +146,7 @@ export function NoteEditor({
         </div>
 
         <p className="mt-3 px-1 text-center text-[11px] text-ink-soft/80">
-          Yazdıkların otomatik kaydedilir.
+          Your writing is saved automatically.
         </p>
       </main>
     </div>

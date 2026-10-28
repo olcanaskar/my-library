@@ -1,17 +1,12 @@
-const dayFormat = new Intl.DateTimeFormat("tr-TR", {
+const dayFormat = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
   month: "long",
 });
 
-const shortFormat = new Intl.DateTimeFormat("tr-TR", {
+const shortFormat = new Intl.DateTimeFormat("en-US", {
   day: "2-digit",
   month: "2-digit",
   year: "numeric",
-});
-
-const timeFormat = new Intl.DateTimeFormat("tr-TR", {
-  hour: "2-digit",
-  minute: "2-digit",
 });
 
 export function formatDay(ts: number): string {
@@ -24,7 +19,10 @@ export function formatShort(ts: number): string {
   return shortFormat.format(new Date(ts));
 }
 
-export function formatClock(ts: number): string {
-  if (!ts) return "";
-  return timeFormat.format(new Date(ts));
+export function pagesLabel(count: number): string {
+  return `${count} ${count === 1 ? "page" : "pages"}`;
+}
+
+export function subjectsLabel(count: number): string {
+  return `${count} ${count === 1 ? "subject" : "subjects"}`;
 }

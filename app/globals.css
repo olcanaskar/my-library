@@ -58,9 +58,9 @@ body {
   background: color-mix(in oklab, var(--ink) 16%, transparent);
 }
 
-/* ---------- kağıt dokuları ----------
-   Kural: çizgi aralığı her zaman 32px, metin line-height 32px.
-   Bu iki değer ayrılırsa tema bozulur. */
+/* ---------- paper textures ----------
+   Rule: the rule spacing is always 32px and body line-height is 32px.
+   If these two drift apart, the theme falls apart. */
 
 .paper-sheet {
   background-color: var(--paper);
@@ -99,7 +99,7 @@ body {
   background-color: var(--paper);
 }
 
-/* kenar boşluğu çizgisi (sadece çizgili/kareli kağıtta anlamlı) */
+/* margin line (only meaningful on lined/grid paper) */
 .paper-margin {
   position: relative;
 }
@@ -122,14 +122,14 @@ body {
   }
 }
 
-/* ---------- ince kaydırma çubuğu ---------- */
+/* ---------- thin scrollbar ---------- */
 .shelf-scroll {
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--shelf) 55%, transparent)
     transparent;
 }
 
-/* ---------- hareket azaltma ---------- */
+/* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -139,7 +139,7 @@ body {
   }
 }
 
-/* ---------- metin alanı ---------- */
+/* ---------- text fields ---------- */
 textarea::placeholder,
 input::placeholder {
   color: color-mix(in oklab, var(--ink-soft) 75%, transparent);

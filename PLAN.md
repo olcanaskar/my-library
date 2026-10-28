@@ -4,7 +4,8 @@
 > kendi kağıt dokusuna sahip bir defter olduğu web uygulaması.
 
 **Durum (28 Ekim 2026):** MVP tamam ve çalışıyor. V1'in bir kısmı bitti
-(arama, ayraç, karanlık mod). Sırada: kitap açma animasyonu, PWA, Capacitor.
+(arama, ayraç, karanlık mod). Arayüz tamamen İngilizceye çevrildi.
+Sırada: kitap açma animasyonu, PWA, Capacitor.
 
 ---
 

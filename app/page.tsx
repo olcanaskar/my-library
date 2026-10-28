@@ -8,6 +8,7 @@ import { LibraryView } from "@/components/library/LibraryView";
 import { NewBookDialog } from "@/components/library/NewBookDialog";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
+import { pagesLabel } from "@/lib/format";
 import type { Paper } from "@/lib/types";
 
 export default function Page() {
@@ -90,7 +91,7 @@ function App() {
         onChange={(patch) => lib.updateNote(note.id, patch)}
         onBack={() => goBook(subject.id)}
         onDelete={() => {
-          const ok = window.confirm("Bu sayfa silinsin mi?");
+          const ok = window.confirm("Delete this page?");
           if (!ok) return;
           lib.deleteNote(subject.id, note.id);
           goBook(subject.id);
@@ -115,7 +116,7 @@ function App() {
         onOpenNote={(noteToOpen) => goNote(subject.id, noteToOpen)}
         onDelete={() => {
           const ok = window.confirm(
-            `"${subject.name}" defteri ve içindeki ${notes.length} sayfa silinsin mi?`,
+            `Delete "${subject.name}" and all ${pagesLabel(notes.length)}?`,
           );
           if (!ok) return;
           lib.deleteSubject(subject.id);

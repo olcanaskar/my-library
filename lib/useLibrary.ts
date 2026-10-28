@@ -129,7 +129,7 @@ export function useLibrary() {
     }));
   }, []);
 
-  /** Sayfa numarası sabit kalsın diye oluşturma sırasına göre. */
+  /** Keep page numbers stable: order by creation time. */
   const notesFor = useCallback(
     (subjectId: string) =>
       store.notes

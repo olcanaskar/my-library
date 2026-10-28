@@ -1,6 +1,6 @@
 "use client";
 
-import { formatShort } from "@/lib/format";
+import { formatShort, pagesLabel } from "@/lib/format";
 import { paperLabel, type Note, type Subject } from "@/lib/types";
 import {
   ArrowLeftIcon,
@@ -36,7 +36,7 @@ export function BookView({
           <button
             type="button"
             onClick={onBack}
-            aria-label="Kitaplığa dön"
+            aria-label="Back to library"
             className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
           >
             <ArrowLeftIcon className="h-5 w-5" />
@@ -54,7 +54,7 @@ export function BookView({
               </h1>
             </div>
             <p className="mt-1 text-[11px] text-ink-soft">
-              {notes.length} sayfa · {paperLabel(subject.paper)} defter
+              {pagesLabel(notes.length)} · {paperLabel(subject.paper)} notebook
             </p>
           </div>
 
@@ -64,12 +64,12 @@ export function BookView({
             className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:opacity-90"
           >
             <PlusIcon className="h-4 w-4" />
-            Sayfa
+            Page
           </button>
           <button
             type="button"
             onClick={onDelete}
-            aria-label="Defteri sil"
+            aria-label="Delete notebook"
             className="rounded-lg p-2 text-ink-soft transition hover:bg-red-500/10 hover:text-red-600"
           >
             <TrashIcon className="h-5 w-5" />
@@ -87,10 +87,10 @@ export function BookView({
             <BookmarkIcon className="h-4 w-4 shrink-0 text-ink-soft" />
             <span className="min-w-0 flex-1">
               <span className="block text-[10px] font-medium tracking-widest text-ink-soft uppercase">
-                Kaldığın yer
+                Bookmark
               </span>
               <span className="mt-0.5 block truncate text-sm font-medium">
-                {bookmark.title || "Başlıksız sayfa"}
+                {bookmark.title || "Untitled page"}
               </span>
             </span>
             <ArrowRightIcon className="h-4 w-4 shrink-0 text-ink-soft transition group-hover:translate-x-0.5" />
@@ -99,9 +99,10 @@ export function BookView({
 
         {notes.length === 0 ? (
           <div className="rounded-xl border border-dashed border-ink/20 bg-card/60 px-6 py-12 text-center">
-            <h2 className="font-hand text-2xl">Bu defter henüz boş</h2>
+            <h2 className="font-hand text-2xl">This notebook is empty</h2>
             <p className="mt-1 text-sm text-ink-soft">
-              İlk sayfayı aç, {subject.name} notların burada biriksin.
+              Open the first page and start collecting your {subject.name}{" "}
+              notes.
             </p>
             <button
               type="button"
@@ -109,7 +110,7 @@ export function BookView({
               className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:opacity-90"
             >
               <PlusIcon className="h-4 w-4" />
-              İlk sayfayı aç
+              Open first page
             </button>
           </div>
         ) : (
@@ -127,14 +128,14 @@ export function BookView({
                   <span className="min-w-0 flex-1">
                     <span className="flex items-baseline justify-between gap-3">
                       <span className="truncate text-sm font-medium">
-                        {note.title || "Başlıksız sayfa"}
+                        {note.title || "Untitled page"}
                       </span>
                       <span className="shrink-0 text-[11px] text-ink-soft">
                         {formatShort(note.updatedAt)}
                       </span>
                     </span>
                     <span className="mt-1 line-clamp-2 block text-sm text-ink-soft">
-                      {note.body.trim() || "Boş sayfa"}
+                      {note.body.trim() || "Empty page"}
                     </span>
                   </span>
                 </button>

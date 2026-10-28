@@ -40,10 +40,10 @@ export const SUBJECT_COLORS = [
 ] as const;
 
 export const PAPERS: { value: Paper; label: string; hint: string }[] = [
-  { value: "lined", label: "Çizgili", hint: "Edebiyat, tarih" },
-  { value: "grid", label: "Kareli", hint: "Matematik, fizik" },
-  { value: "dotted", label: "Noktalı", hint: "Plan, karalama" },
-  { value: "plain", label: "Düz", hint: "Serbest" },
+  { value: "lined", label: "Lined", hint: "Literature, history" },
+  { value: "grid", label: "Grid", hint: "Maths, physics" },
+  { value: "dotted", label: "Dotted", hint: "Plans, sketching" },
+  { value: "plain", label: "Plain", hint: "Anything" },
 ];
 
 export function paperClass(paper: Paper): string {
@@ -51,5 +51,5 @@ export function paperClass(paper: Paper): string {
 }
 
 export function paperLabel(paper: Paper): string {
-  return PAPERS.find((p) => p.value === paper)?.label ?? "Düz";
+  return PAPERS.find((p) => p.value === paper)?.label ?? "Plain";
 }

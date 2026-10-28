@@ -2,6 +2,7 @@
 
 import type { Note, Subject } from "@/lib/types";
 import { paperLabel } from "@/lib/types";
+import { pagesLabel, subjectsLabel } from "@/lib/format";
 import {
   BookIcon,
   MoonIcon,
@@ -32,7 +33,10 @@ export function LibraryView({
 }: LibraryViewProps) {
   const countBySubject = new Map<string, number>();
   for (const note of notes) {
-    countBySubject.set(note.subjectId, (countBySubject.get(note.subjectId) ?? 0) + 1);
+    countBySubject.set(
+      note.subjectId,
+      (countBySubject.get(note.subjectId) ?? 0) + 1,
+    );
   }
 
   return (
@@ -40,10 +44,10 @@ export function LibraryView({
       <header className="mx-auto flex max-w-5xl items-end justify-between gap-3 px-4 pt-9 pb-6 sm:px-5 sm:pt-10">
         <div className="min-w-0">
           <h1 className="font-hand text-4xl leading-none sm:text-5xl md:text-6xl">
-            Kütüphanem
+            My Library
           </h1>
           <p className="mt-2 text-sm text-ink-soft">
-            {subjects.length} ders · {notes.length} sayfa
+            {subjectsLabel(subjects.length)} · {pagesLabel(notes.length)}
           </p>
         </div>
 
@@ -51,7 +55,7 @@ export function LibraryView({
           <button
             type="button"
             onClick={onOpenSearch}
-            aria-label="Notlarda ara"
+            aria-label="Search notes"
             className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
           >
             <SearchIcon className="h-5 w-5" />
@@ -59,7 +63,7 @@ export function LibraryView({
           <button
             type="button"
             onClick={onToggleTheme}
-            aria-label={theme === "dark" ? "Aydınlık tema" : "Karanlık tema"}
+            aria-label={theme === "dark" ? "Light theme" : "Dark theme"}
             className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
           >
             {theme === "dark" ? (
@@ -71,11 +75,11 @@ export function LibraryView({
           <button
             type="button"
             onClick={onNewBook}
-            aria-label="Yeni kitap ekle"
+            aria-label="Add a new book"
             className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-ink px-2.5 py-2 text-sm font-medium text-paper transition hover:opacity-90 sm:px-3"
           >
             <PlusIcon className="h-4 w-4" />
-            <span className="hidden sm:inline">Kitap</span>
+            <span className="hidden sm:inline">New book</span>
           </button>
         </div>
       </header>
@@ -84,9 +88,9 @@ export function LibraryView({
         {subjects.length === 0 ? (
           <div className="mx-auto mt-10 max-w-sm rounded-xl border border-dashed border-ink/20 bg-card/60 px-6 py-12 text-center">
             <BookIcon className="mx-auto h-10 w-10 text-ink-soft/70" />
-            <h2 className="mt-4 font-hand text-2xl">Kitaplık boş</h2>
+            <h2 className="mt-4 font-hand text-2xl">Your shelf is empty</h2>
             <p className="mt-1 text-sm text-ink-soft">
-              İlk dersini ekle, defterin rafındaki yerini alsın.
+              Add your first subject and give it a place on the shelf.
             </p>
             <button
               type="button"
@@ -94,12 +98,12 @@ export function LibraryView({
               className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:opacity-90"
             >
               <PlusIcon className="h-4 w-4" />
-              Yeni kitap
+              New book
             </button>
           </div>
         ) : (
           <>
-            {/* Mobil: kapak ızgarası */}
+            {/* Mobile: cover grid */}
             <div className="grid grid-cols-2 gap-4 sm:hidden">
               {subjects.map((subject) => {
                 const count = countBySubject.get(subject.id) ?? 0;
@@ -118,14 +122,14 @@ export function LibraryView({
                       {subject.name}
                     </span>
                     <span className="text-[11px] text-white/75">
-                      {count} sayfa
+                      {pagesLabel(count)}
                     </span>
                   </button>
                 );
               })}
             </div>
 
-            {/* Masaüstü: raf */}
+            {/* Desktop: shelf */}
             <div className="hidden sm:block">
               <div className="shelf-scroll overflow-x-auto pb-1">
                 <div className="flex min-w-max items-end justify-center gap-2.5 px-6 pt-8">
@@ -141,7 +145,7 @@ export function LibraryView({
                   <button
                     type="button"
                     onClick={onNewBook}
-                    aria-label="Yeni ders ekle"
+                    aria-label="Add a new subject"
                     className="flex h-56 w-14 shrink-0 items-center justify-center rounded-t-[3px] border border-dashed border-ink/25 text-ink-soft transition hover:border-ink/50 hover:bg-card/50 hover:text-ink"
                   >
                     <PlusIcon className="h-5 w-5" />
@@ -156,7 +160,7 @@ export function LibraryView({
         )}
 
         <p className="mt-10 text-center text-xs text-ink-soft/80">
-          Notların bu cihazda saklanır. İnternet olmadan da açılır.
+          Your notes are stored on this device. Works offline.
         </p>
       </main>
     </div>

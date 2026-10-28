@@ -15,9 +15,9 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Kütüphanem — Ders Notları",
+  title: "My Library — Class Notes",
   description:
-    "Her ders bir kitap, her not bir sayfa. Ders notlarını kitaplık düzeninde tut.",
+    "Every subject a book, every note a page. Keep your class notes on a shelf.",
 };
 
 export const viewport: Viewport = {
@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="tr"
+      lang="en"
       suppressHydrationWarning
       className={`${inter.variable} ${caveat.variable}`}
     >

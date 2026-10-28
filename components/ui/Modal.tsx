@@ -55,7 +55,7 @@ export function Modal({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Kapat"
+            aria-label="Close"
             className="rounded-md p-1.5 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
           >
             <CloseIcon className="h-4 w-4" />

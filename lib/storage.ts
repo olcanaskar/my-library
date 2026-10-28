@@ -13,8 +13,9 @@ export function emptyStore(): Store {
 }
 
 /**
- * İlk açılışta boş bir kitaplık yerine örnek bir kütüphane gösterilir.
- * Kullanıcı kitapları silerse tekrar tohumlanmaz (çünkü store artık boş değil).
+ * On first launch the library is seeded with sample subjects instead of
+ * showing an empty shelf. If the user deletes everything, it is not seeded
+ * again (the store exists, it is just empty).
  */
 export function seedStore(): Store {
   const now = Date.now();
@@ -23,31 +24,31 @@ export function seedStore(): Store {
   const subjects: Subject[] = [
     {
       id: "mat",
-      name: "Matematik",
+      name: "Mathematics",
       color: "#4a5c9e",
       paper: "grid",
       createdAt: now - 4 * day,
       order: 0,
     },
     {
-      id: "fiz",
-      name: "Fizik",
+      id: "phy",
+      name: "Physics",
       color: "#3e7c8c",
       paper: "dotted",
       createdAt: now - 3 * day,
       order: 1,
     },
     {
-      id: "ede",
-      name: "Edebiyat",
+      id: "lit",
+      name: "Literature",
       color: "#c05746",
       paper: "lined",
       createdAt: now - 2 * day,
       order: 2,
     },
     {
-      id: "tar",
-      name: "Tarih",
+      id: "his",
+      name: "History",
       color: "#c9a227",
       paper: "lined",
       createdAt: now - 1 * day,
@@ -59,27 +60,27 @@ export function seedStore(): Store {
     {
       id: "n1",
       subjectId: "mat",
-      title: "Türev — giriş",
+      title: "Derivatives — intro",
       body:
-        "Bir fonksiyonun bir noktadaki türevi, o noktadaki teğetin eğimidir.\n\nf'(x) = lim (h→0) [f(x+h) − f(x)] / h\n\nTemel kurallar:\n- (xⁿ)' = n · xⁿ⁻¹\n- (sin x)' = cos x\n- (eˣ)' = eˣ\n- (ln x)' = 1/x\n\nSınavda türev tanımı sorulursa limit ifadesini yazmadan geçme.",
+        "The derivative at a point is the slope of the tangent line there.\n\nf'(x) = lim (h→0) [f(x+h) − f(x)] / h\n\nCore rules:\n- (xⁿ)' = n · xⁿ⁻¹\n- (sin x)' = cos x\n- (eˣ)' = eˣ\n- (ln x)' = 1/x\n\nIf the exam asks for the definition, do not skip the limit expression.",
       createdAt: now - 3 * day,
       updatedAt: now - 2 * day,
     },
     {
       id: "n2",
       subjectId: "mat",
-      title: "Limit — belirsizlikler",
+      title: "Limits — indeterminate forms",
       body:
-        "0/0 ve ∞/∞ belirsizliklerinde L'Hôpital uygulanır.\n\nÖrnek: lim (x→0) sin x / x = 1\n\nNot: payda sıfıra gidiyorsa önce sadeleştirmeyi dene, L'Hôpital son çare.",
+        "For 0/0 and ∞/∞ apply L'Hôpital.\n\nExample: lim (x→0) sin x / x = 1\n\nNote: try simplifying first, L'Hôpital is the last resort.",
       createdAt: now - 2 * day,
       updatedAt: now - 2 * day,
     },
     {
       id: "n3",
-      subjectId: "ede",
-      title: "Cumhuriyet Dönemi — ilk yıllar",
+      subjectId: "lit",
+      title: "Modernism — early 20th century",
       body:
-        "1923–1930 arası öne çıkanlar:\n- 1923: Cumhuriyet ilanı\n- 1924: Tevhid-i Tedrisat, halifeliğin kaldırılması\n- 1926: Medeni Kanun\n- 1928: Harf devrimi\n\nKronoloji sorusu gelirse yıl–olay eşleştirmesi isteniyor.",
+        "Key shifts around 1900–1930:\n- Free verse replaces fixed metre\n- Interior monologue\n- Stream of consciousness\n\nChronology questions usually ask for author–work pairs.",
       createdAt: now - day,
       updatedAt: now - day,
     },
@@ -113,7 +114,7 @@ export function loadStore(): Store {
 
     const parsed: unknown = JSON.parse(raw);
     if (!isValidStore(parsed)) {
-      // Bozuk/eski sürüm: veriyi kaybetmemek için yedekle, sonra taze başla.
+      // Corrupt or outdated data: keep a backup, then start fresh.
       window.localStorage.setItem(`${STORAGE_KEY}.backup`, raw);
       return seedStore();
     }
@@ -135,6 +136,6 @@ export function saveStore(store: Store): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   } catch {
-    // Kota dolu ya da gizli mod: uygulama çalışmaya devam etsin.
+    // Quota full or private mode: keep the app usable.
   }
 }
