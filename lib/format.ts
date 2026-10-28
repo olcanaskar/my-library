@@ -22,7 +22,3 @@ export function formatShort(ts: number): string {
 export function pagesLabel(count: number): string {
   return `${count} ${count === 1 ? "page" : "pages"}`;
 }
-
-export function subjectsLabel(count: number): string {
-  return `${count} ${count === 1 ? "subject" : "subjects"}`;
-}

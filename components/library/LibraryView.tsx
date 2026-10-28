@@ -1,7 +1,6 @@
 "use client";
 
 import type { Note, Subject } from "@/lib/types";
-import { pagesLabel, subjectsLabel } from "@/lib/format";
 import {
   BookIcon,
   MoonIcon,
@@ -45,9 +44,6 @@ export function LibraryView({
           <h1 className="font-hand text-4xl leading-none sm:text-5xl md:text-6xl">
             My Library
           </h1>
-          <p className="mt-2 text-sm text-ink-soft">
-            {subjectsLabel(subjects.length)} · {pagesLabel(notes.length)}
-          </p>
         </div>
 
         <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
