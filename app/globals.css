@@ -122,6 +122,22 @@ body {
   }
 }
 
+/* ---------- page turn (subtle: the book feel, not a gimmick) ---------- */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px) rotateY(-1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0);
+  }
+}
+
+.page-turn {
+  animation: page-in 180ms ease-out both;
+}
+
 /* ---------- thin scrollbar ---------- */
 .shelf-scroll {
   scrollbar-width: thin;

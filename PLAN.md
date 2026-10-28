@@ -36,9 +36,9 @@ Sırada: kitap açma animasyonu, PWA, Capacitor.
 ### V1 — zaman kalırsa (muhtemelen kalır)
 - [ ] Kitap açma animasyonu (CSS 3D, 200-300 ms)
 - [x] Tüm notlarda arama (ara butonu)
-- [x] Kitap ayracı: "Kaldığın yer" kartı
-- [x] Sayfa numarası
-- [ ] Sayfa çevirme geçişi
+- [x] Kaldığın sayfadan devam (kitaba tıklayınca doğrudan sayfa)
+- [x] Sayfa numarası + oklarla sayfa gezinme
+- [x] Sayfa çevirme geçişi (kısa kayma animasyonu)
 - [x] Karanlık mod
 
 ### V2 — sunumdan önce denenir, olmazsa çıkar

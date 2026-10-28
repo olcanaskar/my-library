@@ -15,7 +15,7 @@ npm run lint
 ## Neler var
 
 - **Kitaplık:** dersler kitap sırtı olarak; sırt kalınlığı sayfa sayısıyla büyür
-- **Defter:** not listesi, sayfa numaraları ve "kaldığın yer" ayracı
+- **Sayfa:** kitaba tıklayınca doğrudan kaldığın sayfa açılır; oklarla sayfa sayfa gezilir
 - **Editör:** çizgili / kareli / noktalı / düz kağıt, otomatik kaydetme
 - **Arama:** tüm notlarda başlık, içerik ve ders adına göre
 - **Karanlık mod**
@@ -45,8 +45,7 @@ npm run lint
 app/            tek sayfa + tema tokenları
 components/
   library/      kitaplık, kitap sırtı, yeni kitap
-  book/         defter görünümü
-  editor/       kağıt sayfa + editör
+  editor/       kağıt sayfa + editör + sayfa gezinme
   search/       arama
   ui/           ikonlar, modal
 lib/            tipler, depolama, hook'lar, formatlama

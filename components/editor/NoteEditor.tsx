@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { formatDay } from "@/lib/format";
 import { paperClass, type Note, type Subject } from "@/lib/types";
-import { ArrowLeftIcon, TrashIcon } from "@/components/ui/icons";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@/components/ui/icons";
 
 type NoteEditorProps = {
   subject: Subject;
@@ -12,7 +17,11 @@ type NoteEditorProps = {
   totalPages: number;
   onChange: (patch: { title?: string; body?: string }) => void;
   onBack: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  onNewPage: () => void;
   onDelete: () => void;
+  onDeleteNotebook: () => void;
 };
 
 export function NoteEditor({
@@ -22,7 +31,11 @@ export function NoteEditor({
   totalPages,
   onChange,
   onBack,
+  onPrev,
+  onNext,
+  onNewPage,
   onDelete,
+  onDeleteNotebook,
 }: NoteEditorProps) {
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const [status, setStatus] = useState<"typing" | "saved">("saved");
@@ -41,6 +54,23 @@ export function NoteEditor({
     el.style.height = `${el.scrollHeight}px`;
   }, [note.body, note.id]);
 
+  // Alt+arrow turns pages without stealing keys from the text fields.
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (!event.altKey) return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        onPrev();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        onNext();
+      }
+    }
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onPrev, onNext]);
+
   function markTyping() {
     setStatus("typing");
     if (timer.current) window.clearTimeout(timer.current);
@@ -53,15 +83,17 @@ export function NoteEditor({
   }
 
   const margin = subject.paper === "lined" || subject.paper === "grid";
+  const hasPrev = pageNo > 1;
+  const hasNext = pageNo < totalPages;
 
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-10 border-b border-rule/70 bg-paper/85 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center gap-2 px-3 py-2.5 sm:px-5">
+        <div className="mx-auto flex max-w-3xl items-center gap-1.5 px-2 py-2.5 sm:gap-2 sm:px-5">
           <button
             type="button"
             onClick={onBack}
-            aria-label="Back to notebook"
+            aria-label="Back to library"
             className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
           >
             <ArrowLeftIcon className="h-5 w-5" />
@@ -73,12 +105,19 @@ export function NoteEditor({
               className="h-2.5 w-2.5 shrink-0 rounded-full"
               style={{ backgroundColor: subject.color }}
             />
-            <span className="truncate text-sm font-medium">{subject.name}</span>
+            <div className="min-w-0">
+              <p className="truncate text-sm leading-tight font-medium">
+                {subject.name}
+              </p>
+              <p className="mt-0.5 text-[11px] leading-tight text-ink-soft">
+                Page {pageNo} of {totalPages}
+              </p>
+            </div>
           </div>
 
           <span
             aria-live="polite"
-            className="flex items-center gap-1.5 pr-1 text-[11px] text-ink-soft"
+            className="flex shrink-0 items-center gap-1.5 pr-1 text-[11px] text-ink-soft"
           >
             <span
               aria-hidden="true"
@@ -86,14 +125,26 @@ export function NoteEditor({
                 status === "saved" ? "bg-emerald-500" : "bg-amber-500"
               }`}
             />
-            {status === "saved" ? "Saved" : "Saving…"}
+            <span className="whitespace-nowrap">
+              {status === "saved" ? "Saved" : "Saving…"}
+            </span>
           </span>
+
+          <button
+            type="button"
+            onClick={onNewPage}
+            aria-label="New page"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-rule px-2 py-2 text-xs font-medium transition hover:border-ink/30 hover:bg-ink/5 sm:px-3 sm:text-sm"
+          >
+            <PlusIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">New page</span>
+          </button>
 
           <button
             type="button"
             onClick={onDelete}
             aria-label="Delete page"
-            className="rounded-lg p-2 text-ink-soft transition hover:bg-red-500/10 hover:text-red-600"
+            className="shrink-0 rounded-lg p-2 text-ink-soft transition hover:bg-red-500/10 hover:text-red-600"
           >
             <TrashIcon className="h-5 w-5" />
           </button>
@@ -101,7 +152,10 @@ export function NoteEditor({
       </header>
 
       <main className="mx-auto max-w-3xl px-2 py-4 sm:px-5 sm:py-8">
-        <div className="paper-sheet overflow-hidden rounded-lg border border-rule/70 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_20px_44px_-30px_rgba(0,0,0,0.55)]">
+        <div
+          key={note.id}
+          className="paper-sheet page-turn overflow-hidden rounded-lg border border-rule/70 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_20px_44px_-30px_rgba(0,0,0,0.55)]"
+        >
           <div className="px-5 pt-7 sm:px-14">
             <input
               value={note.title}
@@ -135,19 +189,45 @@ export function NoteEditor({
             />
           </div>
 
-          <div className="flex items-center justify-between gap-3 px-5 py-3 text-[11px] text-ink-soft sm:px-14">
-            <span className="truncate">
-              {subject.name} · page {pageNo}
-            </span>
-            <span className="shrink-0 font-mono tabular-nums">
+          <div className="flex items-center justify-between gap-2 border-t border-rule/70 px-2 py-1.5 sm:px-3">
+            <button
+              type="button"
+              onClick={onPrev}
+              disabled={!hasPrev}
+              aria-label="Previous page"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-2 text-xs font-medium text-ink-soft transition hover:bg-ink/5 hover:text-ink disabled:pointer-events-none disabled:opacity-30 sm:px-3"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Previous</span>
+            </button>
+
+            <span className="font-mono text-[11px] tabular-nums text-ink-soft">
               {pageNo} / {totalPages}
             </span>
+
+            <button
+              type="button"
+              onClick={onNext}
+              disabled={!hasNext}
+              aria-label="Next page"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-2 text-xs font-medium text-ink-soft transition hover:bg-ink/5 hover:text-ink disabled:pointer-events-none disabled:opacity-30 sm:px-3"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <ArrowRightIcon className="h-4 w-4" />
+            </button>
           </div>
         </div>
 
-        <p className="mt-3 px-1 text-center text-[11px] text-ink-soft/80">
-          Your writing is saved automatically.
-        </p>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-[11px] text-ink-soft/80">
+          <span>Your writing is saved automatically.</span>
+          <button
+            type="button"
+            onClick={onDeleteNotebook}
+            className="rounded px-1 py-0.5 transition hover:text-red-600"
+          >
+            Delete notebook
+          </button>
+        </div>
       </main>
     </div>
   );

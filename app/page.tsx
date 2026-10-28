@@ -1,8 +1,7 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BookView } from "@/components/book/BookView";
 import { NoteEditor } from "@/components/editor/NoteEditor";
 import { LibraryView } from "@/components/library/LibraryView";
 import { NewBookDialog } from "@/components/library/NewBookDialog";
@@ -38,19 +37,21 @@ function App() {
     ? (lib.store.subjects.find((s) => s.id === subjectId) ?? null)
     : null;
 
+  const notes = subject ? lib.notesFor(subject.id) : [];
+
+  // The URL is the source of truth, but a stale link (deleted page, old
+  // bookmark) falls back to the page the reader left off on.
+  const requestedNote = noteId
+    ? (notes.find((n) => n.id === noteId) ?? null)
+    : null;
   const note =
-    subject && noteId
-      ? (lib.store.notes.find(
-          (n) => n.id === noteId && n.subjectId === subject.id,
-        ) ?? null)
-      : null;
+    requestedNote ??
+    notes.find((n) => n.id === lib.store.lastNoteBySubject[subject?.id ?? ""]) ??
+    notes[0] ??
+    null;
 
   function goLibrary() {
     router.push("/", { scroll: false });
-  }
-
-  function goBook(id: string) {
-    router.push(`/?kitap=${encodeURIComponent(id)}`, { scroll: false });
   }
 
   function goNote(subjectToOpen: string, noteToOpen: string) {
@@ -63,6 +64,35 @@ function App() {
     );
   }
 
+  /** Opening a book jumps straight into a page: no page list in between. */
+  function openBook(subjectToOpen: string) {
+    const bookNotes = lib.notesFor(subjectToOpen);
+
+    if (bookNotes.length === 0) {
+      goNote(subjectToOpen, lib.addNote(subjectToOpen));
+      return;
+    }
+
+    const remembered =
+      bookNotes.find(
+        (n) => n.id === lib.store.lastNoteBySubject[subjectToOpen],
+      ) ?? bookNotes[0];
+
+    goNote(subjectToOpen, remembered.id);
+  }
+
+  function turnPage(offset: number) {
+    if (!subject || !note) return;
+    const index = notes.findIndex((n) => n.id === note.id);
+    const target = notes[index + offset];
+    if (target) goNote(subject.id, target.id);
+  }
+
+  function addPage() {
+    if (!subject) return;
+    goNote(subject.id, lib.addNote(subject.id));
+  }
+
   function handleCreateBook(input: {
     name: string;
     color: string;
@@ -70,15 +100,33 @@ function App() {
   }) {
     const id = lib.addSubject(input);
     setNewBookOpen(false);
-    goBook(id);
+    openBook(id);
   }
+
+  // Keep the URL honest without rendering a page the reader never chose.
+  useEffect(() => {
+    if (!lib.ready || !subject) return;
+
+    if (!note) {
+      router.replace("/", { scroll: false });
+      return;
+    }
+
+    if (noteId !== note.id) {
+      router.replace(
+        `/?kitap=${encodeURIComponent(subject.id)}&not=${encodeURIComponent(
+          note.id,
+        )}`,
+        { scroll: false },
+      );
+    }
+  }, [lib.ready, note, noteId, router, subject]);
 
   if (!lib.ready) return <Boot />;
 
   let view: React.ReactNode;
 
   if (subject && note) {
-    const notes = lib.notesFor(subject.id);
     const index = notes.findIndex((n) => n.id === note.id);
     const pageNo = index >= 0 ? index + 1 : 1;
 
@@ -89,32 +137,24 @@ function App() {
         pageNo={pageNo}
         totalPages={Math.max(notes.length, 1)}
         onChange={(patch) => lib.updateNote(note.id, patch)}
-        onBack={() => goBook(subject.id)}
+        onBack={goLibrary}
+        onPrev={() => turnPage(-1)}
+        onNext={() => turnPage(1)}
+        onNewPage={addPage}
         onDelete={() => {
           const ok = window.confirm("Delete this page?");
           if (!ok) return;
           lib.deleteNote(subject.id, note.id);
-          goBook(subject.id);
-        }}
-      />
-    );
-  } else if (subject) {
-    const notes = lib.notesFor(subject.id);
-    const lastId = lib.store.lastNoteBySubject[subject.id];
-    const bookmark = notes.find((n) => n.id === lastId) ?? null;
 
-    view = (
-      <BookView
-        subject={subject}
-        notes={notes}
-        bookmark={bookmark}
-        onBack={goLibrary}
-        onNewNote={() => {
-          const id = lib.addNote(subject.id);
-          goNote(subject.id, id);
+          const remaining = notes.filter((n) => n.id !== note.id);
+          const next = remaining[Math.min(index, remaining.length - 1)];
+          if (next) {
+            goNote(subject.id, next.id);
+          } else {
+            goLibrary();
+          }
         }}
-        onOpenNote={(noteToOpen) => goNote(subject.id, noteToOpen)}
-        onDelete={() => {
+        onDeleteNotebook={() => {
           const ok = window.confirm(
             `Delete "${subject.name}" and all ${pagesLabel(notes.length)}?`,
           );
@@ -130,7 +170,7 @@ function App() {
         subjects={lib.store.subjects}
         notes={lib.store.notes}
         theme={lib.store.theme}
-        onOpenBook={goBook}
+        onOpenBook={openBook}
         onNewBook={() => setNewBookOpen(true)}
         onOpenSearch={() => setSearchOpen(true)}
         onToggleTheme={lib.toggleTheme}
