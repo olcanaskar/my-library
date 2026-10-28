@@ -18,7 +18,7 @@ export function BookSpine({ subject, noteCount, onOpen }: BookSpineProps) {
       type="button"
       onClick={onOpen}
       aria-label={`${subject.name} notebook, ${pagesLabel(noteCount)}`}
-      className="group relative flex h-56 shrink-0 items-end justify-center rounded-t-[3px] pb-4 shadow-[inset_-3px_0_0_rgba(0,0,0,0.18),inset_2px_0_0_rgba(255,255,255,0.14),0_8px_12px_-8px_rgba(0,0,0,0.55)] transition-all duration-200 ease-out hover:-translate-y-2 hover:shadow-[inset_-3px_0_0_rgba(0,0,0,0.18),inset_2px_0_0_rgba(255,255,255,0.14),0_18px_22px_-12px_rgba(0,0,0,0.55)] focus-visible:-translate-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+      className="group relative flex h-48 shrink-0 items-end justify-center rounded-t-[3px] pb-4 shadow-[inset_-3px_0_0_rgba(0,0,0,0.18),inset_2px_0_0_rgba(255,255,255,0.14),0_8px_12px_-8px_rgba(0,0,0,0.55)] transition-all duration-200 ease-out hover:-translate-y-2 active:-translate-y-1 hover:shadow-[inset_-3px_0_0_rgba(0,0,0,0.18),inset_2px_0_0_rgba(255,255,255,0.14),0_18px_22px_-12px_rgba(0,0,0,0.55)] focus-visible:-translate-y-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:h-56"
       style={{ width, backgroundColor: subject.color }}
     >
       <span

@@ -1,7 +1,6 @@
 "use client";
 
 import type { Note, Subject } from "@/lib/types";
-import { paperLabel } from "@/lib/types";
 import { pagesLabel, subjectsLabel } from "@/lib/format";
 import {
   BookIcon,
@@ -93,72 +92,32 @@ export function LibraryView({
             </button>
           </div>
         ) : (
-          <>
-            {/* Mobile: cover grid */}
-            <div className="grid grid-cols-2 gap-4 sm:hidden">
-              {subjects.map((subject) => {
-                const count = countBySubject.get(subject.id) ?? 0;
-                return (
-                  <button
+          <div>
+            <div className="shelf-scroll overflow-x-auto pb-1">
+              <div className="flex min-w-max items-end justify-center gap-2.5 px-4 pt-8 sm:px-6">
+                {subjects.map((subject) => (
+                  <BookSpine
                     key={subject.id}
-                    type="button"
-                    onClick={() => onOpenBook(subject.id)}
-                    className="group relative flex aspect-3/4 flex-col justify-between overflow-hidden rounded-md p-3 text-left shadow-[inset_-4px_0_0_rgba(0,0,0,0.16),0_8px_14px_-8px_rgba(0,0,0,0.5)] transition active:scale-[0.98]"
-                    style={{ backgroundColor: subject.color }}
-                  >
-                    <span className="text-[10px] font-medium tracking-wider text-white/70 uppercase">
-                      {paperLabel(subject.paper)}
-                    </span>
-                    <span className="font-hand text-2xl leading-tight text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.25)]">
-                      {subject.name}
-                    </span>
-                    <span className="text-[11px] text-white/75">
-                      {pagesLabel(count)}
-                    </span>
-                  </button>
-                );
-              })}
+                    subject={subject}
+                    noteCount={countBySubject.get(subject.id) ?? 0}
+                    onOpen={() => onOpenBook(subject.id)}
+                  />
+                ))}
 
-              {/* Mobile needs its own add entry: the shelf is hidden here. */}
-              <button
-                type="button"
-                onClick={onNewBook}
-                aria-label="Add a new book"
-                className="flex aspect-3/4 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-ink/25 text-ink-soft transition hover:border-ink/50 hover:bg-card/50 hover:text-ink active:scale-[0.98]"
-              >
-                <PlusIcon className="h-6 w-6" />
-                <span className="text-xs font-medium">New book</span>
-              </button>
-            </div>
-
-            {/* Desktop: shelf */}
-            <div className="hidden sm:block">
-              <div className="shelf-scroll overflow-x-auto pb-1">
-                <div className="flex min-w-max items-end justify-center gap-2.5 px-6 pt-8">
-                  {subjects.map((subject) => (
-                    <BookSpine
-                      key={subject.id}
-                      subject={subject}
-                      noteCount={countBySubject.get(subject.id) ?? 0}
-                      onOpen={() => onOpenBook(subject.id)}
-                    />
-                  ))}
-
-                  <button
-                    type="button"
-                    onClick={onNewBook}
-                    aria-label="Add a new subject"
-                    className="flex h-56 w-14 shrink-0 items-center justify-center rounded-t-[3px] border border-dashed border-ink/25 text-ink-soft transition hover:border-ink/50 hover:bg-card/50 hover:text-ink"
-                  >
-                    <PlusIcon className="h-5 w-5" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={onNewBook}
+                  aria-label="Add a new subject"
+                  className="flex h-48 w-12 shrink-0 items-center justify-center rounded-t-[3px] border border-dashed border-ink/25 text-ink-soft transition hover:border-ink/50 hover:bg-card/50 hover:text-ink sm:h-56 sm:w-14"
+                >
+                  <PlusIcon className="h-5 w-5" />
+                </button>
               </div>
-
-              <div className="h-3.5 rounded-b-[3px] bg-gradient-to-b from-shelf to-shelf-edge" />
-              <div className="mx-1 h-2 rounded-b-md bg-black/10" />
             </div>
-          </>
+
+            <div className="h-3.5 rounded-b-[3px] bg-gradient-to-b from-shelf to-shelf-edge" />
+            <div className="mx-1 h-2 rounded-b-md bg-black/10" />
+          </div>
         )}
 
         <p className="mt-10 text-center text-xs text-ink-soft/80">
