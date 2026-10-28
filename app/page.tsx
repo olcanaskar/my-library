@@ -5,10 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { NoteEditor } from "@/components/editor/NoteEditor";
 import { LibraryView } from "@/components/library/LibraryView";
 import { NewBookDialog } from "@/components/library/NewBookDialog";
+import { BookOpening, type BookRect } from "@/components/library/BookOpening";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
 import { pagesLabel } from "@/lib/format";
-import type { Paper } from "@/lib/types";
+import type { Paper, Subject } from "@/lib/types";
 
 export default function Page() {
   return (
@@ -29,6 +30,10 @@ function App() {
 
   const [newBookOpen, setNewBookOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [opening, setOpening] = useState<{
+    subject: Subject;
+    from: BookRect;
+  } | null>(null);
 
   const subjectId = params.get("kitap");
   const noteId = params.get("not");
@@ -79,6 +84,18 @@ function App() {
       ) ?? bookNotes[0];
 
     goNote(subjectToOpen, remembered.id);
+  }
+
+  /** A spine click: play the book coming off the shelf, then open its page. */
+  function handleOpenBook(subjectToOpen: string, from: BookRect | null) {
+    const picked = lib.store.subjects.find((s) => s.id === subjectToOpen);
+
+    if (!picked || !from) {
+      openBook(subjectToOpen);
+      return;
+    }
+
+    setOpening({ subject: picked, from });
   }
 
   function turnPage(offset: number) {
@@ -170,7 +187,8 @@ function App() {
         subjects={lib.store.subjects}
         notes={lib.store.notes}
         theme={lib.store.theme}
-        onOpenBook={openBook}
+        liftedId={opening?.subject.id ?? null}
+        onOpenBook={handleOpenBook}
         onNewBook={() => setNewBookOpen(true)}
         onOpenSearch={() => setSearchOpen(true)}
         onToggleTheme={lib.toggleTheme}
@@ -181,6 +199,16 @@ function App() {
   return (
     <>
       {view}
+
+      {opening ? (
+        <BookOpening
+          subject={opening.subject}
+          from={opening.from}
+          fading={Boolean(subject && note)}
+          onNavigate={() => openBook(opening.subject.id)}
+          onRemove={() => setOpening(null)}
+        />
+      ) : null}
 
       <NewBookDialog
         open={newBookOpen}

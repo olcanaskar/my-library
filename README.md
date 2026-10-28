@@ -15,8 +15,8 @@ npm run lint
 ## What's inside
 
 - **Library:** subjects as book spines; the spine grows thicker with the page count
-- **Page:** clicking a book opens the page you left off on; the cover swings open
-  first and arrows turn pages one by one
+- **Page:** clicking a book lifts it off the shelf and the cover swings open;
+  arrows then turn pages one by one
 - **Editor:** lined / grid / dotted / plain paper, autosave
 - **Search:** across titles, content and subject names
 - **Dark mode**

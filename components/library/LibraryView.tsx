@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import type { Note, Subject } from "@/lib/types";
 import {
   BookIcon,
@@ -9,14 +8,16 @@ import {
   SearchIcon,
   SunIcon,
 } from "@/components/ui/icons";
-import { BookOpening } from "./BookOpening";
+import type { BookRect } from "./BookOpening";
 import { BookSpine } from "./BookSpine";
 
 type LibraryViewProps = {
   subjects: Subject[];
   notes: Note[];
   theme: "light" | "dark";
-  onOpenBook: (id: string) => void;
+  /** Subject whose book is currently flying out of the shelf. */
+  liftedId: string | null;
+  onOpenBook: (id: string, from: BookRect | null) => void;
   onNewBook: () => void;
   onOpenSearch: () => void;
   onToggleTheme: () => void;
@@ -26,13 +27,12 @@ export function LibraryView({
   subjects,
   notes,
   theme,
+  liftedId,
   onOpenBook,
   onNewBook,
   onOpenSearch,
   onToggleTheme,
 }: LibraryViewProps) {
-  const [opening, setOpening] = useState<Subject | null>(null);
-
   const countBySubject = new Map<string, number>();
   for (const note of notes) {
     countBySubject.set(
@@ -41,22 +41,12 @@ export function LibraryView({
     );
   }
 
-  // The cover animation plays first; the page opens when it is nearly done.
-  // Reduced-motion users go straight to the page instead of waiting.
-  function handleOpen(subject: Subject) {
-    if (opening) return;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      onOpenBook(subject.id);
-      return;
-    }
-
-    setOpening(subject);
+  // The cover animation needs a starting rectangle; reduced-motion users skip
+  // straight to the page instead of waiting through it.
+  function handleOpen(subject: Subject, from: BookRect) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    onOpenBook(subject.id, reduce ? null : from);
   }
-
-  const finishOpening = useCallback(() => {
-    if (opening) onOpenBook(opening.id);
-  }, [onOpenBook, opening]);
 
   return (
     <div className="min-h-dvh pb-16">
@@ -117,7 +107,8 @@ export function LibraryView({
                     key={subject.id}
                     subject={subject}
                     noteCount={countBySubject.get(subject.id) ?? 0}
-                    onOpen={() => handleOpen(subject)}
+                    lifted={liftedId === subject.id}
+                    onOpen={(from) => handleOpen(subject, from)}
                   />
                 ))}
 
@@ -141,10 +132,6 @@ export function LibraryView({
           Your notes are stored on this device. Works offline.
         </p>
       </main>
-
-      {opening ? (
-        <BookOpening subject={opening} onDone={finishOpening} />
-      ) : null}
     </div>
   );
 }

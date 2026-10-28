@@ -35,8 +35,8 @@ writing where they left off.
 - [x] Works properly on mobile and desktop
 
 ### V1 — if there is time (there probably is)
-- [x] Book-opening animation (the cover fills the screen in the subject colour,
-  then swings open on its left edge, ~400 ms)
+- [x] Book-opening animation (the book lifts out of its slot, comes forward and
+  grows to cover size, then the cover swings open on its left edge)
 - [x] Search across all notes (toolbar button)
 - [x] Resume where you left off (clicking a book opens its page directly)
 - [x] Page number + arrow-key / button page turning

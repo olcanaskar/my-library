@@ -122,15 +122,66 @@ body {
   }
 }
 
-/* ---------- opening a book: the cover swings open on its left edge ---------- */
-@keyframes book-open-scene {
+/* ---------- opening a book ----------
+   The spine lifts out of its slot, flies forward and grows to cover size,
+   then the cover swings open on its left edge. Everything is timed off the
+   same 380 ms flight so the two halves stay locked together. */
+
+@keyframes book-veil-in {
   from {
     opacity: 0;
-    transform: scale(0.97);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+  }
+}
+
+@keyframes book-fly {
+  0% {
+    top: var(--from-top);
+    left: var(--from-left);
+    width: var(--from-w);
+    height: var(--from-h);
+    transform: rotate(0deg);
+    animation-timing-function: cubic-bezier(0.25, 0.8, 0.35, 1);
+  }
+  26% {
+    top: calc(var(--from-top) - 24px);
+    left: var(--from-left);
+    width: var(--from-w);
+    height: var(--from-h);
+    transform: rotate(1.2deg);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  100% {
+    top: var(--to-top);
+    left: var(--to-left);
+    width: var(--to-w);
+    height: var(--to-h);
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes book-title-out {
+  0%,
+  28% {
+    opacity: 1;
+  }
+  62%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes book-title-in {
+  0%,
+  40% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -144,14 +195,48 @@ body {
 }
 
 .book-open-scene {
-  animation: book-open-scene 140ms ease-out both;
+  transition: opacity 160ms ease-out;
+}
+
+/* Fading only starts once the real page is behind the overlay. */
+.book-open-scene.is-fading {
+  opacity: 0;
+}
+
+.book-open-veil {
+  animation: book-veil-in 260ms ease-out 100ms both;
+}
+
+.book-fly {
+  position: fixed;
+  transform-origin: center center;
+  animation: book-fly 380ms both;
+}
+
+.book-title-out {
+  animation: book-title-out 380ms linear both;
+}
+
+.book-title-in {
+  animation: book-title-in 380ms ease-out both;
 }
 
 .book-cover-face {
   transform-origin: left center;
   backface-visibility: hidden;
-  animation: book-cover-swing 300ms cubic-bezier(0.5, 0.05, 0.35, 1) 100ms both;
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.35);
+  animation: book-cover-swing 300ms cubic-bezier(0.45, 0.05, 0.3, 1) 360ms both;
+}
+
+/* The page under the cover comes forward as the real page takes over. */
+.book-page {
+  transition:
+    transform 260ms cubic-bezier(0.35, 0, 0.25, 1),
+    opacity 150ms ease-out;
+}
+
+.book-page.is-fading {
+  transform: scale(1.3);
+  opacity: 0;
 }
 
 /* ---------- page turn (subtle: the book feel, not a gimmick) ---------- */
