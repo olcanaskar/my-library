@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kütüphanem
 
-## Getting Started
+Her ders bir kitap, her not bir sayfa. Ders notlarını kitaplık düzeninde tutan,
+tarayıcıda çalışan mini uygulama.
 
-First, run the development server:
+## Çalıştırma
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # statik çıktı: out/
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Neler var
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Kitaplık:** dersler kitap sırtı olarak; sırt kalınlığı sayfa sayısıyla büyür
+- **Defter:** not listesi, sayfa numaraları ve "kaldığın yer" ayracı
+- **Editör:** çizgili / kareli / noktalı / düz kağıt, otomatik kaydetme
+- **Arama:** tüm notlarda başlık, içerik ve ders adına göre
+- **Karanlık mod**
+- Veriler `localStorage`'da: hesap yok, sunucu yok, internet gerekmez
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Teknoloji
 
-## Learn More
+| Katman | Seçim |
+|---|---|
+| Framework | Next.js 16 (App Router, statik export) |
+| Dil | TypeScript |
+| Stil | Tailwind CSS 4 |
+| Depolama | `localStorage` (tek noktadan: `lib/storage.ts`) |
 
-To learn more about Next.js, take a look at the following resources:
+## Mimari notları
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `output: "export"` — sunucu tarafı yok, ileride Capacitor ile app'e taşınabilir.
+- Rota: `/?kitap=<id>&not=<id>`. Dinamik segment yok.
+- Kağıt çizgileri 32px aralıkta; metin `line-height: 32px` olmak zorunda.
+  Bu ikisi ayrılırsa tema bozulur.
+- Sunucu ve istemci farklı içerik üretmesin diye `useHydrated()` ile ilk boyama
+  atlanır.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Klasörler
 
-## Deploy on Vercel
+```
+app/            tek sayfa + tema tokenları
+components/
+  library/      kitaplık, kitap sırtı, yeni kitap
+  book/         defter görünümü
+  editor/       kağıt sayfa + editör
+  search/       arama
+  ui/           ikonlar, modal
+lib/            tipler, depolama, hook'lar, formatlama
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Ekip
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **A — Vitrin:** `components/library/*`, `app/page.tsx`
+- **B — İçerik:** `components/book/*`, `components/editor/*`, `lib/*`
+
+Yol haritası ve iş bölümü: [PLAN.md](./PLAN.md)

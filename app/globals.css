@@ -1,26 +1,146 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #faf7f0;
+  --paper-deep: #f0eadd;
+  --card: #fffdf8;
+  --ink: #2a2a28;
+  --ink-soft: #7c7667;
+  --rule: #ded7c6;
+  --margin: #d98c8c;
+  --shelf: #b0824d;
+  --shelf-edge: #7f5a34;
+  --line: 32px;
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --paper: #272520;
+  --paper-deep: #1c1a16;
+  --card: #302d27;
+  --ink: #ece7da;
+  --ink-soft: #a29a88;
+  --rule: #3c3830;
+  --margin: #8b5a5a;
+  --shelf: #5b4128;
+  --shelf-edge: #3d2c1b;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-rule: var(--rule);
+  --color-margin: var(--margin);
+  --color-shelf: var(--shelf);
+  --color-shelf-edge: var(--shelf-edge);
+  --font-sans: var(--font-inter);
+  --font-hand: var(--font-caveat);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper-deep);
+  color: var(--ink);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--ink) 16%, transparent);
+}
+
+/* ---------- kağıt dokuları ----------
+   Kural: çizgi aralığı her zaman 32px, metin line-height 32px.
+   Bu iki değer ayrılırsa tema bozulur. */
+
+.paper-sheet {
+  background-color: var(--paper);
+}
+
+.paper-lined {
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 31px,
+    var(--rule) 31px 32px
+  );
+}
+
+.paper-grid {
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0 31px,
+      var(--rule) 31px 32px
+    ),
+    repeating-linear-gradient(
+      to right,
+      transparent 0 31px,
+      var(--rule) 31px 32px
+    );
+}
+
+.paper-dotted {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--rule) 1.1px, transparent 1.2px);
+  background-size: 32px 32px;
+}
+
+.paper-plain {
+  background-color: var(--paper);
+}
+
+/* kenar boşluğu çizgisi (sadece çizgili/kareli kağıtta anlamlı) */
+.paper-margin {
+  position: relative;
+}
+
+.paper-margin::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 44px;
+  width: 1px;
+  background: var(--margin);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .paper-margin::before {
+    display: none;
+  }
+}
+
+/* ---------- ince kaydırma çubuğu ---------- */
+.shelf-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--shelf) 55%, transparent)
+    transparent;
+}
+
+/* ---------- hareket azaltma ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- metin alanı ---------- */
+textarea::placeholder,
+input::placeholder {
+  color: color-mix(in oklab, var(--ink-soft) 75%, transparent);
 }
