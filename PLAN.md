@@ -4,8 +4,8 @@
 > subject is a notebook with its own cover colour and its own paper texture.
 
 **Status (28 October 2026):** the MVP is complete and working. Part of V1 is done
-(search, resume where you left off, dark mode). The interface is fully English.
-Next up: book-opening animation, PWA, Capacitor.
+(search, resume where you left off, dark mode, the cover-opening animation). The
+interface is fully English. Next up: PWA, Capacitor.
 
 ---
 
@@ -35,7 +35,8 @@ writing where they left off.
 - [x] Works properly on mobile and desktop
 
 ### V1 — if there is time (there probably is)
-- [ ] Book-opening animation (CSS 3D, 200-300 ms)
+- [x] Book-opening animation (the cover fills the screen in the subject colour,
+  then swings open on its left edge, ~400 ms)
 - [x] Search across all notes (toolbar button)
 - [x] Resume where you left off (clicking a book opens its page directly)
 - [x] Page number + arrow-key / button page turning
@@ -309,6 +310,7 @@ kutuphanem/
   components/
     library/LibraryView.tsx
     library/BookSpine.tsx
+    library/BookOpening.tsx
     library/NewBookDialog.tsx
     editor/NoteEditor.tsx
     search/SearchDialog.tsx

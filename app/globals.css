@@ -122,6 +122,38 @@ body {
   }
 }
 
+/* ---------- opening a book: the cover swings open on its left edge ---------- */
+@keyframes book-open-scene {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes book-cover-swing {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(106deg);
+  }
+}
+
+.book-open-scene {
+  animation: book-open-scene 140ms ease-out both;
+}
+
+.book-cover-face {
+  transform-origin: left center;
+  backface-visibility: hidden;
+  animation: book-cover-swing 300ms cubic-bezier(0.5, 0.05, 0.35, 1) 100ms both;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.35);
+}
+
 /* ---------- page turn (subtle: the book feel, not a gimmick) ---------- */
 @keyframes page-in {
   from {
