@@ -15,6 +15,9 @@ npm run lint
 npx vercel --prod # deploy (project: my-library)
 ```
 
+Pushes to `master` are deployed automatically by Vercel; the command above is
+only the manual fallback.
+
 ## What's inside
 
 - **Library:** subjects as book spines; the spine grows thicker with the page count
