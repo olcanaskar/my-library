@@ -72,15 +72,6 @@ export function LibraryView({
               <MoonIcon className="h-5 w-5" />
             )}
           </button>
-          <button
-            type="button"
-            onClick={onNewBook}
-            aria-label="Add a new book"
-            className="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-ink px-2.5 py-2 text-sm font-medium text-paper transition hover:opacity-90 sm:px-3"
-          >
-            <PlusIcon className="h-4 w-4" />
-            <span className="hidden sm:inline">New book</span>
-          </button>
         </div>
       </header>
 
@@ -127,6 +118,17 @@ export function LibraryView({
                   </button>
                 );
               })}
+
+              {/* Mobile needs its own add entry: the shelf is hidden here. */}
+              <button
+                type="button"
+                onClick={onNewBook}
+                aria-label="Add a new book"
+                className="flex aspect-3/4 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-ink/25 text-ink-soft transition hover:border-ink/50 hover:bg-card/50 hover:text-ink active:scale-[0.98]"
+              >
+                <PlusIcon className="h-6 w-6" />
+                <span className="text-xs font-medium">New book</span>
+              </button>
             </div>
 
             {/* Desktop: shelf */}
