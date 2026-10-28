@@ -3,8 +3,9 @@
 > A web app that organises class notes around a "library" metaphor: every
 > subject is a notebook with its own cover colour and its own paper texture.
 
-**Status (28 October 2026):** the MVP is complete and working. Part of V1 is done
-(search, resume where you left off, dark mode, the cover-opening animation). The
+**Status (28 October 2026):** the MVP is complete and working, and the live site
+is deployed at https://my-library-pi-one.vercel.app. Part of V1 is done (search,
+resume where you left off, dark mode, the book opening out of the shelf). The
 interface is fully English. Next up: PWA, Capacitor.
 
 ---
@@ -298,6 +299,7 @@ entirely.
 - [ ] Every flow can be completed with a keyboard
 - [ ] Lighthouse accessibility ≥ 90
 - [ ] Live link + backup demo video are ready
+  - [x] Live link: https://my-library-pi-one.vercel.app
 
 ## 14. Folder structure (current)
 

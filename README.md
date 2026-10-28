@@ -3,6 +3,8 @@
 Every subject a book, every note a page. A small browser app that keeps class
 notes on a library shelf.
 
+**Live:** https://my-library-pi-one.vercel.app
+
 ## Running
 
 ```bash
@@ -10,6 +12,7 @@ npm install
 npm run dev      # http://localhost:3000
 npm run build    # static output: out/
 npm run lint
+npx vercel --prod # deploy (project: my-library)
 ```
 
 ## What's inside
