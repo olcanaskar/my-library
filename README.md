@@ -1,59 +1,59 @@
-# Kütüphanem
+# My Library
 
-Her ders bir kitap, her not bir sayfa. Ders notlarını kitaplık düzeninde tutan,
-tarayıcıda çalışan mini uygulama.
+Every subject a book, every note a page. A small browser app that keeps class
+notes on a library shelf.
 
-## Çalıştırma
+## Running
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # statik çıktı: out/
+npm run build    # static output: out/
 npm run lint
 ```
 
-## Neler var
+## What's inside
 
-- **Kitaplık:** dersler kitap sırtı olarak; sırt kalınlığı sayfa sayısıyla büyür
-- **Sayfa:** kitaba tıklayınca doğrudan kaldığın sayfa açılır; oklarla sayfa sayfa gezilir
-- **Editör:** çizgili / kareli / noktalı / düz kağıt, otomatik kaydetme
-- **Arama:** tüm notlarda başlık, içerik ve ders adına göre
-- **Karanlık mod**
-- Veriler `localStorage`'da: hesap yok, sunucu yok, internet gerekmez
+- **Library:** subjects as book spines; the spine grows thicker with the page count
+- **Page:** clicking a book opens the page you left off on; arrows turn pages one by one
+- **Editor:** lined / grid / dotted / plain paper, autosave
+- **Search:** across titles, content and subject names
+- **Dark mode**
+- Data lives in `localStorage`: no account, no server, no internet needed
 
-## Teknoloji
+## Stack
 
-| Katman | Seçim |
+| Layer | Choice |
 |---|---|
-| Framework | Next.js 16 (App Router, statik export) |
-| Dil | TypeScript |
-| Stil | Tailwind CSS 4 |
-| Depolama | `localStorage` (tek noktadan: `lib/storage.ts`) |
+| Framework | Next.js 16 (App Router, static export) |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4 |
+| Storage | `localStorage` (single entry point: `lib/storage.ts`) |
 
-## Mimari notları
+## Architecture notes
 
-- `output: "export"` — sunucu tarafı yok, ileride Capacitor ile app'e taşınabilir.
-- Rota: `/?kitap=<id>&not=<id>`. Dinamik segment yok.
-- Kağıt çizgileri 32px aralıkta; metin `line-height: 32px` olmak zorunda.
-  Bu ikisi ayrılırsa tema bozulur.
-- Sunucu ve istemci farklı içerik üretmesin diye `useHydrated()` ile ilk boyama
-  atlanır.
+- `output: "export"` — no server side, so the app can move to Capacitor later.
+- Route: `/?kitap=<id>&not=<id>`. No dynamic segments.
+- Paper rules are 32px apart; body text must use `line-height: 32px`.
+  If those two drift apart, the theme breaks.
+- `useHydrated()` skips the first paint so the server and the client never
+  disagree about the content.
 
-## Klasörler
+## Folders
 
 ```
-app/            tek sayfa + tema tokenları
+app/            single page + theme tokens
 components/
-  library/      kitaplık, kitap sırtı, yeni kitap
-  editor/       kağıt sayfa + editör + sayfa gezinme
-  search/       arama
-  ui/           ikonlar, modal
-lib/            tipler, depolama, hook'lar, formatlama
+  library/      shelf, book spine, new book
+  editor/       paper page + editor + page navigation
+  search/       search
+  ui/           icons, modal
+lib/            types, storage, hooks, formatting
 ```
 
-## Ekip
+## Team
 
-- **A — Vitrin:** `components/library/*`, `app/page.tsx`
-- **B — İçerik:** `components/book/*`, `components/editor/*`, `lib/*`
+- **A — Front of house:** `components/library/*`, `app/page.tsx`
+- **B — Content:** `components/editor/*`, `components/search/*`, `lib/*`
 
-Yol haritası ve iş bölümü: [PLAN.md](./PLAN.md)
+Roadmap and work split: [PLAN.md](./PLAN.md)

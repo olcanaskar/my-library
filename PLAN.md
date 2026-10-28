@@ -1,95 +1,100 @@
-# Kütüphanem — Proje Planı
+# My Library — Project Plan
 
-> Ders notlarını "kitaplık" metaforuyla düzenleyen; her dersin kendi kapak rengi ve
-> kendi kağıt dokusuna sahip bir defter olduğu web uygulaması.
+> A web app that organises class notes around a "library" metaphor: every
+> subject is a notebook with its own cover colour and its own paper texture.
 
-**Durum (28 Ekim 2026):** MVP tamam ve çalışıyor. V1'in bir kısmı bitti
-(arama, ayraç, karanlık mod). Arayüz tamamen İngilizceye çevrildi.
-Sırada: kitap açma animasyonu, PWA, Capacitor.
+**Status (28 October 2026):** the MVP is complete and working. Part of V1 is done
+(search, resume where you left off, dark mode). The interface is fully English.
+Next up: book-opening animation, PWA, Capacitor.
 
 ---
 
-## 1. Tek cümle
+## 1. One sentence
 
-Öğrenci kütüphanesini açar, dersini seçer, defterini açar ve kaldığı yerden yazmaya devam eder.
+A student opens their library, picks a subject, opens the notebook and keeps
+writing where they left off.
 
-## 2. Problem ve hedef kullanıcı
+## 2. Problem and target user
 
-| Soru | Cevap |
+| Question | Answer |
 |---|---|
-| Kim? | Lise/üniversite öğrencisi (biz ve sınıf arkadaşlarımız) |
-| Hangi sorun? | Notlar WhatsApp, Drive, defter, telefon arasında dağılıyor; "hangi derste ne yazmıştım" kayboluyor |
-| Neden bu uygulama? | Dosya listesi değil, **kitaplık**: ders = kitap, not = sayfa. Akılda kalıcı ve aranabilir |
-| Farkı | Her dersin kendi kağıdı (kareli matematik, çizgili edebiyat) ve kütüphane hissi |
+| Who? | High school / university students (us and our classmates) |
+| Which problem? | Notes are scattered across WhatsApp, Drive, paper notebooks and phones; "what did I write in that subject" gets lost |
+| Why this app? | Not a file list but a **library**: subject = book, note = page. Memorable and searchable |
+| What makes it different | Every subject has its own paper (grid for maths, lined for literature) and the whole thing feels like a library |
 
-## 3. Kapsam
+## 3. Scope
 
-### MVP — "bitti" sayılması için şart
-- [x] Kitaplık ekranı: dersler raflarda kitap olarak
-- [x] Yeni kitap ekle (ad, renk, kağıt türü)
-- [x] Kitap içi: o dersin notları listesi
-- [x] Not editörü: başlık + gövde, otomatik kaydet
-- [x] Not sil / başlığı düzenle
-- [x] `localStorage` ile kalıcılık (yenile → kaybolmasın)
-- [x] Mobil + masaüstü düzgün çalışsın
+### MVP — required to call it "done"
+- [x] Library screen: subjects as books on a shelf
+- [x] Add a book (name, colour, paper type)
+- [x] A book opens straight into the page you left off on — no page list in between
+- [x] Page editor: title + body, autosave
+- [x] Delete a page / edit its title
+- [x] Persistence with `localStorage` (reload → nothing lost)
+- [x] Works properly on mobile and desktop
 
-### V1 — zaman kalırsa (muhtemelen kalır)
-- [ ] Kitap açma animasyonu (CSS 3D, 200-300 ms)
-- [x] Tüm notlarda arama (ara butonu)
-- [x] Kaldığın sayfadan devam (kitaba tıklayınca doğrudan sayfa)
-- [x] Sayfa numarası + oklarla sayfa gezinme
-- [x] Sayfa çevirme geçişi (kısa kayma animasyonu)
-- [x] Karanlık mod
+### V1 — if there is time (there probably is)
+- [ ] Book-opening animation (CSS 3D, 200-300 ms)
+- [x] Search across all notes (toolbar button)
+- [x] Resume where you left off (clicking a book opens its page directly)
+- [x] Page number + arrow-key / button page turning
+- [x] Page-turn transition (short slide animation)
+- [x] Dark mode
 
-### V2 — sunumdan önce denenir, olmazsa çıkar
-- [ ] Çalışma modu (notu kapat, başlıklardan kendini test et)
-- [ ] AI'dan kapak görseli veya not özeti
-- [ ] Supabase ile hesaplar arası senkron
-- [ ] PDF / markdown dışa aktarma
+### V2 — try before the presentation, drop if it does not land
+- [ ] Study mode (hide the note, test yourself from the titles)
+- [ ] AI-generated cover art or note summaries
+- [ ] Cross-device sync with Supabase
+- [ ] PDF / markdown export
 
-### Kapsam dışı (bilinçli olarak)
-Gerçek zamanlı işbirliği, kullanıcı hesabı, sınıf paylaşımı, mobil uygulama mağaza sürümü.
+### Out of scope (on purpose)
+Real-time collaboration, user accounts, class sharing, a store release of the
+mobile app.
 
-## 4. Bilgi mimarisi ve ekranlar
+## 4. Information architecture and screens
 
 ```
-Kitaplık ──▶ Kitap (ders) ──▶ Not (sayfa)
-   │              │                │
-   │              │                └─ editör: başlık + metin
-   │              └─ not listesi + "yeni sayfa"
-   └─ yeni kitap · arama · karanlık mod
+Library ──▶ Page (subject + note) ──▶ Editor
+   │              │
+   │              └─ previous / next page · new page
+   └─ new book · search · dark mode
 ```
 
-**Kitaplık (masaüstü)**
+**Library (desktop)**
 ```
 ┌──────────────────────────────────────────┐
-│  Kütüphanem                [+ Yeni Kitap]│
+│  My Library                       ⌕  ☾   │
 │                                          │
-│   ┌───┐ ┌───┐ ┌───┐ ┌───┐                │
-│   │ M │ │ F │ │ B │ │ T │                │
-│   │ a │ │ i │ │ i │ │ a │                │
-│   │ t │ │ z │ │ y │ │ r │                │
-│   └───┘ └───┘ └───┘ └───┘                │
+│   ┌───┐ ┌───┐ ┌───┐ ┌───┐  ┌┄┄┄┐        │
+│   │ M │ │ P │ │ L │ │ H │  │ + │        │
+│   │ a │ │ h │ │ i │ │ i │  │   │        │
+│   │ t │ │ y │ │ t │ │ s │  │   │        │
+│   └───┘ └───┘ └───┘ └───┘  └┄┄┄┘        │
 │  ═════════════════════════════════════   │
-│   kitap sırtı kalınlığı = not sayısı     │
+│   spine thickness = page count           │
 └──────────────────────────────────────────┘
 ```
 
-**Kitaplık (mobil):** raf yerine 2 sütunlu kapak ızgarası.
+**Library (mobile):** the same shelf, with slightly shorter spines and horizontal
+scrolling when it overflows.
 
-**Not sayfası**
+**Page (opened straight from the shelf)**
 ```
 ┌──────────────────────────────────────┐
-│ 12 Ekim        Türev                 │
+│ ←  ● Mathematics   Saved   [+]  🗑   │
+│    Page 2 of 5                        │
+├──────────────────────────────────────┤
+│ 12 October          Derivatives       │
 │ ──────────────────────────────────── │
-│  │ Fonksiyonun bir noktadaki eğimi   │
-│  │ limit ile tanımlanır...           │
+│  │ The slope at a point is defined   │
+│  │ with a limit...                   │
 │  │                                   │
-│                              [ 3 ]   │
+│  ← Previous         2 / 5     Next → │
 └──────────────────────────────────────┘
 ```
 
-## 5. Veri modeli
+## 5. Data model
 
 ```ts
 type Paper = 'lined' | 'grid' | 'dotted' | 'plain'
@@ -97,8 +102,8 @@ type Paper = 'lined' | 'grid' | 'dotted' | 'plain'
 type Subject = {
   id: string
   name: string
-  color: string          // sırt/kapak rengi
-  paper: Paper           // defter kağıdı
+  color: string          // spine / cover colour
+  paper: Paper           // notebook paper
   createdAt: number
   order: number
 }
@@ -116,82 +121,89 @@ type Store = {
   version: 1
   subjects: Subject[]
   notes: Note[]
-  lastNoteBySubject: Record<string, string>   // kitap ayracı
+  lastNoteBySubject: Record<string, string>   // resume bookmark
   theme: 'light' | 'dark'
 }
 ```
 
-`localStorage` anahtarı: `kutuphanem.v1`
-Bozuk veri ihtimaline karşı okuma `try/catch` ile, sürüm uyuşmazsa yedekleyip sıfırla.
+`localStorage` key: `kutuphanem.v1` (kept as-is so existing data survives).
+Reads are wrapped in `try/catch`; on a version mismatch the raw value is backed
+up before starting fresh.
 
-## 6. Teknoloji seçimi
+## 6. Technology choices
 
-| Katman | Seçim | Gerekçe |
+| Layer | Choice | Why |
 |---|---|---|
-| Framework | Next.js (App Router) + TypeScript | Tek repo, tek deploy, dosya tabanlı routing |
-| Stil | Tailwind CSS | Hızlı, vibe-code dostu, responsive |
-| İkon | lucide-react | Hafif, tutarlı |
-| Durum | React state + `useLocalStorage` hook'u | Backend yok, karmaşıklık yok |
-| Animasyon | CSS transition (gerekirse framer-motion) | 2 saatlik bütçe |
-| Deploy | Vercel | `git push` → canlı link |
+| Framework | Next.js (App Router) + TypeScript | One repo, one deploy, file-based routing |
+| Styling | Tailwind CSS | Fast, vibe-code friendly, responsive |
+| Icons | Inline SVG (`components/ui/icons.tsx`) | No dependency, exactly the shapes we need |
+| State | React state + `useLibrary()` hook | No backend, no complexity |
+| Animation | CSS transitions and keyframes | Two-hour budget |
+| Deploy | Vercel | `git push` → live link |
 
-Kural: **ilk 3 gün bağımlılık eklemek yasak.** Bir kütüphane eklemeden önce "bunu 30 satırla yazar mıyım?" sorusu sorulur.
+Rule: **no new dependencies in the first three days.** Before adding a library,
+ask "would I write this in 30 lines?"
 
-## 6.1. Web → App geçiş stratejisi
+## 6.1. Web → app strategy
 
-**Karar: web-first, sonra Capacitor.** Aynı kod tabanı, mağaza uygulamasına taşınabilir.
+**Decision: web first, then Capacitor.** The same codebase can move into a store
+app later.
 
-| Yol | Ne verir | Emek | Mağaza | Risk |
+| Path | What it gives | Effort | Store | Risk |
 |---|---|---|---|---|
-| PWA | Ana ekrana eklenir, tam ekran, offline | ~1 saat | Yok | Düşük |
-| **Capacitor** | Web kodunu native kabuğa sarar, iOS + Android | 1-2 gün | Var | Düşük |
-| Expo (React Native) | Gerçek native his, tek kod tabanı | Baştan yazım | Var | Yüksek |
+| PWA | Home-screen install, full screen, offline | ~1 hour | No | Low |
+| **Capacitor** | Wraps the web code in a native shell, iOS + Android | 1-2 days | Yes | Low |
+| Expo (React Native) | Truly native feel, single codebase | Rewrite | Yes | High |
 
-**Web'i "taşınabilir" yazmak için 7 kural** (Gün 0'da uygulanır, sonradan düzeltmesi pahalı):
+**Seven rules for writing a "portable" web app** (applied on day 0, expensive to
+retrofit):
 
-1. `next.config.ts` → `output: 'export'` (statik site, sunucu yok)
-2. API route, **server action**, middleware **yok**
-3. Dinamik rota **yok**: `/kitap/[id]` yerine `/?kitap=mat&not=abc` (query param) veya tek sayfa state
-4. `localStorage`'a **sadece** `lib/storage.ts` içinden erişilir → app'te Capacitor Preferences'a tek dosyada geçilir
-5. Fontlar self-host (`next/font/local`), CDN yok → offline çalışsın
-6. `100dvh`, `env(safe-area-inset-*)`, dokunma hedefi ≥ 44px, hover'a bağlı işlev yok
-7. `next/image` optimizasyonu kapalı, tüm görseller yerel
+1. `next.config.ts` → `output: 'export'` (static site, no server)
+2. No API routes, **no server actions**, no middleware
+3. No dynamic routes: `/?kitap=mat&not=abc` (query params) or single-page state
+   instead of `/book/[id]`
+4. `localStorage` is touched **only** through `lib/storage.ts` → swapping to
+   Capacitor Preferences is a one-file change
+5. Self-hosted fonts (`next/font/local`), no CDN → works offline
+6. `100dvh`, `env(safe-area-inset-*)`, tap targets ≥ 44px, nothing hover-only
+7. `next/image` optimisation disabled, all assets local
 
-**Taşıma günü (yaklaşık 1 gün):**
+**Migration day (about a day):**
 ```bash
 npm i @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android
-npx cap init "Kütüphanem" app.kutuphanem
-npx cap add android   # ve/veya ios
+npx cap init "My Library" app.mylibrary
+npx cap add android   # and/or ios
 npm run build && npx cap sync
 npx cap open android
 ```
-`lib/storage.ts` içindeki `localStorage` çağrıları `@capacitor/preferences` ile değiştirilir; UI'a dokunulmaz.
+Replace the `localStorage` calls inside `lib/storage.ts` with
+`@capacitor/preferences`; the UI does not change.
 
-**Not:** iOS derlemesi için Mac gerekir; Android her yerde derlenir. Okul sunumu için
-PWA + Android yeterli, iOS sonraya bırakılabilir.
+**Note:** iOS builds need a Mac; Android builds anywhere. For a school
+presentation PWA + Android is enough, iOS can wait.
 
-## 7. Tasarım sistemi
+## 7. Design system
 
-**Renkler**
+**Colours**
 ```
 paper   #FAF7F0    ink      #2A2A28
-rule    #DCD5C4    margin   #D98C8C
-muted   #8A8577    shelf    #8B6B4A
+rule    #DED7C6    margin   #D98C8C
+muted   #7C7667    shelf    #B0824D
 ```
-Ders renkleri (8'li palet): #C05746 · #D08C3C · #C9A227 · #5B8C5A · #3E7C8C · #4A5C9E · #7C5C9E · #A8557A
+Subject palette (eight colours): #4A5C9E · #3E7C8C · #5B8C5A · #C9A227 ·
+#D08C3C · #C05746 · #A8557A · #7C5C9E
 
-**Tipografi**
-- Kitap sırtı ve not başlığı: **Caveat** (el yazısı, sadece başlık)
-- Gövde: **Inter** / system-ui, 16px, satır aralığı 32px
-- Kural: el yazısı fontu **asla** gövde metninde kullanılmaz.
+**Typography**
+- Book spines and page titles: **Caveat** (handwriting, titles only)
+- Body: **Inter** / system-ui, 16px, 32px line height
+- Rule: the handwriting font is **never** used for body text.
 
-**Kağıt (tek bileşen, dört varyant)**
+**Paper (one component, four variants)**
 ```css
 .paper-lined {
   background-image: repeating-linear-gradient(
     transparent 0 31px, var(--rule) 31px 32px
   );
-  background-position-y: 8px;
 }
 .paper-grid {
   background-image:
@@ -199,115 +211,128 @@ Ders renkleri (8'li palet): #C05746 · #D08C3C · #C9A227 · #5B8C5A · #3E7C8C 
     repeating-linear-gradient(90deg, transparent 0 31px, var(--rule) 31px 32px);
 }
 .paper-dotted {
-  background-image: radial-gradient(var(--rule) 1px, transparent 1px);
+  background-image: radial-gradient(var(--rule) 1.1px, transparent 1.2px);
   background-size: 32px 32px;
 }
 ```
-`line-height: 32px` **zorunlu** — çizgiler yazıyla hizalanmazsa tema çöker.
+`line-height: 32px` is **mandatory** — if the rules stop lining up with the text,
+the theme collapses.
 
-**Motion:** 180-300 ms, `ease-out`. `prefers-reduced-motion` desteklenir.
-**Erişilebilirlik:** kontrast ≥ 4.5, tüm etkileşimler klavyeyle, görünür focus halkası.
+**Motion:** 180-300 ms, `ease-out`. `prefers-reduced-motion` is respected.
+**Accessibility:** contrast ≥ 4.5, everything reachable by keyboard, visible
+focus ring.
 
-## 8. İş bölümü (2 kişi)
+## 8. Work split (2 people)
 
-| Kişi | Rol | Sorumluluk | Dosyalar |
+| Person | Role | Responsibility | Files |
 |---|---|---|---|
-| **A** | Vitrin | Kitaplık, raf, kitap sırtları, renk/kapak, yeni kitap modalı, açma animasyonu, karanlık mod, sunum materyali | `components/library/*`, `app/page.tsx` |
-| **B** | İçerik + altyapı | Tipler, storage hook'u, kitap sayfası, not listesi, editör, kağıt tema sistemi, otomatik kaydet, sil/düzenle, arama, deploy | `lib/*`, `components/book/*`, `components/editor/*`, `components/search/*` |
+| **A** | Front of house | Library, shelf, book spines, colours/covers, new-book dialog, page-turn and opening animation, dark mode, presentation material | `components/library/*`, `app/page.tsx` |
+| **B** | Content + plumbing | Types, storage hook, paper theme system, editor, autosave, delete/edit, search, deploy | `lib/*`, `components/editor/*`, `components/search/*` |
 
-Kural: **her dosyanın tek sahibi var.** Başkasının dosyasında değişiklik gerekiyorsa önce söylenir.
-Ortak dosyalar (`types.ts`, `globals.css` tokenları, `layout.tsx`) ilk gün **birlikte** yazılır, sonra dokunulmaz.
+Rule: **every file has exactly one owner.** If a change is needed in someone
+else's file, say so first.
+Shared files (`types.ts`, the `globals.css` tokens, `layout.tsx`) are written
+**together** on day 0 and then left alone.
 
-**Tek kişiye bağımlılık riski:** Tüm veri katmanı B'de. Önlem: A, 1. gün B'nin `useStore()` API'sini
-kullanarak "yeni kitap ekle" akışını yazar. Böylece API erken test edilir, B tıkandığında A devam edebilir.
+**Single-person risk:** the whole data layer sits with B. Mitigation: on day 1 A
+builds the "add a new book" flow against B's `useLibrary()` API. That tests the
+API early and lets A continue if B gets stuck.
 
-**2 kişide kapsam kuralı:** Bir özellik, iki kişiden birinin 4 saatten fazlasını alıyorsa ya bölünür ya düşer.
+**Scope rule with two people:** if a feature costs either person more than four
+hours, it gets split or dropped.
 
-## 9. Takvim (2 kişi, 5 gün varsayımı)
+## 9. Calendar (2 people, 5 days assumed)
 
-| Gün | A (Vitrin) | B (İçerik) | Ortak |
+| Day | A (front of house) | B (content) | Shared |
 |---|---|---|---|
-| 0 (2-3 saat) | — | — | İskelet, tipler, tasarım tokenları, boş ekranlar, statik export + Vercel deploy |
-| 1 | Kitaplık statik görünüm, kitap sırtları | `useStore` + kitap sayfası + not listesi | Akşam: yeni kitap ekleme uçtan uca çalışsın |
-| 2 | Yeni kitap modalı, açma animasyonu | Editör + kağıt teması + otomatik kaydet | Akşam: gerçek not yazılabilsin |
-| 3 | Karanlık mod, mobil raf düzeni, boş durumlar | Arama, ayraç, sil/düzenle | Gün sonu `main`'e merge |
-| 4 | Sunum slaytları, demo provası | Hata ayıklama, Lighthouse, yedek video | Birlikte prova |
-| 5 | Sunum | Sunum | — |
+| 0 (2-3 hours) | — | — | Scaffold, types, design tokens, empty screens, static export + Vercel deploy |
+| 1 | Static library view, book spines | `useLibrary` + direct page open + editor shell | Evening: adding a book works end to end |
+| 2 | New-book dialog, page-turn animation | Editor + paper theme + autosave | Evening: a real note can be written |
+| 3 | Dark mode, mobile shelf, empty states | Search, resume, delete/edit, page arrows | Merge to `main` at the end of the day |
+| 4 | Slides, demo rehearsal | Debugging, Lighthouse, backup video | Rehearse together |
+| 5 | Presentation | Presentation | — |
 
-Süre kısaysa: Gün 3 ve 4 birleşir; V1 listesinden **arama** kalır, animasyon ve karanlık mod düşer.
-Süre 3 gün ise: MVP'ye inilir (kitaplık + not yazma + kayıt), animasyon tamamen çıkar.
+If time is short: days 3 and 4 merge; **search** stays, animation and dark mode
+drop.
+With three days: cut to the MVP (library + writing + saving), drop the animation
+entirely.
 
-## 10. Git disiplini
+## 10. Git discipline
 
-- `main` her zaman çalışır ve deploy edilebilir.
-- Dallar: `feature/kitaplik`, `feature/defter`, `feature/veri`.
-- **Her gün en az bir kez `main`'e merge.** Son gün merge yok.
-- Commit: `feat: kitap sırtı kalınlığı not sayısına bağlandı`
-- `node_modules`, `.next`, `.env` commit edilmez.
+- `main` always runs and can always be deployed.
+- Branches: `feature/library`, `feature/notebook`, `feature/data`.
+- **Merge into `main` at least once a day.** No merges on the last day.
+- Commit messages: `feat: tie spine thickness to page count`
+- `node_modules`, `.next`, `.env` are never committed.
 
-## 11. Riskler ve önlemler
+## 11. Risks and mitigations
 
-| Risk | Önlem |
+| Risk | Mitigation |
 |---|---|
-| Kağıt çizgileri yazıyla hizalanmıyor | Tek `PaperPage` bileşeni, `line-height` tek yerden; başka yerde kağıt CSS'i yok |
-| Animasyon işi yutuyor | Toplam bütçe 2 saat; süre aşarsa sabit geçiş |
-| Merge çakışması | Dosya sahipliği + günlük merge |
-| `localStorage` bozulması / kota | `try/catch`, sürüm kontrolü, kullanıcıya "veri sıfırlandı" uyarısı |
-| Mobil klavye sayfayı kaydırıyor | `textarea` autosize, `position: fixed` alt barlar yok |
-| Demo günü internet/DNS | 60 saniyelik yedek ekran kaydı + `npm run dev` ile yerel demo |
-| "Hepsi bitti ama boş görünüyor" | Gün 2'de gerçek ders notlarıyla doldurma zorunlu |
+| Paper rules do not line up with the text | One paper implementation, `line-height` in one place; no paper CSS anywhere else |
+| Animation swallows the schedule | Two-hour total budget; if exceeded, ship a static transition |
+| Merge conflicts | File ownership + daily merges |
+| Corrupt `localStorage` / quota | `try/catch`, version check, backup key, fresh start |
+| The mobile keyboard scrolls the page | Autosizing `textarea`, no fixed bottom bars |
+| Internet/DNS on demo day | 60-second backup screen recording + `npm run dev` locally |
+| "It's all done but looks empty" | Fill it with real class notes on day 2, no exceptions |
 
-## 12. Demo senaryosu (90 saniye)
+## 12. Demo script (90 seconds)
 
-1. Kütüphane açılır — dört kitap, renkleri farklı. "Her ders bir kitap." (10 sn)
-2. "Matematik"e tıklanır — kitap açılır, kaldığı sayfa gelir. (10 sn)
-3. İki satır not yazılır, sayfa numarası artar. (20 sn)
-4. Kütüphaneye dönülür — **kitabın sırtı kalınlaşmıştır.** (10 sn)
-5. Arama: "türev" yazılır, not bulunur. (15 sn)
-6. Karanlık mod + mobil görünüm gösterilir. (10 sn)
-7. Kapanış: "Notlar kaybolmuyor, çünkü yeri belli." (5 sn)
+1. The library opens — four books, different colours. "Every subject is a book." (10s)
+2. Click "Mathematics" — it opens directly at the page you left off on. (10s)
+3. Type two lines; the status dot goes Saving → Saved. (20s)
+4. Press "+ New page", write a line, then go back — **the book's spine has
+   grown thicker.** (15s)
+5. Search: type "derivative", the note opens straight away. (15s)
+6. Show dark mode and the mobile shelf. (10s)
+7. Closing: "Notes don't get lost, because they have a place." (5s)
 
-## 13. Bitti tanımı (Definition of Done)
+## 13. Definition of Done
 
-- [ ] Sayfa yenilendiğinde hiçbir not kaybolmuyor
-- [ ] Telefonda yazı yazmak rahat (klavye açıkken sayfa kaymıyor)
-- [ ] Kütüphanede 0 kitap ve 0 not durumları düzgün görünüyor (empty state)
-- [ ] Silme işlemi onay istiyor
-- [ ] Klavye ile tüm akış tamamlanabiliyor
-- [ ] Lighthouse erişilebilirlik ≥ 90
-- [ ] Canlı link + yedek demo videosu hazır
+- [ ] No note is lost when the page is reloaded
+- [ ] Writing on a phone is comfortable (the page does not jump while the keyboard is open)
+- [ ] Zero-book and zero-page states look right (empty states)
+- [ ] Deleting asks for confirmation
+- [ ] Every flow can be completed with a keyboard
+- [ ] Lighthouse accessibility ≥ 90
+- [ ] Live link + backup demo video are ready
 
-## 14. Klasör yapısı (hedef)
+## 14. Folder structure (current)
 
 ```
 kutuphanem/
   app/
     layout.tsx
-    page.tsx                     # tek sayfa: kitaplık / kitap / not (query param ile)
-    globals.css                  # tema tokenları + kağıt stilleri
+    page.tsx                     # single page: library / page (query params)
+    globals.css                  # theme tokens + paper styles
   components/
-    library/Shelf.tsx
+    library/LibraryView.tsx
     library/BookSpine.tsx
     library/NewBookDialog.tsx
-    book/NoteList.tsx
-    editor/PaperPage.tsx
     editor/NoteEditor.tsx
     search/SearchDialog.tsx
-    ui/                          # buton, modal, input
+    ui/Modal.tsx
+    ui/icons.tsx
   lib/
     types.ts
-    storage.ts                   # localStorage ↔ Capacitor Preferences tek nokta
-    useStore.ts
+    storage.ts                   # localStorage ↔ Capacitor Preferences single point
+    useLibrary.ts
+    useHydrated.ts
+    format.ts
     id.ts
-  public/                        # fontlar, kağıt dokuları
+  public/
 ```
 
-Rota kuralı: `/?kitap=matematik&not=abc123`. Dinamik segment yok → statik export ve
-Capacitor sorunsuz çalışır.
+Route rule: `/?kitap=mat&not=abc123`. No dynamic segments → static export and
+Capacitor both work.
 
-## 15. Açık sorular
+## 15. Open questions
 
-1. **Teslim tarihi?** Takvim 5 güne göre kurgulandı; kısaysa Gün 3-4 birleşir, V1 kırpılır.
-2. **İsimler?** A / B kimler? (dosya sahipliği ve commit sahipliği için)
-3. **Sunum nerede gösterilecek?** Web linki + Android APK yeterli; iOS Mac gerektirir.
-4. **Supabase gerekli mi?** Şimdilik hayır; notlar cihazda kalır. İki kişi aynı anda yazacaksa sonra eklenir.
+1. **Deadline?** The calendar assumes five days; if it is shorter, days 3-4 merge
+   and V1 gets trimmed.
+2. **Names?** Who are A and B? (for file and commit ownership)
+3. **Where will the presentation happen?** A web link + an Android APK is enough;
+   iOS needs a Mac.
+4. **Is Supabase needed?** Not for now; notes stay on the device. Add it later if
+   two people write at the same time.
