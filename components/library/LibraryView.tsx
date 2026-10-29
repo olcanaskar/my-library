@@ -50,7 +50,9 @@ export function LibraryView({
 
   return (
     <div className="library-scene min-h-dvh">
-      <div className="mx-auto flex min-h-dvh w-full flex-col items-center justify-center px-3 py-8 sm:px-6 sm:py-10">
+      <RoomBackdrop />
+
+      <div className="room-stage">
         <section className="cabinet" aria-labelledby="library-title">
           <div className="cabinet-inner">
             <header className="cabinet-head">
@@ -149,6 +151,30 @@ export function LibraryView({
           Pick a book to keep writing where you left off · stored on this device
         </p>
       </div>
+    </div>
+  );
+}
+
+/** The room around the cabinet: back wall, floor and the window on the right. */
+function RoomBackdrop() {
+  return (
+    <div aria-hidden="true" className="room-backdrop">
+      <div className="room-window">
+        <div className="window-view">
+          <span className="window-sun" />
+          <span className="window-moon" />
+          <span className="window-stars" />
+          <span className="window-cloud window-cloud-a" />
+          <span className="window-cloud window-cloud-b" />
+          <span className="window-hills" />
+        </div>
+        <span className="window-bar-v" />
+        <span className="window-bar-h" />
+        <span className="window-sill" />
+      </div>
+
+      <div className="room-floor" />
+      <div className="room-light-pool" />
     </div>
   );
 }
