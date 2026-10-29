@@ -123,15 +123,14 @@ body {
   }
 }
 
-/* ---------- library cabinet ----------
-   The shelf is a wooden cabinet standing in a warm room. Every colour is
-   driven off the tokens below so dark mode can re-stain the wood without
-   touching the layout. */
+/* ---------- the room and the open shelf ----------
+   The books stand on an open shelf in front of the window: there is no back
+   panel, so the sky shows through the gaps. Every colour comes from the
+   tokens below, which is how dark mode turns the same room into night. */
 
 .library-scene {
   --lib-cream: #f2e5c9;
   --lib-cream-soft: rgba(242, 229, 201, 0.62);
-  --lib-cream-faint: rgba(242, 229, 201, 0.28);
   --room-wall-top: #ddc6a4;
   --room-wall-bottom: #b99a73;
   --room-glow: rgba(255, 241, 205, 0.5);
@@ -164,12 +163,13 @@ body {
   --cloud-opacity: 1;
   --light-pool: rgba(255, 240, 205, 0.42);
   --wood-frame: linear-gradient(150deg, #a87c4e 0%, #8a6038 44%, #6b4726 100%);
-  --wood-panel: linear-gradient(180deg, #96703f 0%, #85603a 55%, #775231 100%);
   --wood-shelf-light: #b6864f;
   --wood-shelf-dark: #6a4826;
-  --wood-footer: #533720;
-  --wood-edge: rgba(52, 32, 14, 0.65);
   --spine-base: clamp(190px, min(36vw, 38vh), 320px);
+  --room-ink: #3b2a18;
+  --room-ink-soft: rgba(59, 42, 24, 0.62);
+  --room-ink-shadow: rgba(255, 250, 235, 0.25);
+  --floor-h: clamp(70px, 10vh, 120px);
 
   position: relative;
   overflow: hidden;
@@ -234,11 +234,11 @@ html[data-theme="dark"] .library-scene {
   --cloud-opacity: 0;
   --light-pool: rgba(150, 180, 230, 0.1);
   --wood-frame: linear-gradient(150deg, #6c4d31 0%, #513822 45%, #372414 100%);
-  --wood-panel: linear-gradient(180deg, #5e4630 0%, #4c3622 55%, #3f2c1b 100%);
   --wood-shelf-light: #6f4d2c;
   --wood-shelf-dark: #402b17;
-  --wood-footer: #2a1c0f;
-  --wood-edge: rgba(12, 7, 2, 0.7);
+  --room-ink: #f2e5c9;
+  --room-ink-soft: rgba(242, 229, 201, 0.6);
+  --room-ink-shadow: rgba(0, 0, 0, 0.5);
 }
 
 /* ---------- the room ---------- */
@@ -275,26 +275,85 @@ html[data-theme="dark"] .library-scene {
   min-height: 100dvh;
   width: 100%;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 0.75rem 3rem;
+  padding: clamp(20px, 3.5vh, 40px) clamp(22px, 6vw, 80px) 0;
 }
 
-@media (min-width: 700px) {
-  .room-stage {
-    padding-right: clamp(0px, 24vw, 260px);
-  }
+.room-head {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--room-ink);
+}
+
+.room-heading {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: clamp(32px, 4.6vw, 46px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 0 var(--room-ink-shadow);
+}
+
+.room-sub {
+  margin-top: 10px;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--room-ink-soft);
+}
+
+.room-ornament {
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin-top: 12px;
+  transform: rotate(45deg);
+  border: 1px solid var(--room-ink-soft);
+}
+
+.room-actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.room-action {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--room-ink-soft);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--room-ink) 4%, transparent);
+  color: var(--room-ink-soft);
+  transition:
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    background-color 160ms ease-out;
+}
+
+.room-action:hover {
+  color: var(--room-ink);
+  border-color: var(--room-ink);
+  background: color-mix(in srgb, var(--room-ink) 8%, transparent);
+}
+
+.room-action:focus-visible {
+  outline: 2px solid var(--room-ink);
+  outline-offset: 2px;
 }
 
 .room-window {
   position: absolute;
-  top: 46%;
-  right: 5%;
-  width: clamp(170px, 24vw, 330px);
-  aspect-ratio: 3 / 4;
+  top: 18%;
+  left: 28%;
+  width: min(60vw, 780px);
+  height: min(56vh, 520px);
   z-index: 1;
-  transform: translateY(-50%);
-  border: clamp(8px, 0.85vw, 12px) solid var(--window-frame);
+  border: clamp(8px, 0.8vw, 12px) solid var(--window-frame);
   border-radius: 4px;
   background: var(--window-frame);
   box-shadow:
@@ -326,9 +385,9 @@ html[data-theme="dark"] .library-scene {
 
 .window-sun {
   position: absolute;
-  top: 51%;
-  right: 12%;
-  width: 26%;
+  top: 53%;
+  right: 7%;
+  width: 15%;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
@@ -343,9 +402,9 @@ html[data-theme="dark"] .library-scene {
 
 .window-moon {
   position: absolute;
-  top: 51%;
-  right: 15%;
-  width: 23%;
+  top: 53%;
+  right: 9%;
+  width: 14%;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
@@ -425,7 +484,7 @@ html[data-theme="dark"] .library-scene {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 30%;
+  height: 28%;
   background:
     radial-gradient(
       55% 62% at 15% 102%,
@@ -502,7 +561,7 @@ html[data-theme="dark"] .window-sill {
   bottom: 0;
   left: 0;
   z-index: 0;
-  height: clamp(70px, 10vh, 120px);
+  height: var(--floor-h);
   border-top: 9px solid var(--room-baseboard);
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent 45%),
@@ -528,138 +587,42 @@ html[data-theme="dark"] .window-sill {
   filter: blur(10px);
 }
 
-.cabinet {
+.open-shelf {
   position: relative;
-  width: min(100%, 460px);
-  padding: 15px;
-  border: 1px solid var(--wood-edge);
-  border-radius: 10px;
-  background:
-    repeating-linear-gradient(
-      94deg,
-      rgba(255, 255, 255, 0.055) 0 1px,
-      transparent 1px 6px,
-      rgba(0, 0, 0, 0.06) 6px 7px,
-      transparent 7px 15px
-    ),
-    var(--wood-frame);
+  width: min(480px, 100%);
+  margin-top: auto;
+  margin-bottom: var(--floor-h);
+  align-self: flex-start;
+  filter: drop-shadow(0 22px 26px rgba(30, 16, 4, 0.3));
+}
+
+.shelf-rail {
+  height: 12px;
+  border-radius: 3px 3px 0 0;
+  background: var(--wood-frame);
   box-shadow:
-    inset 0 1px 0 rgba(255, 238, 208, 0.4),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.35),
-    0 38px 64px -30px rgba(48, 28, 10, 0.7),
-    -18px 30px 50px -34px rgba(48, 28, 10, 0.6);
+    inset 0 1px 0 rgba(255, 238, 208, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
 }
 
-.cabinet-inner {
-  position: relative;
-  overflow: hidden;
-  border-radius: 5px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.34),
-      rgba(0, 0, 0, 0.04) 24%,
-      rgba(0, 0, 0, 0.34)
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.16) 0 1px,
-      rgba(0, 0, 0, 0.02) 1px 4px,
-      rgba(255, 255, 255, 0.03) 4px 5px,
-      rgba(0, 0, 0, 0.02) 5px 26px,
-      rgba(0, 0, 0, 0.12) 26px 27px,
-      rgba(255, 255, 255, 0.03) 27px 28px
-    ),
-    var(--wood-panel);
-  box-shadow:
-    0 0 0 1px rgba(40, 24, 10, 0.5),
-    inset 0 2px 12px rgba(0, 0, 0, 0.55),
-    inset 0 0 80px rgba(28, 15, 4, 0.45);
-}
-
-.cabinet-inner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    70% 60% at 50% 62%,
-    rgba(255, 226, 178, 0.12),
-    transparent 70%
-  );
-  pointer-events: none;
-}
-
-.cabinet-head {
-  position: relative;
-  padding: 30px 22px 0;
-  text-align: center;
-}
-
-.cabinet-title {
-  font-family: var(--font-cormorant), Georgia, serif;
-  font-size: clamp(30px, 4.6vw, 40px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.05em;
-  color: var(--lib-cream);
-  text-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.45),
-    0 0 22px rgba(0, 0, 0, 0.2);
-}
-
-.cabinet-sub {
-  margin-top: 12px;
-  font-size: 9px;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--lib-cream-soft);
-}
-
-.cabinet-ornament {
-  display: block;
-  width: 5px;
-  height: 5px;
-  margin: 14px auto 0;
-  transform: rotate(45deg);
-  border: 1px solid var(--lib-cream-faint);
-}
-
-.cabinet-actions {
-  position: absolute;
-  top: 16px;
-  right: 16px;
+.shelf-frame {
   display: flex;
-  gap: 8px;
+  align-items: stretch;
 }
 
-.cabinet-action {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--lib-cream-faint);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--lib-cream-soft);
-  transition:
-    color 160ms ease-out,
-    border-color 160ms ease-out,
-    background-color 160ms ease-out;
+.shelf-post {
+  width: 12px;
+  flex: none;
+  background: var(--wood-frame);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 238, 208, 0.18),
+    inset -1px 0 0 rgba(0, 0, 0, 0.35);
 }
 
-.cabinet-action:hover {
-  color: var(--lib-cream);
-  border-color: var(--lib-cream-soft);
-  background: rgba(255, 255, 255, 0.09);
-}
-
-.cabinet-action:focus-visible {
-  outline: 2px solid var(--lib-cream);
-  outline-offset: 2px;
-}
-
-.cabinet-shelf {
-  padding: 26px 14px 0;
+.shelf-opening {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px 0;
 }
 
 .shelf-row {
@@ -668,73 +631,88 @@ html[data-theme="dark"] .window-sill {
   justify-content: flex-start;
   gap: 0;
   min-width: max-content;
-  padding: 14px 14px 0;
+  padding: 14px 0 0;
 }
 
 .shelf-board {
-  height: 24px;
-  margin: 0 4px;
-  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 34px;
+  border-radius: 0 0 2px 2px;
   background: linear-gradient(
     180deg,
     #b98c5c 0 2px,
-    var(--wood-shelf-light) 2px 5px,
-    #9a6f41 5px 9px,
-    var(--wood-shelf-dark) 9px 100%
+    var(--wood-shelf-light) 2px 6px,
+    #9a6f41 6px 12px,
+    var(--wood-shelf-dark) 12px 100%
   );
+  color: var(--lib-cream);
   box-shadow:
     inset 0 1px 0 rgba(255, 242, 215, 0.4),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5),
     0 14px 20px -12px rgba(0, 0, 0, 0.6);
 }
 
-.cabinet-foot {
-  padding: 11px 16px 13px;
-  text-align: center;
+.shelf-count {
   font-size: 9px;
-  letter-spacing: 0.28em;
+  line-height: 1;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.shelf-note {
+  font-size: 6px;
+  line-height: 1;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--lib-cream-soft);
-  background: linear-gradient(
-    180deg,
-    var(--wood-footer),
-    rgba(0, 0, 0, 0.35)
-  );
-  box-shadow: inset 0 1px 0 rgba(255, 235, 200, 0.12);
 }
 
-.cabinet-empty {
-  padding: 48px 26px 60px;
+.shelf-empty {
+  display: flex;
+  min-height: calc(var(--spine-base) + 16px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border: 1px dashed var(--room-ink-soft);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--room-wall-top) 58%, transparent);
   text-align: center;
-  color: var(--lib-cream);
+  color: var(--room-ink);
+  backdrop-filter: blur(2px);
 }
 
-@media (max-width: 480px) {
-  .cabinet-head {
-    padding: 52px 18px 0;
+@media (max-width: 640px) {
+  .room-stage {
+    padding: 20px 20px 0;
   }
 
-  .cabinet-actions {
-    top: 12px;
-    right: 12px;
+  .room-heading {
+    font-size: 30px;
   }
 
-  .cabinet-sub {
+  .room-sub {
     font-size: 8px;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.22em;
   }
-}
 
-.scene-hint {
-  margin-top: 16px;
-  text-align: center;
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  color: rgba(74, 52, 30, 0.62);
-}
+  .room-action {
+    width: 32px;
+    height: 32px;
+  }
 
-html[data-theme="dark"] .scene-hint {
-  color: rgba(236, 223, 194, 0.42);
+  .open-shelf {
+    width: 100%;
+  }
+
+  .room-window {
+    left: 22%;
+    width: 78vw;
+  }
 }
 
 /* spine */
