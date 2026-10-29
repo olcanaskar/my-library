@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { Note, Subject } from "@/lib/types";
 import {
   BookIcon,
@@ -48,8 +49,28 @@ export function LibraryView({
     onOpenBook(subject.id, reduce ? null : from);
   }
 
+  const [cycling, setCycling] = useState(false);
+  const cycleTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (cycleTimer.current) window.clearTimeout(cycleTimer.current);
+    };
+  }, []);
+
+  function handleToggleTheme() {
+    setCycling(true);
+    if (cycleTimer.current) window.clearTimeout(cycleTimer.current);
+    cycleTimer.current = window.setTimeout(() => setCycling(false), 1450);
+    onToggleTheme();
+  }
+
   return (
-    <div className="library-scene library-room">
+    <div
+      className={`library-scene library-room ${
+        cycling ? "theme-cycling" : ""
+      }`}
+    >
       <header className="library-head">
         <div>
           <h1 className="library-title">My Library</h1>
@@ -67,7 +88,7 @@ export function LibraryView({
           </button>
           <button
             type="button"
-            onClick={onToggleTheme}
+            onClick={handleToggleTheme}
             aria-label={theme === "dark" ? "Light theme" : "Dark theme"}
             className="library-action"
           >
