@@ -6,6 +6,8 @@ import type { BookRect } from "./BookOpening";
 
 /** Slight height differences so the shelf reads as real books, not bars. */
 const STAGGER = [0, 16, 6, 13, 3, 18];
+/** A gentle lean, as if the row settled against the left side. */
+const TILT = [-1.8, -1.4, -1.7, -1.2, -1.6, -1];
 
 type BookSpineProps = {
   subject: Subject;
@@ -56,6 +58,7 @@ export function BookSpine({
           height,
           // Dust the stored colour down towards the wood so the shelf feels aged.
           "--spine-color": `color-mix(in oklab, ${subject.color} 76%, #6b4e30)`,
+          "--tilt": `${TILT[index % TILT.length]}deg`,
         } as React.CSSProperties
       }
     >
