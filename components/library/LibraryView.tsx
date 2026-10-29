@@ -104,12 +104,18 @@ export function LibraryView({
         <section className="window-column" aria-label="Window">
           <div className="window-box">
             <div className="window-glass">
+              <span className="window-shooting-star" />
               <span className="window-sun" />
               <span className="window-moon" />
               <span className="window-stars" />
               <span className="window-cloud window-cloud-a" />
               <span className="window-cloud window-cloud-b" />
-              <span className="window-hills" />
+              <span className="window-ridge window-ridge--far" />
+              <span className="window-ridge window-ridge--mid" />
+              <span className="window-treeline" />
+              <span className="window-lake" />
+              <span className="window-lake-glow window-lake-glow--moon" />
+              <span className="window-lake-glow window-lake-glow--sun" />
             </div>
 
             <span aria-hidden="true" className="window-muntin window-muntin--v" />
