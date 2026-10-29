@@ -94,71 +94,76 @@ export function LibraryView({
             My Library
           </h2>
 
-          <div aria-hidden="true" className="shelf-rail" />
-
-          <div className="shelf-frame">
+          <div className="shelf-unit">
             <span aria-hidden="true" className="shelf-post" />
 
-            <div className="shelf-opening">
-              {subjects.length === 0 ? (
-                <div className="shelf-empty">
-                  <BookIcon className="mx-auto h-9 w-9 text-[var(--room-ink-soft)]" />
-                  <p className="mt-3 font-display text-2xl text-[var(--room-ink)]">
-                    Your shelf is empty
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--room-ink-soft)]">
-                    Add your first subject and give it a place on the shelf.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={onNewBook}
-                    className="mt-5 inline-flex items-center gap-1.5 rounded-md border border-[var(--room-ink-soft)] px-3 py-2 text-xs font-medium tracking-wide text-[var(--room-ink)] uppercase transition hover:bg-white/10"
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                    New book
-                  </button>
-                </div>
-              ) : (
-                <div className="shelf-scroll overflow-x-auto">
-                  <div className="shelf-row">
-                    {subjects.map((subject, index) => (
-                      <BookSpine
-                        key={subject.id}
-                        index={index}
-                        subject={subject}
-                        noteCount={countBySubject.get(subject.id) ?? 0}
-                        lifted={liftedId === subject.id}
-                        onOpen={(from) => handleOpen(subject, from)}
-                      />
-                    ))}
-
+            <div className="shelf-stack">
+              <div className="shelf-opening">
+                {subjects.length === 0 ? (
+                  <div className="shelf-empty">
+                    <BookIcon className="mx-auto h-9 w-9 text-[var(--room-ink-soft)]" />
+                    <p className="mt-3 font-display text-2xl text-[var(--room-ink)]">
+                      Your shelf is empty
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--room-ink-soft)]">
+                      Add your first subject and give it a place on the shelf.
+                    </p>
                     <button
                       type="button"
                       onClick={onNewBook}
-                      aria-label="Add a new subject"
-                      className="book-spine book-spine-new"
-                      style={{
-                        width: "clamp(38px, 4.6vw, 48px)",
-                        height: "calc(var(--spine-base) - 18px)",
-                      }}
+                      className="mt-5 inline-flex items-center gap-1.5 rounded-md border border-[var(--room-ink-soft)] px-3 py-2 text-xs font-medium tracking-wide text-[var(--room-ink)] uppercase transition hover:bg-white/10"
                     >
-                      <span className="book-spine-label">+ New book</span>
+                      <PlusIcon className="h-4 w-4" />
+                      New book
                     </button>
-
-                    <ShelfStack />
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="shelf-scroll overflow-x-auto">
+                    <div className="shelf-row">
+                      {subjects.map((subject, index) => (
+                        <BookSpine
+                          key={subject.id}
+                          index={index}
+                          subject={subject}
+                          noteCount={countBySubject.get(subject.id) ?? 0}
+                          lifted={liftedId === subject.id}
+                          onOpen={(from) => handleOpen(subject, from)}
+                        />
+                      ))}
+
+                      <button
+                        type="button"
+                        onClick={onNewBook}
+                        aria-label="Add a new subject"
+                        className="book-spine book-spine-new"
+                        style={{
+                          width: "clamp(38px, 4.6vw, 48px)",
+                          height: "calc(var(--spine-base) - 18px)",
+                        }}
+                      >
+                        <span className="book-spine-label">+ New book</span>
+                      </button>
+
+                      <ShelfStack />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="shelf-board">
+                <span className="shelf-count">
+                  {books} · {pages}
+                </span>
+                <span className="shelf-note">Stored on this device</span>
+              </div>
+
+              <div aria-hidden="true" className="shelf-gap" />
+              <div aria-hidden="true" className="shelf-board shelf-board--slim" />
+              <div aria-hidden="true" className="shelf-gap" />
+              <div aria-hidden="true" className="shelf-board shelf-board--slim" />
             </div>
 
             <span aria-hidden="true" className="shelf-post" />
-          </div>
-
-          <div className="shelf-board">
-            <span className="shelf-count">
-              {books} · {pages}
-            </span>
-            <span className="shelf-note">Stored on this device</span>
           </div>
         </section>
       </div>
