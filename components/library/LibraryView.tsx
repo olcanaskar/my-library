@@ -87,47 +87,11 @@ export function LibraryView({
 
       <div className="library-wall">
         <section className="bookcase bookcase--left" aria-label="Your library">
-          <div className="bookcase-bay bookcase-bay--active">
-            {subjects.length === 0 ? (
-              <div className="shelf-empty">
-                <BookIcon className="mx-auto h-7 w-7" />
-                <p className="mt-2 font-display text-xl">Your shelf is empty</p>
-                <p className="mt-1 text-[11px]">Add your first subject.</p>
-                <button type="button" onClick={onNewBook} className="shelf-empty-button">
-                  <PlusIcon className="h-3.5 w-3.5" />
-                  New book
-                </button>
-              </div>
-            ) : (
-              <div className="active-shelf">
-                <div className="active-books">
-                  {subjects.map((subject, index) => (
-                    <BookSpine
-                      key={subject.id}
-                      index={index}
-                      subject={subject}
-                      noteCount={countBySubject.get(subject.id) ?? 0}
-                      compact
-                      lifted={liftedId === subject.id}
-                      onOpen={(from) => handleOpen(subject, from)}
-                    />
-                  ))}
-
-                  <button
-                    type="button"
-                    onClick={onNewBook}
-                    aria-label="Add a new subject"
-                    className="book-spine book-spine--compact book-spine-new"
-                    style={{
-                      width: 26,
-                      height: "calc(var(--spine-base) - 8px)",
-                    }}
-                  >
-                    <span className="book-spine-label">+ New book</span>
-                  </button>
-                </div>
-              </div>
-            )}
+          <div className="bookcase-bay bookcase-bay--plants">
+            <div aria-hidden="true" className="plant-shelf">
+              <span className="sill-plant plant-shelf-item" />
+              <span className="sill-plant plant-shelf-item" />
+            </div>
             <span aria-hidden="true" className="glass-pane" />
           </div>
 
@@ -160,8 +124,51 @@ export function LibraryView({
             <span aria-hidden="true" className="window-muntin window-muntin--h" />
             <span aria-hidden="true" className="window-curtain" />
             <span aria-hidden="true" className="window-sill" />
-            <span aria-hidden="true" className="sill-plant sill-plant-a" />
-            <span aria-hidden="true" className="sill-plant sill-plant-b" />
+
+            <div className="window-books">
+              {subjects.length === 0 ? (
+                <div className="shelf-empty window-empty">
+                  <BookIcon className="mx-auto h-7 w-7" />
+                  <p className="mt-2 font-display text-xl">Your shelf is empty</p>
+                  <p className="mt-1 text-[11px]">Add your first subject.</p>
+                  <button
+                    type="button"
+                    onClick={onNewBook}
+                    className="shelf-empty-button"
+                  >
+                    <PlusIcon className="h-3.5 w-3.5" />
+                    New book
+                  </button>
+                </div>
+              ) : (
+                <div className="window-books-row">
+                  {subjects.map((subject, index) => (
+                    <BookSpine
+                      key={subject.id}
+                      index={index}
+                      subject={subject}
+                      noteCount={countBySubject.get(subject.id) ?? 0}
+                      compact
+                      lifted={liftedId === subject.id}
+                      onOpen={(from) => handleOpen(subject, from)}
+                    />
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={onNewBook}
+                    aria-label="Add a new subject"
+                    className="book-spine book-spine--compact book-spine-new"
+                    style={{
+                      width: 26,
+                      height: "calc(var(--spine-base) - 8px)",
+                    }}
+                  >
+                    <span className="book-spine-label">+ New book</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="window-cabinet">
