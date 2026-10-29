@@ -1634,12 +1634,12 @@ html[data-theme="dark"] .library-room.theme-cycling .window-sun {
 
 @keyframes celestial-rise {
   0% {
-    transform: translate(-70%, 70%);
+    transform: translate(-70%, -70%);
     opacity: 0;
   }
-  38% {
-    transform: translate(-42%, 22%);
-    opacity: 0.82;
+  40% {
+    transform: translate(-34%, -34%);
+    opacity: 0.85;
   }
   100% {
     transform: translate(0, 0);
