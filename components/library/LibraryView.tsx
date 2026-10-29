@@ -114,7 +114,6 @@ export function LibraryView({
               <span className="window-ridge window-ridge--mid" />
               <span className="window-treeline" />
               <span className="window-lake" />
-              <span className="window-lake-glow window-lake-glow--moon" />
               <span className="window-lake-glow window-lake-glow--sun" />
             </div>
 

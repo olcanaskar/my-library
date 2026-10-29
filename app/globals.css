@@ -1210,9 +1210,10 @@ input::placeholder {
   --lake-top: #a9c6d2;
   --lake-bottom: #6f8fa0;
   --sun-opacity: 1;
-  --moon-opacity: 0.55;
+  --moon-opacity: 0;
   --cloud-opacity: 0.9;
   --stars-opacity: 0;
+  --lake-glow: rgba(255, 220, 160, 0.6);
 
   height: 100dvh;
   overflow: hidden;
@@ -1249,10 +1250,11 @@ html[data-theme="dark"] .library-scene.library-room {
   --treeline: #0b1215;
   --lake-top: #1d2740;
   --lake-bottom: #0b111c;
-  --sun-opacity: 1;
+  --sun-opacity: 0;
   --moon-opacity: 1;
   --cloud-opacity: 0.45;
   --stars-opacity: 1;
+  --lake-glow: rgba(210, 225, 255, 0.5);
 
   background:
     radial-gradient(70% 55% at 50% 0%, rgba(253, 224, 71, 0.1), transparent 70%),
@@ -1499,11 +1501,11 @@ html[data-theme="dark"] .library-scene.library-room {
 }
 
 .library-room .window-moon {
-  top: 8%;
-  right: auto;
-  left: 12%;
+  top: 39%;
+  right: 7%;
+  left: auto;
   z-index: 2;
-  width: 24%;
+  width: 17%;
   box-shadow: 0 0 30px 10px rgba(200, 220, 255, 0.28);
 }
 
@@ -1696,22 +1698,9 @@ html[data-theme="dark"] .library-room .window-cloud {
   opacity: 0.55;
 }
 
-.window-lake-glow--moon {
-  left: 16%;
-  background: linear-gradient(
-    180deg,
-    rgba(220, 235, 255, 0.5),
-    transparent
-  );
-}
-
 .window-lake-glow--sun {
   right: 9%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 220, 160, 0.6),
-    transparent
-  );
+  background: linear-gradient(180deg, var(--lake-glow), transparent);
 }
 
 .window-muntin {
