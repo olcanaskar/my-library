@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, Inter } from "next/font/google";
+import { Caveat, Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,6 +11,12 @@ const inter = Inter({
 const caveat = Caveat({
   subsets: ["latin", "latin-ext"],
   variable: "--font-caveat",
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-cormorant",
   display: "swap",
 });
 
@@ -38,7 +44,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${caveat.variable}`}
+      className={`${inter.variable} ${caveat.variable} ${cormorant.variable}`}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

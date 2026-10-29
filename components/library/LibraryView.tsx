@@ -49,89 +49,135 @@ export function LibraryView({
   }
 
   return (
-    <div className="min-h-dvh pb-16">
-      <header className="mx-auto flex max-w-5xl items-end justify-between gap-3 px-4 pt-9 pb-6 sm:px-5 sm:pt-10">
-        <div className="min-w-0">
-          <h1 className="font-hand text-4xl leading-none sm:text-5xl md:text-6xl">
-            My Library
-          </h1>
-        </div>
+    <div className="library-scene min-h-dvh">
+      <div className="mx-auto flex min-h-dvh w-full flex-col items-center justify-center px-3 py-8 sm:px-6 sm:py-10">
+        <section className="cabinet" aria-labelledby="library-title">
+          <div className="cabinet-inner">
+            <header className="cabinet-head">
+              <h1 id="library-title" className="cabinet-title">
+                My Library
+              </h1>
+              <p className="cabinet-sub">
+                Every subject a book · every note a page
+              </p>
+              <span aria-hidden="true" className="cabinet-ornament" />
 
-        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
-          <button
-            type="button"
-            onClick={onOpenSearch}
-            aria-label="Search notes"
-            className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
-          >
-            <SearchIcon className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={onToggleTheme}
-            aria-label={theme === "dark" ? "Light theme" : "Dark theme"}
-            className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
-          >
-            {theme === "dark" ? (
-              <SunIcon className="h-5 w-5" />
-            ) : (
-              <MoonIcon className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-      </header>
+              <div className="cabinet-actions">
+                <button
+                  type="button"
+                  onClick={onOpenSearch}
+                  aria-label="Search notes"
+                  className="cabinet-action"
+                >
+                  <SearchIcon className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={onToggleTheme}
+                  aria-label={theme === "dark" ? "Light theme" : "Dark theme"}
+                  className="cabinet-action"
+                >
+                  {theme === "dark" ? (
+                    <SunIcon className="h-4 w-4" />
+                  ) : (
+                    <MoonIcon className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+            </header>
 
-      <main className="mx-auto max-w-5xl px-5">
-        {subjects.length === 0 ? (
-          <div className="mx-auto mt-10 max-w-sm rounded-xl border border-dashed border-ink/20 bg-card/60 px-6 py-12 text-center">
-            <BookIcon className="mx-auto h-10 w-10 text-ink-soft/70" />
-            <h2 className="mt-4 font-hand text-2xl">Your shelf is empty</h2>
-            <p className="mt-1 text-sm text-ink-soft">
-              Add your first subject and give it a place on the shelf.
-            </p>
-            <button
-              type="button"
-              onClick={onNewBook}
-              className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-paper transition hover:opacity-90"
-            >
-              <PlusIcon className="h-4 w-4" />
-              New book
-            </button>
-          </div>
-        ) : (
-          <div>
-            <div className="shelf-scroll overflow-x-auto pb-1">
-              <div className="flex min-w-max items-end justify-center gap-2.5 px-4 pt-8 sm:px-6">
-                {subjects.map((subject) => (
-                  <BookSpine
-                    key={subject.id}
-                    subject={subject}
-                    noteCount={countBySubject.get(subject.id) ?? 0}
-                    lifted={liftedId === subject.id}
-                    onOpen={(from) => handleOpen(subject, from)}
-                  />
-                ))}
-
+            {subjects.length === 0 ? (
+              <div className="cabinet-empty">
+                <BookIcon className="mx-auto h-9 w-9 text-[var(--lib-cream-soft)]" />
+                <h2 className="mt-3 font-display text-2xl">Your shelf is empty</h2>
+                <p className="mt-1 text-xs text-[var(--lib-cream-soft)]">
+                  Add your first subject and give it a place on the shelf.
+                </p>
                 <button
                   type="button"
                   onClick={onNewBook}
-                  aria-label="Add a new subject"
-                  className="flex h-48 w-12 shrink-0 items-center justify-center rounded-t-[3px] border border-dashed border-ink/25 text-ink-soft transition hover:border-ink/50 hover:bg-card/50 hover:text-ink sm:h-56 sm:w-14"
+                  className="mt-5 inline-flex items-center gap-1.5 rounded-md border border-[var(--lib-cream-faint)] px-3 py-2 text-xs font-medium tracking-wide text-[var(--lib-cream)] uppercase transition hover:border-[var(--lib-cream-soft)] hover:bg-white/5"
                 >
-                  <PlusIcon className="h-5 w-5" />
+                  <PlusIcon className="h-4 w-4" />
+                  New book
                 </button>
               </div>
-            </div>
+            ) : (
+              <div className="cabinet-shelf">
+                <div className="shelf-scroll overflow-x-auto">
+                  <div className="shelf-row">
+                    {subjects.map((subject, index) => (
+                      <BookSpine
+                        key={subject.id}
+                        index={index}
+                        subject={subject}
+                        noteCount={countBySubject.get(subject.id) ?? 0}
+                        lifted={liftedId === subject.id}
+                        onOpen={(from) => handleOpen(subject, from)}
+                      />
+                    ))}
 
-            <div className="h-3.5 rounded-b-[3px] bg-gradient-to-b from-shelf to-shelf-edge" />
-            <div className="mx-1 h-2 rounded-b-md bg-black/10" />
+                    <button
+                      type="button"
+                      onClick={onNewBook}
+                      aria-label="Add a new subject"
+                      className="book-spine book-spine-new"
+                      style={{
+                        width: "clamp(38px, 4.6vw, 48px)",
+                        height: "calc(var(--spine-base) - 18px)",
+                      }}
+                    >
+                      <span className="book-spine-label">+ New book</span>
+                    </button>
+
+                    <ShelfStack />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div aria-hidden="true" className="shelf-board" />
+
+            <footer className="cabinet-foot">
+              {subjects.length} {subjects.length === 1 ? "book" : "books"} ·{" "}
+              {notes.length} {notes.length === 1 ? "page" : "pages"}
+            </footer>
           </div>
-        )}
+        </section>
 
-        <p className="mt-10 text-center text-xs text-ink-soft/80">
-          Your notes are stored on this device. Works offline.
+        <p className="scene-hint">
+          Pick a book to keep writing where you left off · stored on this device
         </p>
-      </main>
+      </div>
+    </div>
+  );
+}
+
+/** Two books lying flat on the shelf: pure decoration, like a real bookcase. */
+function ShelfStack() {
+  return (
+    <div
+      aria-hidden="true"
+      className="ml-2 hidden shrink-0 flex-col items-start gap-[2px] self-end sm:flex"
+    >
+      <span
+        className="shelf-stack"
+        style={{
+          width: 70,
+          height: 9,
+          background:
+            "linear-gradient(90deg, #5f6b4a 0 68%, #efe1c2 68% 90%, #d8c7a4 90%)",
+        }}
+      />
+      <span
+        className="shelf-stack"
+        style={{
+          width: 76,
+          height: 11,
+          background:
+            "linear-gradient(90deg, #8a4238 0 68%, #efe1c2 68% 90%, #d8c7a4 90%)",
+        }}
+      />
     </div>
   );
 }

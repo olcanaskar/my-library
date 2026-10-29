@@ -120,7 +120,9 @@ export function BookOpening({
         {/* the cover, hinged on its left edge */}
         <div
           className="book-cover-face absolute inset-0 overflow-hidden rounded-[3px]"
-          style={{ backgroundColor: subject.color }}
+          style={{
+            backgroundColor: `color-mix(in oklab, ${subject.color} 76%, #6b4e30)`,
+          }}
         >
           <span
             aria-hidden="true"
