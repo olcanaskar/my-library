@@ -1582,7 +1582,7 @@ html[data-theme="dark"] .library-scene.library-room {
   z-index: 5;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 0 4px 3px;
   --spine-base: clamp(100px, 18vh, 132px);
 }
