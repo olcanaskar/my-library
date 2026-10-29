@@ -93,16 +93,14 @@ export function BookVisual({
 
             {/* the title as it sits on the spine... */}
             <span className="book-title-out absolute inset-0 flex items-center justify-center">
-              <span className="[writing-mode:vertical-rl] max-h-[78%] overflow-hidden text-[13px] font-medium tracking-wide text-white/95 [text-shadow:0_1px_0_rgba(0,0,0,0.25)]">
+              <span className="book-title-spine max-h-[78%] overflow-hidden">
                 {subject.name}
               </span>
             </span>
 
             {/* ...and the same title once the book faces us */}
             <span className="book-title-in absolute inset-0 flex items-center justify-center px-6 text-center">
-              <span className="font-hand text-3xl leading-tight text-white/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.3)] sm:text-4xl">
-                {subject.name}
-              </span>
+              <span className="book-cover-title">{subject.name}</span>
             </span>
 
             <span

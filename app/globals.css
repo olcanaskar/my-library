@@ -975,6 +975,31 @@ html[data-theme="dark"] .window-sill {
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
+/* The flying cover keeps the shelf's typographic voice: same sans family,
+   uppercase, tracking and cream ink, with the size following the book. */
+.book-title-spine,
+.book-cover-title {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.15;
+  text-transform: uppercase;
+  color: rgba(242, 229, 201, 0.82);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.32);
+}
+
+.book-title-spine {
+  writing-mode: vertical-rl;
+  font-size: clamp(7px, 3.4cqw, 15px);
+  letter-spacing: 0.12em;
+}
+
+.book-cover-title {
+  max-width: 86%;
+  font-size: clamp(11px, 4.8cqw, 18px);
+  letter-spacing: 0.12em;
+  overflow-wrap: break-word;
+}
+
 .book-spine-foot {
   position: absolute;
   right: 0;
