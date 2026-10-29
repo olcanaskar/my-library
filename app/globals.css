@@ -1286,11 +1286,12 @@ html[data-theme="dark"] .library-scene.library-room {
 
 .library-wall {
   display: grid;
+  width: max(100%, 1000px);
   flex: 1;
   min-height: 0;
-  grid-template-columns: minmax(120px, 0.7fr) minmax(260px, 1.55fr) minmax(110px, 0.65fr);
-  gap: clamp(6px, 1.1vw, 14px);
-  padding: 0 clamp(16px, 4.5vw, 64px);
+  align-self: center;
+  grid-template-columns: minmax(290px, 1fr) minmax(380px, 1.33fr) minmax(290px, 1fr);
+  gap: clamp(6px, 0.8vw, 12px);
 }
 
 .bookcase {
@@ -1600,7 +1601,7 @@ html[data-theme="dark"] .library-scene.library-room {
   align-items: flex-end;
   justify-content: flex-start;
   padding: 0 4px;
-  --spine-base: clamp(150px, 24vh, 220px);
+  --spine-base: clamp(100px, 18vh, 132px);
 }
 
 .window-books-row {
@@ -1784,12 +1785,6 @@ html[data-theme="dark"] .library-scene.library-room {
 
   .library-title {
     font-size: 30px;
-  }
-
-  .library-wall {
-    grid-template-columns: minmax(110px, 0.7fr) minmax(220px, 1.55fr) minmax(100px, 0.65fr);
-    gap: 6px;
-    padding: 0 18px;
   }
 
   .active-shelf {

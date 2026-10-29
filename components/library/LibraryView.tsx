@@ -156,7 +156,7 @@ export function LibraryView({
                     aria-label="Add a new subject"
                     className="book-spine book-spine--compact book-spine-new"
                     style={{
-                      width: "clamp(26px, 3.5vw, 42px)",
+                      width: 26,
                       height: "calc(var(--spine-base) - 8px)",
                     }}
                   >
