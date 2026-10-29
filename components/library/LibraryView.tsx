@@ -87,11 +87,8 @@ export function LibraryView({
 
       <div className="library-wall">
         <section className="bookcase bookcase--left" aria-label="Your library">
-          <div className="bookcase-bay bookcase-bay--plants">
-            <div aria-hidden="true" className="plant-shelf">
-              <span className="sill-plant plant-shelf-item" />
-              <span className="sill-plant plant-shelf-item" />
-            </div>
+          <div className="bookcase-bay">
+            <DecorativeShelf seed={1} />
             <span aria-hidden="true" className="glass-pane" />
           </div>
 
@@ -159,7 +156,7 @@ export function LibraryView({
                     aria-label="Add a new subject"
                     className="book-spine book-spine--compact book-spine-new"
                     style={{
-                      width: 26,
+                      width: "clamp(26px, 3.5vw, 42px)",
                       height: "calc(var(--spine-base) - 8px)",
                     }}
                   >

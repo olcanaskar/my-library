@@ -29,7 +29,9 @@ export function BookSpine({
 }: BookSpineProps) {
   // Spine width grows with the page count: the shelf's nicest feedback loop.
   const width = compact
-    ? `calc(36px + ${Math.min(noteCount, 8) * 0.8}px)`
+    ? `calc(clamp(48px, 7vw, 76px) + ${
+        Math.min(noteCount, 8) * 0.8
+      }px)`
     : `calc(clamp(54px, 7.4vw, 68px) + ${
         Math.min(noteCount, 8) * 1.5
       }px)`;
@@ -41,8 +43,8 @@ export function BookSpine({
   const nameLength = subject.name.length;
   const labelSize = compact
     ? nameLength > 14
-      ? 6
-      : 7
+      ? 7
+      : 8
     : nameLength > 18
       ? 7.5
       : nameLength > 13
