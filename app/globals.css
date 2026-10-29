@@ -1602,7 +1602,7 @@ html[data-theme="dark"] .library-scene.library-room {
   align-items: flex-end;
   justify-content: flex-start;
   padding: 0 4px;
-  --spine-base: clamp(100px, 18vh, 132px);
+  --spine-base: clamp(125px, 23vh, 170px);
 }
 
 .window-books-row {
