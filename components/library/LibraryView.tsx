@@ -104,6 +104,8 @@ export function LibraryView({
         <section className="window-column" aria-label="Window">
           <div className="window-box">
             <div className="window-glass">
+              <span className="window-sky window-sky--day" />
+              <span className="window-sky window-sky--night" />
               <span className="window-shooting-star" />
               <span className="window-sun" />
               <span className="window-moon" />
