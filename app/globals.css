@@ -1577,13 +1577,13 @@ html[data-theme="dark"] .library-scene.library-room {
 .window-books {
   position: absolute;
   right: 8px;
-  bottom: 0;
+  bottom: 7px;
   left: 8px;
   z-index: 5;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
-  padding: 0 4px 3px;
+  padding: 0 4px;
   --spine-base: clamp(100px, 18vh, 132px);
 }
 

@@ -122,7 +122,6 @@ export function LibraryView({
 
             <span aria-hidden="true" className="window-muntin window-muntin--v" />
             <span aria-hidden="true" className="window-muntin window-muntin--h" />
-            <span aria-hidden="true" className="window-curtain" />
             <span aria-hidden="true" className="window-sill" />
 
             <div className="window-books">
