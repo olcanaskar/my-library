@@ -48,11 +48,6 @@ export function LibraryView({
     onOpenBook(subject.id, reduce ? null : from);
   }
 
-  const books = `${subjects.length} ${
-    subjects.length === 1 ? "book" : "books"
-  }`;
-  const pages = `${notes.length} ${notes.length === 1 ? "page" : "pages"}`;
-
   return (
     <div className="library-scene library-room">
       <header className="library-head">
@@ -199,13 +194,7 @@ export function LibraryView({
         </section>
       </div>
 
-      <div className="library-base">
-        <span className="base-note">
-          {books} · {pages} · stored on this device
-        </span>
-        <span className="base-wood" aria-hidden="true" />
-        <div aria-hidden="true" className="library-ladder" />
-      </div>
+      <div aria-hidden="true" className="library-ladder" />
     </div>
   );
 }
