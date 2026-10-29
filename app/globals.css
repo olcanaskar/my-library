@@ -134,9 +134,6 @@ body {
   --room-wall-top: #ddc6a4;
   --room-wall-bottom: #b99a73;
   --room-glow: rgba(255, 241, 205, 0.5);
-  --room-floor-1: #8c6239;
-  --room-floor-2: #7e5530;
-  --room-baseboard: #d8c3a1;
   --window-frame: #7a5530;
   --window-glow: rgba(255, 236, 190, 0.4);
   --glass-streak: rgba(255, 255, 255, 0.1);
@@ -161,7 +158,6 @@ body {
   --moon-opacity: 0;
   --stars-opacity: 0;
   --cloud-opacity: 1;
-  --light-pool: rgba(255, 240, 205, 0.42);
   --wood-frame: linear-gradient(150deg, #a87c4e 0%, #8a6038 44%, #6b4726 100%);
   --wood-shelf-light: #b6864f;
   --wood-shelf-dark: #6a4826;
@@ -169,7 +165,6 @@ body {
   --room-ink: #3b2a18;
   --room-ink-soft: rgba(59, 42, 24, 0.62);
   --room-ink-shadow: rgba(255, 250, 235, 0.25);
-  --floor-h: clamp(70px, 10vh, 120px);
 
   position: relative;
   overflow: hidden;
@@ -206,9 +201,6 @@ html[data-theme="dark"] .library-scene {
   --room-wall-top: #332a1f;
   --room-wall-bottom: #1a140e;
   --room-glow: rgba(150, 180, 225, 0.12);
-  --room-floor-1: #3a2b1d;
-  --room-floor-2: #2c2015;
-  --room-baseboard: #4a3826;
   --window-frame: #4a331e;
   --window-glow: rgba(140, 170, 220, 0.26);
   --glass-streak: rgba(255, 255, 255, 0.05);
@@ -232,7 +224,6 @@ html[data-theme="dark"] .library-scene {
   --moon-opacity: 1;
   --stars-opacity: 1;
   --cloud-opacity: 0;
-  --light-pool: rgba(150, 180, 230, 0.1);
   --wood-frame: linear-gradient(150deg, #6c4d31 0%, #513822 45%, #372414 100%);
   --wood-shelf-light: #6f4d2c;
   --wood-shelf-dark: #402b17;
@@ -272,9 +263,10 @@ html[data-theme="dark"] .library-scene {
   position: relative;
   z-index: 2;
   display: flex;
-  min-height: 100dvh;
+  height: 100dvh;
   width: 100%;
   flex-direction: column;
+  overflow: hidden;
   padding: clamp(20px, 3.5vh, 40px) clamp(22px, 6vw, 80px) 0;
 }
 
@@ -348,10 +340,10 @@ html[data-theme="dark"] .library-scene {
 
 .room-window {
   position: absolute;
-  top: 18%;
-  left: 28%;
-  width: min(60vw, 780px);
-  height: min(56vh, 520px);
+  top: 150px;
+  right: 8%;
+  width: min(96vw, 780px);
+  height: min(90vh, 640px);
   z-index: 1;
   border: clamp(8px, 0.8vw, 12px) solid var(--window-frame);
   border-radius: 4px;
@@ -361,7 +353,6 @@ html[data-theme="dark"] .library-scene {
     0 20px 34px -18px rgba(0, 0, 0, 0.55),
     0 0 110px 30px var(--window-glow);
 }
-
 .window-view {
   position: absolute;
   inset: 0;
@@ -555,44 +546,12 @@ html[data-theme="dark"] .window-sill {
   background: linear-gradient(180deg, #6a4c30, var(--window-frame));
 }
 
-.room-floor {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 0;
-  height: var(--floor-h);
-  border-top: 9px solid var(--room-baseboard);
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent 45%),
-    repeating-linear-gradient(
-      180deg,
-      var(--room-floor-1) 0 12px,
-      var(--room-floor-2) 12px 14px
-    );
-  box-shadow:
-    0 -6px 16px -8px rgba(0, 0, 0, 0.35),
-    inset 0 22px 30px -22px rgba(0, 0, 0, 0.6);
-}
-
-.room-light-pool {
-  position: absolute;
-  right: 7%;
-  bottom: 7%;
-  width: clamp(130px, 24vw, 320px);
-  height: clamp(40px, 7vh, 80px);
-  z-index: 0;
-  transform: skewX(-10deg);
-  background: radial-gradient(closest-side, var(--light-pool), transparent 75%);
-  filter: blur(10px);
-}
-
 .open-shelf {
-  position: relative;
-  width: min(480px, 100%);
-  margin-top: auto;
-  margin-bottom: var(--floor-h);
-  align-self: flex-start;
+  position: absolute;
+  top: 150px;
+  left: clamp(20px, 5vw, 80px);
+  z-index: 2;
+  width: min(380px, 52vw);
   filter: drop-shadow(0 22px 26px rgba(30, 16, 4, 0.3));
 }
 
@@ -623,7 +582,7 @@ html[data-theme="dark"] .window-sill {
 }
 
 .shelf-gap {
-  height: 88px;
+  height: calc(100dvh - var(--spine-base) - 216px);
 }
 
 .shelf-row {

@@ -159,8 +159,6 @@ export function LibraryView({
 
               <div aria-hidden="true" className="shelf-gap" />
               <div aria-hidden="true" className="shelf-board shelf-board--slim" />
-              <div aria-hidden="true" className="shelf-gap" />
-              <div aria-hidden="true" className="shelf-board shelf-board--slim" />
             </div>
 
             <span aria-hidden="true" className="shelf-post" />
@@ -188,9 +186,6 @@ function RoomBackdrop() {
         <span className="window-bar-h" />
         <span className="window-sill" />
       </div>
-
-      <div className="room-floor" />
-      <div className="room-light-pool" />
     </div>
   );
 }
