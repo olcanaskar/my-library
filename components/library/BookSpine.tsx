@@ -12,6 +12,8 @@ type BookSpineProps = {
   noteCount: number;
   /** Position on the shelf; drives the cosmetic height stagger. */
   index: number;
+  /** Small spine for the built-in bookcase. */
+  compact?: boolean;
   /** True while this book is flying out of the shelf. */
   lifted?: boolean;
   onOpen: (from: BookRect) => void;
@@ -21,20 +23,31 @@ export function BookSpine({
   subject,
   noteCount,
   index,
+  compact = false,
   lifted = false,
   onOpen,
 }: BookSpineProps) {
   // Spine width grows with the page count: the shelf's nicest feedback loop.
-  const width = `calc(clamp(54px, 7.4vw, 68px) + ${
-    Math.min(noteCount, 8) * 1.5
-  }px)`;
+  const width = compact
+    ? `calc(36px + ${Math.min(noteCount, 8) * 0.8}px)`
+    : `calc(clamp(54px, 7.4vw, 68px) + ${
+        Math.min(noteCount, 8) * 1.5
+      }px)`;
   const height = `calc(var(--spine-base) - ${
-    STAGGER[index % STAGGER.length]
+    STAGGER[index % STAGGER.length] * (compact ? 0.3 : 1)
   }px)`;
 
   // Long subject names step down a little so they still read as one line.
   const nameLength = subject.name.length;
-  const labelSize = nameLength > 18 ? 7.5 : nameLength > 13 ? 8.5 : 10;
+  const labelSize = compact
+    ? nameLength > 14
+      ? 6
+      : 7
+    : nameLength > 18
+      ? 7.5
+      : nameLength > 13
+        ? 8.5
+        : 10;
 
   return (
     <button
@@ -49,7 +62,9 @@ export function BookSpine({
         });
       }}
       aria-label={`${subject.name} notebook, ${pagesLabel(noteCount)}`}
-      className={`book-spine ${lifted ? "pointer-events-none opacity-0" : ""}`}
+      className={`book-spine ${compact ? "book-spine--compact" : ""} ${
+        lifted ? "pointer-events-none opacity-0" : ""
+      }`}
       style={
         {
           width,

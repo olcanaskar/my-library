@@ -8,7 +8,7 @@ export function emptyStore(): Store {
     subjects: [],
     notes: [],
     lastNoteBySubject: {},
-    theme: "light",
+    theme: "dark",
   };
 }
 
@@ -91,7 +91,7 @@ export function seedStore(): Store {
     subjects,
     notes,
     lastNoteBySubject: { mat: "n1" },
-    theme: "light",
+    theme: "dark",
   };
 }
 
@@ -123,7 +123,7 @@ export function loadStore(): Store {
       ...emptyStore(),
       ...parsed,
       lastNoteBySubject: parsed.lastNoteBySubject ?? {},
-      theme: parsed.theme === "dark" ? "dark" : "light",
+      theme: parsed.theme === "light" ? "light" : "dark",
     };
   } catch {
     return seedStore();
