@@ -280,19 +280,20 @@ html[data-theme="dark"] .library-scene {
   padding: 2rem 0.75rem 3rem;
 }
 
-@media (min-width: 680px) {
+@media (min-width: 700px) {
   .room-stage {
-    padding-right: clamp(0px, 18vw, 260px);
+    padding-right: clamp(0px, 24vw, 260px);
   }
 }
 
 .room-window {
   position: absolute;
-  top: clamp(32px, 9vh, 110px);
+  top: 46%;
   right: 5%;
-  width: clamp(150px, 19vw, 260px);
+  width: clamp(170px, 24vw, 330px);
   aspect-ratio: 3 / 4;
   z-index: 1;
+  transform: translateY(-50%);
   border: clamp(8px, 0.85vw, 12px) solid var(--window-frame);
   border-radius: 4px;
   background: var(--window-frame);
@@ -325,9 +326,9 @@ html[data-theme="dark"] .library-scene {
 
 .window-sun {
   position: absolute;
-  top: 15%;
-  right: 13%;
-  width: 30%;
+  top: 51%;
+  right: 12%;
+  width: 26%;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
@@ -342,9 +343,9 @@ html[data-theme="dark"] .library-scene {
 
 .window-moon {
   position: absolute;
-  top: 17%;
-  right: 17%;
-  width: 26%;
+  top: 51%;
+  right: 15%;
+  width: 23%;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
@@ -407,15 +408,15 @@ html[data-theme="dark"] .library-scene {
 }
 
 .window-cloud-a {
-  top: 39%;
+  top: 40%;
   left: 6%;
   width: 52%;
 }
 
 .window-cloud-b {
-  top: 55%;
-  left: 42%;
-  width: 44%;
+  top: 58%;
+  left: 16%;
+  width: 36%;
   height: 8%;
 }
 
@@ -424,7 +425,7 @@ html[data-theme="dark"] .library-scene {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 36%;
+  height: 30%;
   background:
     radial-gradient(
       55% 62% at 15% 102%,
@@ -529,7 +530,7 @@ html[data-theme="dark"] .window-sill {
 
 .cabinet {
   position: relative;
-  width: min(100%, 480px);
+  width: min(100%, 460px);
   padding: 15px;
   border: 1px solid var(--wood-edge);
   border-radius: 10px;
