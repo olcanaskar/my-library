@@ -4,11 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { formatDay } from "@/lib/format";
 import { inkPalette, resolveInkColor } from "@/lib/ink";
 import {
+  applyTextEdit,
+  runsFromNote,
+  runsToText,
+  writingColorFromNote,
+  type TextEditInfo,
+} from "@/lib/textRuns";
+import {
   paperClass,
   type InkColor,
   type InkStroke,
   type Note,
   type Subject,
+  type TextRun,
   type Theme,
 } from "@/lib/types";
 import {
@@ -40,6 +48,7 @@ type NoteEditorProps = {
     body?: string;
     ink?: InkStroke[];
     textColor?: InkColor;
+    textRuns?: TextRun[];
   }) => void;
   onBack: () => void;
   onPrev: () => void;
@@ -69,15 +78,19 @@ export function NoteEditor({
 
   const [tool, setTool] = useState<"type" | "pen">("type");
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
+  const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
+  const runsRef = useRef(runs);
+  const editRef = useRef<TextEditInfo | null>(null);
   const palette = inkPalette(theme);
   const [inkColor, setInkColor] = useState<InkColor>("ink");
-  const [textColor, setTextColor] = useState<InkColor>(
-    () => note.textColor ?? "ink",
+  const [textColor, setTextColor] = useState<InkColor>(() =>
+    writingColorFromNote(note),
   );
   const [inkSize, setInkSize] = useState<number>(INK_SIZES[1].value);
   const [eraser, setEraser] = useState(false);
   const penActive = tool === "pen";
   const textColorValue = resolveInkColor(textColor, theme);
+  const body = runsToText(runs);
 
   useEffect(() => {
     return () => {
@@ -88,11 +101,28 @@ export function NoteEditor({
   // Page turns remount this editor (key={note.id}), so each page starts clean.
 
   useEffect(() => {
+    const field = bodyRef.current;
+    if (!field) return;
+    const textarea: HTMLTextAreaElement = field;
+
+    function onBeforeInput(event: InputEvent) {
+      editRef.current = {
+        start: textarea.selectionStart,
+        end: textarea.selectionEnd,
+        inputType: event.inputType ?? "",
+      };
+    }
+
+    textarea.addEventListener("beforeinput", onBeforeInput);
+    return () => textarea.removeEventListener("beforeinput", onBeforeInput);
+  }, []);
+
+  useEffect(() => {
     const el = bodyRef.current;
     if (!el) return;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
-  }, [note.body, note.id]);
+  }, [body, note.id]);
 
   // Alt+arrow turns pages without stealing keys from the text fields.
   useEffect(() => {
@@ -122,17 +152,54 @@ export function NoteEditor({
     body?: string;
     ink?: InkStroke[];
     textColor?: InkColor;
+    textRuns?: TextRun[];
   }) {
     markTyping();
     onChange(patch);
   }
 
+  function commitRuns(next: TextRun[]) {
+    runsRef.current = next;
+    setRuns(next);
+  }
+
+  function handleBodyChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    const nextText = event.currentTarget.value;
+    const edit = editRef.current;
+    editRef.current = null;
+    const nextRuns = applyTextEdit(runsRef.current, nextText, textColor, {
+      start: edit?.start ?? 0,
+      end: edit?.end ?? 0,
+      inputType: edit?.inputType ?? "",
+      afterCaret: event.currentTarget.selectionStart,
+    });
+    commitRuns(nextRuns);
+    handleChange({ body: nextText, textRuns: nextRuns, textColor });
+  }
+
   function chooseColor(next: InkColor) {
     if (!penActive) {
+      const field = bodyRef.current;
+      const start = field?.selectionStart ?? 0;
+      const end = field?.selectionEnd ?? start;
+
       setTextColor(next);
-      handleChange({ textColor: next });
+      // Persist the existing runs alongside the new writing colour. Without
+      // this, an older note with no runs would treat the new colour as if it
+      // had always applied to the whole page after a reload.
+      handleChange({ textColor: next, textRuns: runsRef.current });
+
+      // Keep the caret (and any selection) in the page so the writer can
+      // carry on immediately; only future characters take the new colour.
+      window.requestAnimationFrame(() => {
+        const el = bodyRef.current;
+        if (!el) return;
+        el.focus({ preventScroll: true });
+        el.setSelectionRange(start, end);
+      });
       return;
     }
+
     setInkColor(next);
     setEraser(false);
   }
@@ -270,6 +337,7 @@ export function NoteEditor({
                 <button
                   key={option.key}
                   type="button"
+                  onMouseDown={(event) => event.preventDefault()}
                   onClick={() => chooseColor(option.key)}
                   aria-label={option.name}
                   aria-pressed={selected}
@@ -360,7 +428,6 @@ export function NoteEditor({
               maxLength={80}
               autoFocus={!note.title}
               className="w-full bg-transparent font-hand text-3xl leading-tight outline-none sm:text-4xl"
-              style={{ color: textColorValue }}
             />
             <div className="mt-2 flex items-center justify-between text-[11px] text-ink-soft">
               <span>{formatDay(note.createdAt)}</span>
@@ -373,22 +440,45 @@ export function NoteEditor({
               margin ? "paper-margin" : ""
             }`}
           >
-            <textarea
-              ref={bodyRef}
-              value={note.body}
-              onChange={(event) => handleChange({ body: event.target.value })}
-              placeholder={
-                penActive
-                  ? "Switch to Type to write, or draw on the page…"
-                  : "Start writing…"
-              }
-              aria-label="Note content"
-              spellCheck
-              className={`relative z-[1] block min-h-[46dvh] w-full resize-none overflow-hidden border-0 bg-transparent px-5 py-0 text-[16px] text-ink outline-none sm:px-14 ${
-                penActive ? "pointer-events-none" : ""
-              }`}
-              style={{ lineHeight: "32px", color: textColorValue }}
-            />
+            <div className="relative">
+              {/* The textarea supplies the caret and editing; this mirror
+                  supplies the per-run colours behind its transparent text. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden px-5 py-0 text-[16px] break-words whitespace-pre-wrap sm:px-14"
+                style={{ lineHeight: "32px" }}
+              >
+                {runs.map((run, index) => (
+                  <span
+                    key={`${index}-${run.color}`}
+                    style={{ color: resolveInkColor(run.color, theme) }}
+                  >
+                    {run.text}
+                  </span>
+                ))}
+              </div>
+
+              <textarea
+                ref={bodyRef}
+                value={body}
+                onChange={handleBodyChange}
+                placeholder={
+                  penActive
+                    ? "Switch to Type to write, or draw on the page…"
+                    : "Start writing…"
+                }
+                aria-label="Note content"
+                spellCheck
+                wrap="soft"
+                className={`note-textarea relative z-[1] block min-h-[46dvh] w-full resize-none overflow-hidden border-0 bg-transparent px-5 py-0 text-[16px] break-words outline-none sm:px-14 ${
+                  penActive ? "pointer-events-none" : ""
+                }`}
+                style={{
+                  lineHeight: "32px",
+                  caretColor: textColorValue,
+                }}
+              />
+            </div>
 
             <PenCanvas
               key={note.id}

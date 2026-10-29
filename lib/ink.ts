@@ -15,7 +15,7 @@ export const INK_COLORS_LIGHT: InkPaletteEntry[] = [
 ];
 
 export const INK_COLORS_DARK: InkPaletteEntry[] = [
-  { key: "ink", name: "Default", value: "#f2eee4" },
+  { key: "ink", name: "Default", value: "#ece7da" },
   { key: "red", name: "Red", value: "#ff7a6e" },
   { key: "blue", name: "Blue", value: "#7ab0ff" },
   { key: "green", name: "Green", value: "#7bd98f" },

@@ -1298,6 +1298,28 @@ textarea::placeholder,
 input::placeholder {
   color: color-mix(in oklab, var(--ink-soft) 75%, transparent);
 }
+
+/* The note textarea is only the editing layer; the visible glyphs are the
+   coloured mirror behind it. Keep the caret and selection, hide the glyphs. */
+.note-textarea {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.note-textarea::placeholder {
+  color: color-mix(in oklab, var(--ink-soft) 75%, transparent);
+  -webkit-text-fill-color: color-mix(
+    in oklab,
+    var(--ink-soft) 75%,
+    transparent
+  );
+}
+
+.note-textarea::selection {
+  background: rgba(96, 143, 255, 0.3);
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 /* ============================================================
    Cozy library wall — interactive bookshelf scene
    ============================================================ */

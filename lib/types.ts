@@ -25,13 +25,21 @@ export type InkStroke = {
   points: InkPoint[];
 };
 
+/** A contiguous stretch of typed text in one colour. */
+export type TextRun = {
+  text: string;
+  color: InkColor;
+};
+
 export type Note = {
   id: string;
   subjectId: string;
   title: string;
   body: string;
-  /** Colour of typed text, stored as a theme-aware token. */
+  /** Colour used for the next typed characters. */
   textColor?: InkColor;
+  /** Typed text split into coloured runs; `body` is their concatenation. */
+  textRuns?: TextRun[];
   /** Freehand ink, normalised to the page canvas. */
   ink?: InkStroke[];
   createdAt: number;
