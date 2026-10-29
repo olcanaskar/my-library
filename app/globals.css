@@ -134,6 +134,9 @@ body {
   --room-wall-top: #ddc6a4;
   --room-wall-bottom: #b99a73;
   --room-glow: rgba(255, 241, 205, 0.5);
+  --room-floor-1: #8c6239;
+  --room-floor-2: #7e5530;
+  --room-baseboard: #d8c3a1;
   --window-frame: #7a5530;
   --window-glow: rgba(255, 236, 190, 0.4);
   --glass-streak: rgba(255, 255, 255, 0.1);
@@ -165,6 +168,7 @@ body {
   --room-ink: #3b2a18;
   --room-ink-soft: rgba(59, 42, 24, 0.62);
   --room-ink-shadow: rgba(255, 250, 235, 0.25);
+  --floor-h: clamp(70px, 10vh, 120px);
 
   position: relative;
   overflow: hidden;
@@ -201,6 +205,9 @@ html[data-theme="dark"] .library-scene {
   --room-wall-top: #332a1f;
   --room-wall-bottom: #1a140e;
   --room-glow: rgba(150, 180, 225, 0.12);
+  --room-floor-1: #3a2b1d;
+  --room-floor-2: #2c2015;
+  --room-baseboard: #4a3826;
   --window-frame: #4a331e;
   --window-glow: rgba(140, 170, 220, 0.26);
   --glass-streak: rgba(255, 255, 255, 0.05);
@@ -343,7 +350,7 @@ html[data-theme="dark"] .library-scene {
   top: 150px;
   right: 8%;
   width: min(96vw, 780px);
-  height: min(90vh, 640px);
+  height: calc(100dvh - var(--floor-h) - 206px);
   z-index: 1;
   border: clamp(8px, 0.8vw, 12px) solid var(--window-frame);
   border-radius: 4px;
@@ -377,7 +384,7 @@ html[data-theme="dark"] .library-scene {
 .window-sun {
   position: absolute;
   top: 56%;
-  right: 10%;
+  right: 14%;
   width: 15%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -394,7 +401,7 @@ html[data-theme="dark"] .library-scene {
 .window-moon {
   position: absolute;
   top: 56%;
-  right: 11%;
+  right: 15%;
   width: 14%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -547,22 +554,191 @@ html[data-theme="dark"] .window-sill {
   background: linear-gradient(180deg, #6a4c30, var(--window-frame));
 }
 
+.window-curtain {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: 3;
+  width: 10%;
+  border-radius: 0 2px 2px 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #efe6d2 0 6px,
+    #e2d6bd 6px 10px,
+    #f3ebd9 10px 15px
+  );
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.14);
+}
+
+.sill-plant {
+  position: absolute;
+  bottom: 3px;
+  z-index: 4;
+  width: 42px;
+  height: 60px;
+}
+
+.sill-plant-a {
+  left: 64%;
+}
+
+.sill-plant-b {
+  left: 78%;
+}
+
+.sill-plant::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 11px;
+  width: 20px;
+  height: 17px;
+  border-radius: 2px 2px 5px 5px;
+  background: linear-gradient(180deg, #b56a45, #8a4a2f);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.sill-plant::after {
+  content: "";
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  width: 42px;
+  height: 42px;
+  background:
+    radial-gradient(ellipse 42% 58% at 28% 62%, #6f8a58 0 60%, transparent 62%),
+    radial-gradient(ellipse 40% 55% at 70% 48%, #5c7a4c 0 60%, transparent 62%),
+    radial-gradient(ellipse 34% 46% at 50% 30%, #7d9a63 0 60%, transparent 62%);
+}
+
 .open-shelf {
   position: absolute;
   top: 150px;
   left: clamp(20px, 5vw, 80px);
   z-index: 2;
   width: min(380px, 52vw);
+  height: calc(100dvh - var(--floor-h) - 150px);
   filter: drop-shadow(0 22px 26px rgba(30, 16, 4, 0.3));
+}
+
+.room-floor {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  height: var(--floor-h);
+  border-top: 8px solid var(--room-baseboard);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.26), transparent 42%),
+    repeating-linear-gradient(
+      180deg,
+      var(--room-floor-1) 0 12px,
+      var(--room-floor-2) 12px 14px
+    );
+  box-shadow: inset 0 20px 26px -20px rgba(0, 0, 0, 0.6);
+}
+
+.lower-cabinet {
+  position: absolute;
+  right: 8%;
+  bottom: var(--floor-h);
+  left: calc(clamp(20px, 5vw, 80px) + 388px);
+  z-index: 2;
+  height: 56px;
+  padding: 6px 8px 0;
+  border-radius: 2px 2px 0 0;
+  background: var(--wood-frame);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 238, 208, 0.3),
+    0 10px 14px -10px rgba(0, 0, 0, 0.5);
+}
+
+.lower-cabinet .dummy-shelf {
+  height: 100%;
+  padding: 0 2px;
+}
+
+.side-bookcase {
+  position: absolute;
+  top: 150px;
+  right: 0;
+  bottom: var(--floor-h);
+  z-index: 2;
+  display: flex;
+  width: 8%;
+  flex-direction: column;
+  border-left: 1px solid rgba(0, 0, 0, 0.35);
+  background: var(--wood-frame);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 238, 208, 0.15),
+    -6px 0 12px -8px rgba(0, 0, 0, 0.4);
+}
+
+.side-shelf {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.side-shelf .dummy-shelf {
+  gap: 1px;
+  padding: 4px 4px 0;
+}
+
+.side-shelf .shelf-board--slim {
+  height: 10px;
+}
+
+.ladder {
+  position: absolute;
+  right: 1.5%;
+  bottom: var(--floor-h);
+  z-index: 4;
+  width: clamp(64px, 8vw, 96px);
+  height: 300px;
+  transform: rotate(6deg);
+  transform-origin: bottom right;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0 30px,
+    var(--wood-shelf-light) 30px 38px
+  );
+  filter: drop-shadow(8px 10px 12px rgba(20, 10, 2, 0.35));
+}
+
+.ladder::before,
+.ladder::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #9a6f41, #6b4726);
+  box-shadow: inset 1px 0 0 rgba(255, 235, 200, 0.2);
+}
+
+.ladder::before {
+  left: 0;
+}
+
+.ladder::after {
+  right: 0;
 }
 
 .shelf-unit {
   display: flex;
+  height: 100%;
   align-items: stretch;
 }
 
 .shelf-stack {
   display: flex;
+  height: 100%;
   min-width: 0;
   flex: 1;
   flex-direction: column;
@@ -582,8 +758,37 @@ html[data-theme="dark"] .window-sill {
   padding: 8px 8px 0;
 }
 
-.shelf-gap {
-  height: calc(100dvh - var(--spine-base) - 216px);
+.lower-shelf {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.dummy-shelf {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  align-items: flex-end;
+  gap: 2px;
+  overflow: hidden;
+  padding: 0 8px;
+}
+
+.dummy-book {
+  flex: none;
+  border-radius: 1px;
+  background-image: linear-gradient(
+    180deg,
+    rgba(246, 236, 214, 0.55) 0 2px,
+    rgba(255, 255, 255, 0.16) 2px 3px,
+    transparent 3px 22%,
+    rgba(0, 0, 0, 0.16)
+  );
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.12),
+    inset -1px 0 0 rgba(0, 0, 0, 0.3),
+    0 2px 3px -2px rgba(0, 0, 0, 0.4);
 }
 
 .shelf-row {

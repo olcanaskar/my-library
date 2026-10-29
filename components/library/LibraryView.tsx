@@ -157,13 +157,41 @@ export function LibraryView({
                 <span className="shelf-note">Stored on this device</span>
               </div>
 
-              <div aria-hidden="true" className="shelf-gap" />
-              <div aria-hidden="true" className="shelf-board shelf-board--slim" />
+              <div className="lower-shelf">
+                <DecorativeShelf seed={2} />
+                <div aria-hidden="true" className="shelf-board shelf-board--slim" />
+              </div>
+
+              <div className="lower-shelf">
+                <DecorativeShelf seed={7} />
+                <div aria-hidden="true" className="shelf-board shelf-board--slim" />
+              </div>
             </div>
 
             <span aria-hidden="true" className="shelf-post" />
           </div>
         </section>
+
+        <div aria-hidden="true" className="lower-cabinet">
+          <DecorativeShelf seed={11} />
+        </div>
+
+        <div aria-hidden="true" className="side-bookcase">
+          <div className="side-shelf">
+            <DecorativeShelf seed={4} />
+            <div className="shelf-board shelf-board--slim" />
+          </div>
+          <div className="side-shelf">
+            <DecorativeShelf seed={8} />
+            <div className="shelf-board shelf-board--slim" />
+          </div>
+          <div className="side-shelf">
+            <DecorativeShelf seed={13} />
+            <div className="shelf-board shelf-board--slim" />
+          </div>
+        </div>
+
+        <div aria-hidden="true" className="ladder" />
       </div>
     </div>
   );
@@ -185,7 +213,45 @@ function RoomBackdrop() {
         <span className="window-bar-v" />
         <span className="window-bar-h" />
         <span className="window-sill" />
+        <span className="window-curtain" />
+        <span className="sill-plant sill-plant-a" />
+        <span className="sill-plant sill-plant-b" />
       </div>
+
+      <div className="room-floor" />
+    </div>
+  );
+}
+
+const DUMMY_COLORS = [
+  "#6d5a4a",
+  "#8a6d55",
+  "#4f5d6b",
+  "#7a5a52",
+  "#5b6b5a",
+  "#8c7a5c",
+  "#6a5566",
+  "#7d6a4f",
+];
+const DUMMY_WIDTHS = [7, 10, 6, 12, 8, 9, 11, 7, 13, 8, 6, 10, 9, 7, 12, 8];
+const DUMMY_HEIGHTS = [62, 74, 56, 80, 68, 72, 58, 76, 64, 70, 54, 78, 60, 73, 66, 69];
+
+/** A quiet row of books on a shelf that is not part of the library. */
+function DecorativeShelf({ seed }: { seed: number }) {
+  return (
+    <div aria-hidden="true" className="dummy-shelf">
+      {Array.from({ length: 28 }, (_, i) => (
+        <span
+          key={i}
+          className="dummy-book"
+          style={{
+            width: DUMMY_WIDTHS[i % DUMMY_WIDTHS.length],
+            height: `${DUMMY_HEIGHTS[(i + seed) % DUMMY_HEIGHTS.length]}%`,
+            backgroundColor: DUMMY_COLORS[(i + seed) % DUMMY_COLORS.length],
+            transform: i % 7 === 3 ? "rotate(-2.5deg)" : undefined,
+          }}
+        />
+      ))}
     </div>
   );
 }
