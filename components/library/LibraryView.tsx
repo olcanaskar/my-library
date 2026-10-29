@@ -61,7 +61,7 @@ export function LibraryView({
   function handleToggleTheme() {
     setCycling(true);
     if (cycleTimer.current) window.clearTimeout(cycleTimer.current);
-    cycleTimer.current = window.setTimeout(() => setCycling(false), 2100);
+    cycleTimer.current = window.setTimeout(() => setCycling(false), 2800);
     onToggleTheme();
   }
 

@@ -419,18 +419,112 @@ html[data-theme="dark"] .library-scene {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1.5px);
-  background-size:
-    37px 41px,
-    53px 61px,
-    71px 83px;
-  background-position:
-    8px 12px,
-    21px 7px,
-    3px 30px;
+    radial-gradient(circle at 55.9% 34.9%, rgba(255, 255, 255, 0.58) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 19.1% 48.8%, rgba(255, 255, 255, 0.58) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 44.8% 11.9%, rgba(214, 230, 255, 0.31) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 5.1% 60.6%, rgba(255, 255, 255, 0.93) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 16.4% 51.9%, rgba(255, 255, 255, 0.83) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 87.2% 3.1%, rgba(255, 255, 255, 0.27) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 83.6% 33.7%, rgba(255, 255, 255, 0.41) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 9.3% 2.1%, rgba(188, 255, 226, 0.44) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 83.3% 96%, rgba(214, 230, 255, 0.43) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 3.9% 41.0%, rgba(255, 255, 255, 0.79) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 38.9% 78.7%, rgba(255, 255, 255, 0.84) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 90.2% 13.7%, rgba(214, 230, 255, 0.51) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 56.5% 31.7%, rgba(255, 255, 255, 0.79) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 33.6% 5.6%, rgba(255, 255, 255, 0.78) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 10.9% 16.5%, rgba(255, 255, 255, 0.58) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 19.5% 59.3%, rgba(214, 230, 255, 0.38) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 64.1% 8.2%, rgba(188, 255, 226, 0.53) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 85.7% 2.0%, rgba(188, 255, 226, 0.66) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 19.4% 2.5%, rgba(255, 255, 255, 0.67) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 15.3% 3.3%, rgba(214, 230, 255, 0.43) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 30.0% 23.4%, rgba(255, 255, 255, 0.3) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 2.5% 54.2%, rgba(255, 255, 255, 0.51) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 48.4% 92.7%, rgba(255, 255, 255, 0.35) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 31.5% 53.1%, rgba(255, 255, 255, 0.82) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 73.5% 12.2%, rgba(222, 204, 255, 0.39) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 60.1% 83.1%, rgba(255, 255, 255, 0.28) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 26.0% 40.9%, rgba(255, 255, 255, 0.74) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 59.5% 75.9%, rgba(222, 204, 255, 0.61) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 13.4% 95.1%, rgba(190, 240, 255, 0.64) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 28.5% 51.7%, rgba(255, 255, 255, 0.77) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 25.4% 30.9%, rgba(255, 255, 255, 0.37) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 13.9% 47.2%, rgba(255, 255, 255, 0.35) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 72.8% 23.6%, rgba(255, 255, 255, 0.66) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 2.8% 3.0%, rgba(188, 255, 226, 0.74) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 63.3% 2.5%, rgba(255, 255, 255, 0.3) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 8.1% 8.5%, rgba(214, 230, 255, 0.63) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 73.2% 85.3%, rgba(188, 255, 226, 0.34) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 9.3% 24.5%, rgba(190, 240, 255, 0.88) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 78.5% 31.5%, rgba(255, 255, 255, 0.6) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 38.2% 57.0%, rgba(255, 255, 255, 0.68) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 98.3% 54.5%, rgba(255, 255, 255, 0.76) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 57.9% 65.4%, rgba(255, 255, 255, 0.57) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 51.4% 41.6%, rgba(255, 255, 255, 0.67) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 69.4% 15.2%, rgba(255, 255, 255, 0.8) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 88.8% 38.3%, rgba(255, 255, 255, 0.46) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 17.6% 13.1%, rgba(255, 255, 255, 0.71) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 33.0% 84.2%, rgba(255, 255, 255, 0.43) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 75.0% 73.5%, rgba(255, 255, 255, 0.87) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 32.0% 48.3%, rgba(255, 255, 255, 0.34) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 5.0% 84.7%, rgba(255, 255, 255, 0.92) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 45.2% 10.7%, rgba(190, 240, 255, 0.9) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 52.0% 28.2%, rgba(190, 240, 255, 0.47) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 45.3% 95.7%, rgba(255, 255, 255, 0.83) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 67.5% 51.0%, rgba(255, 255, 255, 0.65) 0 0.75px, transparent 1.45px),
+    radial-gradient(circle at 2.9% 72.0%, rgba(255, 255, 255, 0.53) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 27.1% 69.4%, rgba(255, 255, 255, 0.35) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 44.8% 53.4%, rgba(255, 255, 255, 0.62) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 8.6% 27.0%, rgba(255, 255, 255, 0.39) 0 0.65px, transparent 1.35px),
+    radial-gradient(circle at 2.1% 11.4%, rgba(255, 255, 255, 0.62) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 77.3% 14.9%, rgba(255, 255, 255, 0.74) 0 1.0px, transparent 1.7px),
+    radial-gradient(circle at 75.1% 51.7%, rgba(255, 255, 255, 0.84) 0 0.85px, transparent 1.5499999999999998px),
+    radial-gradient(circle at 41.2% 14.7%, rgba(255, 255, 255, 0.52) 0 1.2px, transparent 1.9px),
+    radial-gradient(circle at 88.0% 12.7%, rgba(255, 255, 255, 0.51) 0 0.55px, transparent 1.25px),
+    radial-gradient(circle at 79.1% 82.7%, rgba(255, 255, 255, 0.57) 0 0.75px, transparent 1.45px);
+  background-repeat: no-repeat;
   opacity: var(--stars-opacity);
+  transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+html[data-theme="dark"] .window-stars {
+  transition-delay: 180ms;
+}
+
+html[data-theme="light"] .window-stars {
+  transition-delay: 0ms;
+}
+
+/* a soft dust of faint stars behind the bright ones */
+.window-stars::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.4) 0.5px, transparent 1px),
+    radial-gradient(circle, rgba(205, 222, 255, 0.32) 0.5px, transparent 1px);
+  background-size:
+    61px 67px,
+    97px 89px;
+  background-position:
+    13px 19px,
+    41px 7px;
+}
+
+/* and a few stars that actually glow */
+.window-stars::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 18% 8%, rgba(200, 240, 255, 1) 0 1.5px, transparent 2.4px),
+    radial-gradient(circle at 71% 14%, rgba(235, 226, 255, 1) 0 1.4px, transparent 2.2px),
+    radial-gradient(circle at 44% 38%, rgba(190, 255, 232, 1) 0 1.3px, transparent 2.1px),
+    radial-gradient(circle at 86% 52%, rgba(255, 255, 255, 0.95) 0 1.6px, transparent 2.5px),
+    radial-gradient(circle at 9% 62%, rgba(210, 232, 255, 1) 0 1.3px, transparent 2.1px);
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 3px rgba(180, 220, 255, 0.9));
 }
 
 .window-cloud {
@@ -1528,16 +1622,16 @@ html[data-theme="dark"] .library-scene.library-room {
     #b06d5f 86%,
     #d88d6d 100%
   );
-  --ridge-far: #2a2f4a;
-  --ridge-mid: #1b2033;
-  --treeline: #0b1215;
-  --lake-top: #1d2740;
-  --lake-bottom: #0b111c;
+  --ridge-far: #1f2750;
+  --ridge-mid: #141b38;
+  --treeline: #060b16;
+  --lake-top: #17224a;
+  --lake-bottom: #0a1026;
   --sun-opacity: 0;
   --moon-opacity: 1;
-  --cloud-opacity: 0.45;
+  --cloud-opacity: 0;
   --stars-opacity: 1;
-  --lake-glow: rgba(210, 225, 255, 0.5);
+  --lake-glow: rgba(150, 230, 255, 0.6);
 
   background:
     radial-gradient(70% 55% at 50% 0%, rgba(253, 224, 71, 0.1), transparent 70%),
@@ -1622,7 +1716,7 @@ html[data-theme="dark"] .library-scene.library-room {
   inset: 0;
   z-index: 20;
   pointer-events: none;
-  transition: opacity 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 .room-light--day {
@@ -1827,7 +1921,7 @@ html[data-theme="dark"] .room-light--night {
   position: absolute;
   inset: 0;
   z-index: 0;
-  transition: opacity 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 .window-sky--day {
@@ -1842,21 +1936,86 @@ html[data-theme="dark"] .room-light--night {
   opacity: 1;
 }
 
+/* Night, after the poster on the desk: deep navy overhead, a violet
+   Milky Way band across it and a cold glow where the sky meets the trees. */
 .window-sky--night {
-  background: linear-gradient(
-    180deg,
-    #0b1026 0%,
-    #151b3d 30%,
-    #2b2852 50%,
-    #644560 70%,
-    #b06d5f 86%,
-    #d88d6d 100%
-  );
+  overflow: hidden;
+  background:
+    radial-gradient(
+      120% 16% at 50% 56%,
+      rgba(140, 226, 255, 0.42) 0%,
+      transparent 78%
+    ),
+    radial-gradient(
+      95% 40% at 52% 68%,
+      rgba(120, 205, 245, 0.34) 0%,
+      transparent 74%
+    ),
+    linear-gradient(
+      180deg,
+      #03050e 0%,
+      #060a1c 18%,
+      #0c1435 36%,
+      #182053 52%,
+      #2f2a6d 66%,
+      #57458f 78%,
+      #8f74b6 88%,
+      #c9b6da 100%
+    );
   opacity: 0;
 }
 
+.window-sky--night::before {
+  content: "";
+  position: absolute;
+  inset: -26% -38%;
+  background: linear-gradient(
+    118deg,
+    transparent 24%,
+    rgba(96, 74, 190, 0.2) 36%,
+    rgba(150, 118, 240, 0.38) 46%,
+    rgba(216, 186, 255, 0.44) 51%,
+    rgba(120, 96, 210, 0.3) 58%,
+    transparent 74%
+  );
+  filter: blur(11px);
+  opacity: 0.95;
+}
+
+.window-sky--night::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.6px, transparent 1.2px),
+    radial-gradient(circle, rgba(200, 214, 255, 0.75) 0.5px, transparent 1px);
+  background-size:
+    19px 23px,
+    31px 29px;
+  background-position:
+    3px 5px,
+    11px 17px;
+  opacity: 0.5;
+  -webkit-mask-image: linear-gradient(
+    118deg,
+    transparent 30%,
+    #000 46%,
+    #000 58%,
+    transparent 74%
+  );
+  mask-image: linear-gradient(
+    118deg,
+    transparent 30%,
+    #000 46%,
+    #000 58%,
+    transparent 74%
+  );
+}
+
+/* the day sky never fades: the night layer simply covers it, so the glass
+   keeps one solid sky behind the crossfade instead of two ghosts */
 html[data-theme="dark"] .window-sky--day {
-  opacity: 0;
+  opacity: 1;
 }
 
 html[data-theme="dark"] .window-sky--night {
@@ -1869,7 +2028,9 @@ html[data-theme="dark"] .window-sky--night {
   left: auto;
   z-index: 2;
   width: 16%;
-  box-shadow: 0 0 30px 10px rgba(200, 220, 255, 0.28);
+  box-shadow:
+    0 0 26px 8px rgba(176, 214, 255, 0.34),
+    0 0 64px 22px rgba(140, 190, 255, 0.18);
 }
 
 .library-room .window-sun {
@@ -1894,32 +2055,34 @@ html[data-theme="dark"] .library-room .window-moon {
   transform: translate(0, 0);
 }
 
+/* Dusk choreography: the sun goes down and dims before the moon comes up,
+   so the two never share the middle of the window. */
 html[data-theme="light"] .library-room.theme-cycling .window-sun {
-  animation: celestial-rise 1600ms 250ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: celestial-rise 1800ms 750ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
 }
 
 html[data-theme="light"] .library-room.theme-cycling .window-moon {
-  animation: celestial-set 1400ms cubic-bezier(0.45, 0, 0.55, 1) both;
+  animation: celestial-set 1500ms cubic-bezier(0.55, 0, 0.9, 0.55) both;
 }
 
 html[data-theme="dark"] .library-room.theme-cycling .window-moon {
-  animation: celestial-rise 1600ms 250ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: celestial-rise 1800ms 750ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
 }
 
 html[data-theme="dark"] .library-room.theme-cycling .window-sun {
-  animation: celestial-set 1400ms cubic-bezier(0.45, 0, 0.55, 1) both;
+  animation: celestial-set 1500ms cubic-bezier(0.55, 0, 0.9, 0.55) both;
 }
 
 @keyframes celestial-rise {
   0% {
-    transform: translate(-78%, -78%) scale(0.8);
+    transform: translate(-72%, -72%) scale(0.82);
     opacity: 0;
-    filter: blur(2px);
+    filter: blur(3px);
   }
-  55% {
-    transform: translate(-28%, -28%) scale(0.96);
-    opacity: 0.9;
-    filter: blur(0);
+  45% {
+    transform: translate(-30%, -30%) scale(0.95);
+    opacity: 0.85;
+    filter: blur(0.6px);
   }
   100% {
     transform: translate(0, 0) scale(1);
@@ -1934,30 +2097,30 @@ html[data-theme="dark"] .library-room.theme-cycling .window-sun {
     opacity: 1;
     filter: blur(0);
   }
-  45% {
-    transform: translate(30%, 30%) scale(1.03);
-    opacity: 0.9;
-    filter: blur(0);
+  40% {
+    transform: translate(26%, 34%) scale(1.04);
+    opacity: 0.85;
+    filter: blur(0.5px);
   }
   100% {
-    transform: translate(78%, 78%) scale(0.82);
+    transform: translate(96%, 96%) scale(0.78);
     opacity: 0;
-    filter: blur(2px);
+    filter: blur(3px);
   }
 }
 
 .library-room .window-stars {
-  transition: opacity 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 .window-cloud {
   transition:
-    opacity 1600ms cubic-bezier(0.4, 0, 0.2, 1),
-    background-color 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+    opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1),
+    background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 .window-shooting-star {
-  transition: opacity 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 html[data-theme="light"] .library-room .window-moon {
@@ -2013,7 +2176,7 @@ html[data-theme="dark"] .library-room .window-cloud {
   right: 0;
   bottom: 0;
   left: 0;
-  transition: background-color 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 .window-ridge--far {
@@ -2066,7 +2229,7 @@ html[data-theme="dark"] .library-room .window-cloud {
   z-index: 5;
   height: 17%;
   background: var(--treeline);
-  transition: background-color 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
   clip-path: polygon(
     0 78%,
     3% 52%,
@@ -2115,7 +2278,7 @@ html[data-theme="dark"] .library-room .window-cloud {
   z-index: 6;
   height: 16%;
   background-color: var(--lake-top);
-  transition: background-color 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     inset 0 -12px 22px rgba(0, 0, 0, 0.2);
@@ -2125,7 +2288,7 @@ html[data-theme="dark"] .library-room .window-cloud {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent, var(--lake-bottom));
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.38));
   opacity: 0.85;
 }
 
@@ -2149,7 +2312,7 @@ html[data-theme="dark"] .library-room .window-cloud {
   height: 19%;
   filter: blur(6px);
   opacity: 0.55;
-  transition: opacity 1600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
 
 .window-lake-glow--moon {
@@ -3096,4 +3259,128 @@ html[data-theme="dark"] .book-spine {
   height: 1px;
   background: color-mix(in oklab, var(--brass-soft) 75%, transparent);
   opacity: 0.75;
+}
+
+/* ---------- dusk, not a switch ----------
+   Gradients cannot be transitioned, so the surfaces that carry the day/night
+   change are a flat colour (transitioned) with a fixed shading gradient on
+   top. Same look, but the room can now fade instead of snapping. */
+
+.library-scene.library-room {
+  background-color: var(--wall);
+  background-image:
+    radial-gradient(
+      78% 58% at 50% 0%,
+      rgba(255, 238, 200, 0.16),
+      transparent 70%
+    ),
+    linear-gradient(180deg, transparent 52%, rgba(0, 0, 0, 0.2) 100%);
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+html[data-theme="dark"] .library-scene.library-room {
+  background-color: var(--wall-deep);
+}
+
+.bookcase,
+.window-box,
+.side-bookcase,
+.lower-cabinet {
+  background-color: var(--wood);
+  background-image:
+    linear-gradient(
+      150deg,
+      rgba(255, 240, 210, 0.16) 0%,
+      rgba(0, 0, 0, 0.22) 58%,
+      rgba(0, 0, 0, 0.42) 100%
+    ),
+    repeating-linear-gradient(
+      94deg,
+      rgba(255, 255, 255, 0.05) 0 1px,
+      transparent 1px 6px,
+      rgba(0, 0, 0, 0.08) 6px 7px,
+      transparent 7px 14px
+    );
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.shelf-board {
+  background-color: var(--wood);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 242, 215, 0.5) 0 2px,
+    rgba(255, 255, 255, 0.1) 2px 6px,
+    rgba(0, 0, 0, 0.14) 6px 12px,
+    rgba(0, 0, 0, 0.34) 12px 100%
+  );
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.bookcase-bay {
+  background-color: var(--library-bay-1);
+  background-image:
+    radial-gradient(
+      120% 100% at 40% 0%,
+      rgba(214, 178, 84, 0.1),
+      transparent 60%
+    ),
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.45));
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.window-sill {
+  background-color: var(--wood-dark);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 240, 210, 0.32),
+    rgba(0, 0, 0, 0.24)
+  );
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.library-title,
+.library-sub,
+.library-action,
+.library-head {
+  transition: color 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-cycling .book-spine,
+.theme-cycling .book-spine-label,
+.theme-cycling .book-spine-foot {
+  transition:
+    filter 2200ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 2200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* the window's own cabinet and shelves carry the same dusk fade */
+.window-cabinet {
+  background-color: var(--wood);
+  background-image:
+    linear-gradient(
+      150deg,
+      rgba(255, 240, 210, 0.16) 0%,
+      rgba(0, 0, 0, 0.22) 58%,
+      rgba(0, 0, 0, 0.42) 100%
+    ),
+    repeating-linear-gradient(
+      94deg,
+      rgba(255, 255, 255, 0.05) 0 1px,
+      transparent 1px 6px,
+      rgba(0, 0, 0, 0.08) 6px 7px,
+      transparent 7px 14px
+    );
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.window-shelf {
+  background-color: var(--library-bay-1);
+  background-image:
+    radial-gradient(
+      120% 100% at 40% 0%,
+      rgba(214, 178, 84, 0.1),
+      transparent 60%
+    ),
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.45));
+  transition: background-color 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
 }
