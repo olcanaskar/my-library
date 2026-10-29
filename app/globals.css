@@ -2944,11 +2944,11 @@ html[data-theme="dark"] .library-action {
     inset 0 1px 0 rgba(255, 245, 225, 0.26),
     inset -2px 0 0 rgba(0, 0, 0, 0.34),
     0 14px 20px -14px rgba(0, 0, 0, 0.7);
-  filter: saturate(0.95) contrast(1.02);
+  filter: saturate(1.04) brightness(1.05) contrast(1.01);
 }
 
 html[data-theme="dark"] .book-spine {
-  filter: saturate(0.78) brightness(0.76) contrast(1.04);
+  filter: saturate(0.9) brightness(0.88) contrast(1.03);
 }
 
 .book-spine::before,

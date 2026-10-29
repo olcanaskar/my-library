@@ -71,7 +71,7 @@ export function BookSpine({
           width,
           height,
           // Dust the stored colour down towards the wood so the shelf feels aged.
-          "--spine-color": `color-mix(in oklab, ${subject.color} 76%, #6b4e30)`,
+          "--spine-color": `color-mix(in oklab, ${subject.color} 88%, #6b4e30)`,
         } as React.CSSProperties
       }
     >
