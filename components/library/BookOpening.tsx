@@ -70,7 +70,7 @@ export function BookOpening({
       subject={subject}
       sceneClass={`book-open-scene ${fading ? "is-fading" : ""}`}
       veilClass="book-open-veil"
-      pageClass={fading ? "is-fading" : ""}
+      modelClass={fading ? "is-fading" : ""}
       style={
         {
           "--from-top": `${from.top}px`,

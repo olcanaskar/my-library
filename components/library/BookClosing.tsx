@@ -91,7 +91,7 @@ export function BookClosing({
       sceneClass="book-close-scene"
       veilClass={`book-close-veil ${revealing ? "is-revealing" : ""}`}
       flyClass={`book-fly--closing ${flying ? "is-flying" : ""}`}
-      pageClass="book-page--closing"
+      modelClass="book-model--closing"
       style={
         {
           "--from-top": `${target.top}px`,
