@@ -82,7 +82,10 @@ export function useLibrary() {
   }, []);
 
   const updateNote = useCallback(
-    (noteId: string, patch: Partial<Pick<Note, "title" | "body" | "ink">>) => {
+    (
+      noteId: string,
+      patch: Partial<Pick<Note, "title" | "body" | "ink" | "textColor">>,
+    ) => {
       setStore((prev) => ({
         ...prev,
         notes: prev.notes.map((n) =>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { formatDay } from "@/lib/format";
-import { inkPalette } from "@/lib/ink";
+import { inkPalette, resolveInkColor } from "@/lib/ink";
 import {
   paperClass,
   type InkColor,
@@ -39,6 +39,7 @@ type NoteEditorProps = {
     title?: string;
     body?: string;
     ink?: InkStroke[];
+    textColor?: InkColor;
   }) => void;
   onBack: () => void;
   onPrev: () => void;
@@ -70,8 +71,13 @@ export function NoteEditor({
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const palette = inkPalette(theme);
   const [inkColor, setInkColor] = useState<InkColor>("ink");
+  const [textColor, setTextColor] = useState<InkColor>(
+    () => note.textColor ?? "ink",
+  );
   const [inkSize, setInkSize] = useState<number>(INK_SIZES[1].value);
   const [eraser, setEraser] = useState(false);
+  const penActive = tool === "pen";
+  const textColorValue = resolveInkColor(textColor, theme);
 
   useEffect(() => {
     return () => {
@@ -115,9 +121,20 @@ export function NoteEditor({
     title?: string;
     body?: string;
     ink?: InkStroke[];
+    textColor?: InkColor;
   }) {
     markTyping();
     onChange(patch);
+  }
+
+  function chooseColor(next: InkColor) {
+    if (!penActive) {
+      setTextColor(next);
+      handleChange({ textColor: next });
+      return;
+    }
+    setInkColor(next);
+    setEraser(false);
   }
 
   function handleInkChange(next: InkStroke[]) {
@@ -139,7 +156,6 @@ export function NoteEditor({
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
   const hasNext = pageNo < totalPages;
-  const penActive = tool === "pen";
 
   return (
     <div className="min-h-dvh">
@@ -241,91 +257,94 @@ export function NoteEditor({
 
           <span aria-hidden="true" className="pen-divider" />
 
-          <div className="pen-group flex items-center gap-1">
-            {palette.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                onClick={() => {
-                  setInkColor(option.key);
-                  setEraser(false);
-                  setTool("pen");
-                }}
-                aria-label={option.name}
-                aria-pressed={!eraser && inkColor === option.key}
-                className={`pen-swatch ${
-                  !eraser && inkColor === option.key ? "is-active" : ""
-                }`}
-                style={{ backgroundColor: option.value }}
-              />
-            ))}
-          </div>
-
-          <span aria-hidden="true" className="pen-divider" />
-
-          <div className="pen-group flex items-center gap-0.5">
-            {INK_SIZES.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  setInkSize(option.value);
-                  setEraser(false);
-                  setTool("pen");
-                }}
-                aria-label={`${option.name} pen`}
-                aria-pressed={!eraser && inkSize === option.value}
-                className={`pen-size ${
-                  !eraser && inkSize === option.value ? "is-active" : ""
-                }`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="block rounded-full bg-current"
-                  style={{ width: option.dot, height: option.dot }}
-                />
-              </button>
-            ))}
-          </div>
-
-          <span aria-hidden="true" className="pen-divider" />
-
-          <button
-            type="button"
-            onClick={() => {
-              setTool("pen");
-              setEraser((value) => !value);
-            }}
-            aria-label="Eraser"
-            aria-pressed={penActive && eraser}
-            className={`pen-tool ${penActive && eraser ? "is-active" : ""}`}
+          <div
+            role="group"
+            aria-label={penActive ? "Ink color" : "Text color"}
+            className="pen-group flex items-center gap-1"
           >
-            <EraserIcon className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Eraser</span>
-          </button>
+            {palette.map((option) => {
+              const selected =
+                !eraser && (penActive ? inkColor : textColor) === option.key;
 
-          <div className="ml-auto flex items-center gap-0.5">
-            <button
-              type="button"
-              onClick={undoInk}
-              disabled={ink.length === 0}
-              aria-label="Undo ink"
-              className="pen-tool"
-            >
-              <UndoIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Undo</span>
-            </button>
-            <button
-              type="button"
-              onClick={clearInk}
-              disabled={ink.length === 0}
-              aria-label="Clear ink"
-              className="pen-tool"
-            >
-              <TrashIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Clear</span>
-            </button>
+              return (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => chooseColor(option.key)}
+                  aria-label={option.name}
+                  aria-pressed={selected}
+                  className={`pen-swatch ${selected ? "is-active" : ""}`}
+                  style={{ backgroundColor: option.value }}
+                />
+              );
+            })}
           </div>
+
+          {penActive ? (
+            <>
+              <span aria-hidden="true" className="pen-divider" />
+
+              <div className="pen-group flex items-center gap-0.5">
+                {INK_SIZES.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => {
+                      setInkSize(option.value);
+                      setEraser(false);
+                    }}
+                    aria-label={`${option.name} pen`}
+                    aria-pressed={!eraser && inkSize === option.value}
+                    className={`pen-size ${
+                      !eraser && inkSize === option.value ? "is-active" : ""
+                    }`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="block rounded-full bg-current"
+                      style={{ width: option.dot, height: option.dot }}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <span aria-hidden="true" className="pen-divider" />
+
+              <button
+                type="button"
+                onClick={() => setEraser((value) => !value)}
+                aria-label="Eraser"
+                aria-pressed={eraser}
+                className={`pen-tool ${eraser ? "is-active" : ""}`}
+              >
+                <EraserIcon className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Eraser</span>
+              </button>
+
+              <div className="ml-auto flex items-center gap-0.5">
+                <button
+                  type="button"
+                  onClick={undoInk}
+                  disabled={ink.length === 0}
+                  aria-label="Undo ink"
+                  className="pen-tool"
+                >
+                  <UndoIcon className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Undo</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={clearInk}
+                  disabled={ink.length === 0}
+                  aria-label="Clear ink"
+                  className="pen-tool"
+                >
+                  <TrashIcon className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Clear</span>
+                </button>
+              </div>
+            </>
+          ) : null}
         </div>
 
         <div
@@ -341,6 +360,7 @@ export function NoteEditor({
               maxLength={80}
               autoFocus={!note.title}
               className="w-full bg-transparent font-hand text-3xl leading-tight outline-none sm:text-4xl"
+              style={{ color: textColorValue }}
             />
             <div className="mt-2 flex items-center justify-between text-[11px] text-ink-soft">
               <span>{formatDay(note.createdAt)}</span>
@@ -367,7 +387,7 @@ export function NoteEditor({
               className={`relative z-[1] block min-h-[46dvh] w-full resize-none overflow-hidden border-0 bg-transparent px-5 py-0 text-[16px] text-ink outline-none sm:px-14 ${
                 penActive ? "pointer-events-none" : ""
               }`}
-              style={{ lineHeight: "32px" }}
+              style={{ lineHeight: "32px", color: textColorValue }}
             />
 
             <PenCanvas

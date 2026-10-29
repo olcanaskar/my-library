@@ -30,6 +30,8 @@ export type Note = {
   subjectId: string;
   title: string;
   body: string;
+  /** Colour of typed text, stored as a theme-aware token. */
+  textColor?: InkColor;
   /** Freehand ink, normalised to the page canvas. */
   ink?: InkStroke[];
   createdAt: number;
