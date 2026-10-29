@@ -9,11 +9,29 @@ export type Subject = {
   order: number;
 };
 
+export type InkPoint = {
+  x: number;
+  y: number;
+  p: number;
+};
+
+/** Semantic ink names, so strokes keep their meaning across themes. */
+export type InkColor = "ink" | "red" | "blue" | "green" | "gold";
+
+export type InkStroke = {
+  color: InkColor;
+  size: number;
+  mode: "pen" | "eraser";
+  points: InkPoint[];
+};
+
 export type Note = {
   id: string;
   subjectId: string;
   title: string;
   body: string;
+  /** Freehand ink, normalised to the page canvas. */
+  ink?: InkStroke[];
   createdAt: number;
   updatedAt: number;
 };

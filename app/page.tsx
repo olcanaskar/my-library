@@ -149,6 +149,8 @@ function App() {
 
     view = (
       <NoteEditor
+        key={note.id}
+        theme={lib.store.theme}
         subject={subject}
         note={note}
         pageNo={pageNo}

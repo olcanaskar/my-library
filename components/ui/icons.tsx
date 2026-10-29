@@ -101,3 +101,40 @@ export function ArrowRightIcon(props: IconProps) {
     </Svg>
   );
 }
+
+export function PenIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="m4 20 4.5-1.2L18 9.3a2.2 2.2 0 0 0-3.1-3.1L5.4 15.6 4 20Z" />
+      <path d="m13.6 7.5 2.9 2.9" />
+      <path d="m4 20 3.1-3.1" />
+    </Svg>
+  );
+}
+
+export function EraserIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="m7 21-3-3 9.4-9.4a2 2 0 0 1 2.8 0l3.2 3.2a2 2 0 0 1 0 2.8L14 21H7Z" />
+      <path d="m8.5 12.5 6 6" />
+      <path d="M4 21h17" />
+    </Svg>
+  );
+}
+
+export function UndoIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M9 14 4 9l5-5" />
+      <path d="M4 9h9a7 7 0 0 1 7 7v3" />
+    </Svg>
+  );
+}
+
+export function TextIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M4 6h16M12 6v13M9 19h6" />
+    </Svg>
+  );
+}
