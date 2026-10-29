@@ -62,6 +62,7 @@ export function BookSpine({
         });
       }}
       aria-label={`${subject.name} notebook, ${pagesLabel(noteCount)}`}
+      data-book-id={subject.id}
       className={`book-spine ${compact ? "book-spine--compact" : ""} ${
         lifted ? "pointer-events-none opacity-0" : ""
       }`}

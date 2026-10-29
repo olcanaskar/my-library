@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NoteEditor } from "@/components/editor/NoteEditor";
 import { LibraryView } from "@/components/library/LibraryView";
 import { NewBookDialog } from "@/components/library/NewBookDialog";
 import { BookOpening, type BookRect } from "@/components/library/BookOpening";
+import { BookClosing } from "@/components/library/BookClosing";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
 import { pagesLabel } from "@/lib/format";
@@ -34,6 +35,11 @@ function App() {
     subject: Subject;
     from: BookRect;
   } | null>(null);
+  const [closing, setClosing] = useState<{
+    subject: Subject;
+    from: BookRect | null;
+  } | null>(null);
+  const bookRects = useRef<Record<string, BookRect>>({});
 
   const subjectId = params.get("kitap");
   const noteId = params.get("not");
@@ -57,6 +63,25 @@ function App() {
 
   function goLibrary() {
     router.push("/", { scroll: false });
+  }
+
+  /** The reverse trip: settle into the cover and fly back to the shelf. */
+  function closeBook() {
+    if (!subject || closing) {
+      goLibrary();
+      return;
+    }
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      goLibrary();
+      return;
+    }
+
+    setClosing({
+      subject,
+      from: bookRects.current[subject.id] ?? null,
+    });
   }
 
   function goNote(subjectToOpen: string, noteToOpen: string) {
@@ -95,6 +120,7 @@ function App() {
       return;
     }
 
+    bookRects.current[subjectToOpen] = from;
     setOpening({ subject: picked, from });
   }
 
@@ -156,7 +182,7 @@ function App() {
         pageNo={pageNo}
         totalPages={Math.max(notes.length, 1)}
         onChange={(patch) => lib.updateNote(note.id, patch)}
-        onBack={goLibrary}
+        onBack={closeBook}
         onPrev={() => turnPage(-1)}
         onNext={() => turnPage(1)}
         onNewPage={addPage}
@@ -189,7 +215,7 @@ function App() {
         subjects={lib.store.subjects}
         notes={lib.store.notes}
         theme={lib.store.theme}
-        liftedId={opening?.subject.id ?? null}
+        liftedId={opening?.subject.id ?? closing?.subject.id ?? null}
         onOpenBook={handleOpenBook}
         onNewBook={() => setNewBookOpen(true)}
         onOpenSearch={() => setSearchOpen(true)}
@@ -209,6 +235,15 @@ function App() {
           fading={Boolean(subject && note)}
           onNavigate={() => openBook(opening.subject.id)}
           onRemove={() => setOpening(null)}
+        />
+      ) : null}
+
+      {closing ? (
+        <BookClosing
+          subject={closing.subject}
+          from={closing.from}
+          onNavigate={goLibrary}
+          onRemove={() => setClosing(null)}
         />
       ) : null}
 
