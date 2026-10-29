@@ -376,8 +376,8 @@ html[data-theme="dark"] .library-scene {
 
 .window-sun {
   position: absolute;
-  top: 53%;
-  right: 7%;
+  top: 56%;
+  right: 10%;
   width: 15%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -393,8 +393,8 @@ html[data-theme="dark"] .library-scene {
 
 .window-moon {
   position: absolute;
-  top: 53%;
-  right: 9%;
+  top: 56%;
+  right: 11%;
   width: 14%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -458,16 +458,17 @@ html[data-theme="dark"] .library-scene {
 }
 
 .window-cloud-a {
-  top: 40%;
+  top: 58%;
   left: 6%;
-  width: 52%;
+  width: 48%;
+  height: 9%;
 }
 
 .window-cloud-b {
-  top: 58%;
-  left: 16%;
+  top: 66%;
+  left: 38%;
   width: 36%;
-  height: 8%;
+  height: 7.5%;
 }
 
 .window-hills {
