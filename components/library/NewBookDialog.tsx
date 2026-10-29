@@ -70,7 +70,7 @@ function NewBookForm({
               aria-pressed={color === option}
               className={`h-8 w-8 rounded-full transition ${
                 color === option
-                  ? "ring-2 ring-ink ring-offset-2 ring-offset-card"
+                  ? "ring-2 ring-ink ring-offset-2 ring-offset-[#f8f0dd]"
                   : "hover:scale-110"
               }`}
               style={{ backgroundColor: option }}

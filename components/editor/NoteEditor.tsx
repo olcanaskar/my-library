@@ -225,14 +225,14 @@ export function NoteEditor({
   const hasNext = pageNo < totalPages;
 
   return (
-    <div className="min-h-dvh">
-      <header className="sticky top-0 z-10 border-b border-rule/70 bg-paper/85 backdrop-blur">
+    <div className="desk scene-grain min-h-dvh overflow-x-hidden">
+      <header className="desk-head">
         <div className="mx-auto flex max-w-3xl items-center gap-1.5 px-2 py-2.5 sm:gap-2 sm:px-5">
           <button
             type="button"
             onClick={onBack}
             aria-label="Back to library"
-            className="rounded-lg p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink"
+            className="desk-btn rounded-full p-2"
           >
             <ArrowLeftIcon className="h-5 w-5" />
           </button>
@@ -272,7 +272,7 @@ export function NoteEditor({
             type="button"
             onClick={onNewPage}
             aria-label="New page"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-rule px-2 py-2 text-xs font-medium transition hover:border-ink/30 hover:bg-ink/5 sm:px-3 sm:text-sm"
+            className="desk-btn inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-2 text-xs font-medium sm:px-3 sm:text-sm"
           >
             <PlusIcon className="h-4 w-4" />
             <span className="hidden sm:inline">New page</span>
@@ -282,7 +282,7 @@ export function NoteEditor({
             type="button"
             onClick={onDelete}
             aria-label="Delete page"
-            className="shrink-0 rounded-lg p-2 text-ink-soft transition hover:bg-red-500/10 hover:text-red-600"
+            className="shrink-0 rounded-full p-2 text-[#c6ae83] transition hover:bg-red-500/15 hover:text-red-300"
           >
             <TrashIcon className="h-5 w-5" />
           </button>
@@ -417,8 +417,18 @@ export function NoteEditor({
 
         <div
           key={note.id}
-          className={`paper-sheet page-turn overflow-hidden rounded-lg border border-rule/70 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_20px_44px_-30px_rgba(0,0,0,0.55)]`}
+          className="book-shell page-turn"
+          style={{ "--cover": subject.color } as React.CSSProperties}
         >
+          <span aria-hidden="true" className="book-shell-spine">
+            <span className="max-h-[68%] overflow-hidden font-serif text-[10px] leading-none font-semibold tracking-[0.18em] text-[#f6e7c8]/80 uppercase [writing-mode:vertical-rl]">
+              {subject.name}
+            </span>
+          </span>
+          <span aria-hidden="true" className="book-shell-cover" />
+          <span aria-hidden="true" className="book-ribbon" />
+
+          <div className="relative overflow-hidden rounded-[3px] bg-paper shadow-[inset_14px_0_18px_-18px_rgba(0,0,0,0.55),inset_-10px_0_18px_-16px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(0,0,0,0.05)]">
           <div className="px-5 pt-7 sm:px-14">
             <input
               value={note.title}
@@ -519,9 +529,10 @@ export function NoteEditor({
               <ArrowRightIcon className="h-4 w-4" />
             </button>
           </div>
+          </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-[11px] text-ink-soft/80">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-[11px] text-[#c6ae83]/80">
           <span>
             {penActive
               ? "Draw directly on the page with a pen, Pencil or mouse."
@@ -530,7 +541,7 @@ export function NoteEditor({
           <button
             type="button"
             onClick={onDeleteNotebook}
-            className="rounded px-1 py-0.5 transition hover:text-red-600"
+            className="rounded px-1 py-0.5 transition hover:text-red-300"
           >
             Delete notebook
           </button>

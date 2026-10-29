@@ -39,7 +39,7 @@ html[data-theme="dark"] {
   --color-shelf-edge: var(--shelf-edge);
   --font-sans: var(--font-inter);
   --font-hand: var(--font-caveat);
-  --font-display: var(--font-playfair);
+  --font-display: var(--font-cormorant);
 }
 
 html,
@@ -2639,4 +2639,461 @@ html[data-theme="dark"] .window-lake-glow--moon {
 
 .pen-canvas.is-active {
   pointer-events: auto;
+}
+
+/* ---------- wooden-shelf skin ----------
+   The room is the same; the materials are older. Darker oak, brass fittings,
+   aged cloth spines, and a notebook that sits on a writing desk. Tokens first,
+   so the day/night cycle keeps driving everything. */
+
+:root {
+  --paper: #f9f3e4;
+  --paper-deep: #efe3ca;
+  --card: #fffaf0;
+  --ink: #2c2418;
+  --ink-soft: #7f6f56;
+  --rule: #ded1b5;
+  --margin: #c98a80;
+  --shelf: #a06b33;
+  --shelf-edge: #523210;
+
+  --wall: #cbb590;
+  --wall-deep: #ab916c;
+  --wall-light: #e8d9bb;
+  --wood: #a06b33;
+  --wood-mid: #7d4f22;
+  --wood-dark: #523210;
+  --wood-deep: #3e250d;
+  --wood-edge: rgba(30, 16, 4, 0.55);
+  --brass: #f4dfb2;
+  --brass-soft: #c9a25f;
+}
+
+html[data-theme="dark"] {
+  --paper: #2a251d;
+  --paper-deep: #1d1913;
+  --card: #332d24;
+  --ink: #f1e7d2;
+  --ink-soft: #a99a7e;
+  --rule: #3e362a;
+  --margin: #8d5952;
+  --shelf: #6b4526;
+  --shelf-edge: #321f0d;
+
+  --wall: #15100a;
+  --wall-deep: #0b0805;
+  --wall-light: #241a10;
+  --wood: #6b4526;
+  --wood-mid: #4c2f18;
+  --wood-dark: #321f0d;
+  --wood-deep: #1e1105;
+  --wood-edge: rgba(0, 0, 0, 0.6);
+  --brass: #ecd4a0;
+  --brass-soft: #ad8848;
+}
+
+.library-scene {
+  --lib-cream: var(--brass);
+  --lib-cream-soft: color-mix(in oklab, var(--brass) 62%, transparent);
+  --room-wall-top: var(--wall);
+  --room-wall-bottom: var(--wall-deep);
+  --room-glow: rgba(255, 241, 205, 0.44);
+  --room-floor-1: #7e5330;
+  --room-floor-2: #5d3a1d;
+  --room-baseboard: #c9a25f;
+  --window-frame: var(--wood-dark);
+  --window-glow: rgba(255, 236, 190, 0.34);
+  --vignette: rgba(52, 31, 10, 0.3);
+  --wood-frame: linear-gradient(
+    150deg,
+    var(--wood) 0%,
+    var(--wood-mid) 46%,
+    var(--wood-dark) 100%
+  );
+  --wood-shelf-light: var(--wood);
+  --wood-shelf-dark: var(--wood-dark);
+}
+
+html[data-theme="dark"] .library-scene {
+  --room-glow: rgba(150, 180, 225, 0.1);
+  --room-floor-1: #2f2113;
+  --room-floor-2: #20150b;
+  --room-baseboard: #4a3520;
+  --window-frame: #32200f;
+  --vignette: rgba(0, 0, 0, 0.5);
+  --wood-frame: linear-gradient(
+    150deg,
+    #6b4526 0%,
+    #4a2f16 48%,
+    #2b1a0b 100%
+  );
+  --wood-shelf-light: #6b4526;
+  --wood-shelf-dark: #33200e;
+}
+
+.library-title {
+  font-family: var(--font-display), Georgia, serif;
+  letter-spacing: 0.04em;
+}
+
+.library-action {
+  border-color: color-mix(in oklab, var(--brass) 30%, transparent);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+html[data-theme="dark"] .library-action {
+  color: var(--brass);
+}
+
+.library-action:hover {
+  border-color: color-mix(in oklab, var(--brass) 55%, transparent);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* --- spines: aged cloth, brass rules, serif capitals --- */
+
+.book-spine {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(14, 9, 4, 0.55) 0%,
+      rgba(14, 9, 4, 0.14) 9%,
+      rgba(255, 255, 255, 0.1) 28%,
+      rgba(255, 255, 255, 0.02) 48%,
+      rgba(0, 0, 0, 0.08) 72%,
+      rgba(0, 0, 0, 0.34) 92%,
+      rgba(0, 0, 0, 0.5) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 3px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 224, 176, 0.16) 0%,
+      transparent 16%,
+      transparent 82%,
+      rgba(24, 12, 2, 0.45) 100%
+    ),
+    var(--spine-color);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 225, 0.26),
+    inset -2px 0 0 rgba(0, 0, 0, 0.34),
+    0 14px 20px -14px rgba(0, 0, 0, 0.7);
+  filter: saturate(0.95) contrast(1.02);
+}
+
+html[data-theme="dark"] .book-spine {
+  filter: saturate(0.78) brightness(0.76) contrast(1.04);
+}
+
+.book-spine::before,
+.book-spine::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 1px;
+  background: color-mix(in oklab, var(--brass) 58%, transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.book-spine::before {
+  top: 22px;
+}
+
+.book-spine::after {
+  bottom: 34px;
+}
+
+.book-spine-band {
+  background: color-mix(in oklab, var(--brass) 62%, transparent);
+  opacity: 0.6;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.book-spine-label {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #f8ecd2;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.book-spine-foot {
+  border-top: 1px solid color-mix(in oklab, var(--brass) 34%, transparent);
+  background: rgba(0, 0, 0, 0.16);
+  color: color-mix(in oklab, var(--brass) 82%, transparent);
+  letter-spacing: 0.16em;
+}
+
+.bookcase,
+.side-bookcase,
+.lower-cabinet {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 238, 208, 0.28),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.45),
+    0 26px 44px -26px rgba(0, 0, 0, 0.8);
+}
+
+/* --- the writing desk and the hardcover notebook --- */
+
+.desk {
+  background:
+    radial-gradient(
+      90% 58% at 50% -8%,
+      rgba(255, 223, 168, 0.16) 0%,
+      transparent 62%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.16) 0 3px,
+      transparent 3px 28px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.035) 0 1px,
+      transparent 1px 7px
+    ),
+    linear-gradient(180deg, #412b16 0%, #2b1a0c 58%, #1c1006 100%);
+}
+
+.scene-grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.scene-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.book-shell {
+  --cover: #6b5b3a;
+  position: relative;
+  border-radius: 15px 9px 9px 15px;
+  padding: 10px 10px 10px 28px;
+  background-color: var(--cover);
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.62) 0 2px,
+      rgba(255, 255, 255, 0.15) 2px 3px,
+      transparent 3px 15px,
+      rgba(0, 0, 0, 0.24) 15px 16px,
+      transparent 16px
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--cover) 88%, white 12%),
+      color-mix(in oklab, var(--cover) 80%, black 20%)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 1px 0 rgba(0, 0, 0, 0.32),
+    0 40px 70px -40px rgba(0, 0, 0, 0.95),
+    0 12px 24px -18px rgba(0, 0, 0, 0.7);
+}
+
+.book-shell-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(120, 82, 36, 0.34) 0%,
+      rgba(64, 38, 12, 0.46) 55%,
+      rgba(34, 18, 4, 0.62) 100%
+    ),
+    radial-gradient(
+      120% 55% at 30% 0%,
+      rgba(255, 228, 180, 0.18),
+      transparent 62%
+    );
+}
+
+.book-shell::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 3px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0 1px,
+    rgba(0, 0, 0, 0.16) 1px 2px
+  );
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.book-shell-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 26px;
+  border-radius: 14px 0 0 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.14) 38%,
+    rgba(255, 255, 255, 0.16) 76%,
+    rgba(0, 0, 0, 0.28) 100%
+  );
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.45);
+}
+
+.book-shell-spine::before,
+.book-shell-spine::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  height: 1px;
+  background: color-mix(in oklab, var(--brass) 60%, transparent);
+  opacity: 0.5;
+}
+
+.book-shell-spine::before {
+  top: 22px;
+}
+
+.book-shell-spine::after {
+  bottom: 22px;
+}
+
+.book-ribbon {
+  position: absolute;
+  top: -7px;
+  left: 44px;
+  z-index: 2;
+  width: 11px;
+  height: 48px;
+  background: linear-gradient(180deg, #b8473e, #8d332c);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%);
+  box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 0.6);
+}
+
+/* the desk header */
+
+.desk-head {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+  background: rgba(34, 20, 8, 0.88);
+  backdrop-filter: blur(10px);
+}
+
+.desk-btn {
+  border: 1px solid color-mix(in oklab, var(--brass) 26%, transparent);
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--brass);
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+.desk-btn:hover {
+  border-color: color-mix(in oklab, var(--brass) 52%, transparent);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff6df;
+}
+
+/* the desk's own type and controls */
+
+.desk-head {
+  color: #f2e2c2;
+}
+
+.desk-head .text-ink-soft {
+  color: #c6ae83;
+}
+
+.desk .pen-toolbar {
+  border-color: color-mix(in oklab, var(--brass) 22%, transparent);
+  background: rgba(28, 16, 6, 0.72);
+  box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.8);
+}
+
+.desk .pen-tool {
+  color: rgba(244, 223, 178, 0.72);
+}
+
+.desk .pen-tool:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--brass);
+}
+
+.desk .pen-tool.is-active {
+  background: var(--brass);
+  color: #2a1a08;
+}
+
+.desk .pen-tool:focus-visible {
+  outline-color: var(--brass);
+}
+
+.desk .pen-divider {
+  background: color-mix(in oklab, var(--brass) 22%, transparent);
+}
+
+.desk .pen-size {
+  color: var(--brass);
+}
+
+.desk .pen-swatch.is-active,
+.desk .pen-swatch:focus-visible {
+  outline-color: var(--brass);
+}
+
+.desk .page-turn {
+  animation: page-in 180ms ease-out both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px) rotateY(-1.5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0);
+  }
+}
+
+/* a brass hairline under the room's title, the one ornament the skin adds */
+
+.library-sub {
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.library-sub::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 52px;
+  height: 1px;
+  background: color-mix(in oklab, var(--brass-soft) 75%, transparent);
+  opacity: 0.75;
 }
