@@ -193,8 +193,6 @@ export function LibraryView({
           </div>
         </section>
       </div>
-
-      <div aria-hidden="true" className="library-ladder" />
     </div>
   );
 }
