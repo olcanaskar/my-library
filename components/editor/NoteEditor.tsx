@@ -515,7 +515,7 @@ export function NoteEditor({
               className={`pen-tool ${tool === "type" ? "is-active" : ""}`}
             >
               <TextIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Type</span>
+              <span className="hidden md:inline">Type</span>
             </button>
             <button
               type="button"
@@ -527,7 +527,7 @@ export function NoteEditor({
               className={`pen-tool ${tool === "pen" ? "is-active" : ""}`}
             >
               <PenIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Pen</span>
+              <span className="hidden md:inline">Pen</span>
             </button>
           </div>
 
@@ -646,11 +646,11 @@ export function NoteEditor({
                 type="button"
                 onClick={() => setEraser((value) => !value)}
                 aria-label="Eraser"
+                title="Eraser"
                 aria-pressed={eraser}
                 className={`pen-tool ${eraser ? "is-active" : ""}`}
               >
                 <EraserIcon className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Eraser</span>
               </button>
 
               <div className="ml-auto flex items-center gap-0.5">
@@ -659,20 +659,20 @@ export function NoteEditor({
                   onClick={undoInk}
                   disabled={ink.length === 0}
                   aria-label="Undo ink"
+                  title="Undo ink"
                   className="pen-tool"
                 >
                   <UndoIcon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Undo</span>
                 </button>
                 <button
                   type="button"
                   onClick={clearInk}
                   disabled={ink.length === 0}
                   aria-label="Clear ink"
+                  title="Clear ink"
                   className="pen-tool"
                 >
                   <TrashIcon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Clear</span>
                 </button>
               </div>
             </>
@@ -700,9 +700,11 @@ export function NoteEditor({
               className="pen-tool"
             >
               <ImageIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">
-                {imageBusy ? "Adding…" : "Image"}
-              </span>
+              {!penActive ? (
+                <span className="hidden sm:inline">
+                  {imageBusy ? "Adding…" : "Image"}
+                </span>
+              ) : null}
             </button>
           </div>
         </div>
