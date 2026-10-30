@@ -148,3 +148,13 @@ export function DownloadIcon(props: IconProps) {
     </Svg>
   );
 }
+
+export function ShareIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 15V3" />
+      <path d="m8 7 4-4 4 4" />
+      <path d="M5 12v7h14v-7" />
+    </Svg>
+  );
+}

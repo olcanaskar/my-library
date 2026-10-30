@@ -493,11 +493,27 @@ function noteTitleColor(note: Note): string {
   return note.title.trim() ? "#2c2418" : "#9a8a70";
 }
 
-export async function exportNotebookPdf(
+function saveBlob(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = name;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+type PdfResult = {
+  blob: Blob;
+  fileName: string;
+};
+
+async function generateNotebookPdf(
   subject: Subject,
   notes: Note[],
-): Promise<void> {
-  if (typeof window === "undefined" || notes.length === 0) return;
+): Promise<PdfResult | null> {
+  if (typeof window === "undefined" || notes.length === 0) return null;
 
   const cover = document.createElement("div");
   cover.className = "pdf-export-cover";
@@ -531,7 +547,7 @@ export async function exportNotebookPdf(
 
     const measureCanvas = document.createElement("canvas");
     const ctx = measureCanvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) return null;
 
     const plans = buildPagePlans(subject, notes, ctx, bodyFont, titleFont);
     const pdf = new jsPDF({
@@ -568,9 +584,72 @@ export async function exportNotebookPdf(
       });
     }
 
-    pdf.save(fileName(subject.name));
+    return {
+      blob: pdf.output("blob") as Blob,
+      fileName: fileName(subject.name),
+    };
   } finally {
     cover.remove();
     document.body.style.overflow = previousOverflow;
   }
+}
+
+export async function downloadNotebookPdf(
+  subject: Subject,
+  notes: Note[],
+): Promise<void> {
+  const result = await generateNotebookPdf(subject, notes);
+  if (!result) return;
+  saveBlob(result.blob, result.fileName);
+}
+
+export type ShareNotebookResult =
+  | "shared"
+  | "cancelled"
+  | "downloaded"
+  | null;
+
+/**
+ * On phones the PDF is handed to the native share sheet. Desktop browsers
+ * that cannot share files get the PDF as a download instead.
+ */
+export async function shareNotebookPdf(
+  subject: Subject,
+  notes: Note[],
+): Promise<ShareNotebookResult> {
+  const result = await generateNotebookPdf(subject, notes);
+  if (!result) return null;
+
+  const file = new File([result.blob], result.fileName, {
+    type: "application/pdf",
+  });
+
+  if (
+    typeof navigator !== "undefined" &&
+    typeof navigator.share === "function"
+  ) {
+    const canShare =
+      typeof navigator.canShare !== "function" ||
+      navigator.canShare({ files: [file] });
+
+    if (canShare) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: `${subject.name} notebook`,
+          text: `${subject.name} notebook PDF`,
+        });
+        return "shared";
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return "cancelled";
+        }
+        // A browser may expose share but reject file sharing; fall through
+        // to the normal download rather than losing the export.
+      }
+    }
+  }
+
+  saveBlob(result.blob, result.fileName);
+  return "downloaded";
 }

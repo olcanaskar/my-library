@@ -40,6 +40,7 @@ function App() {
     from: BookRect | null;
   } | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const bookRects = useRef<Record<string, BookRect>>({});
 
   const subjectId = params.get("kitap");
@@ -86,17 +87,37 @@ function App() {
   }
 
   async function exportNotebook() {
-    if (!subject || exporting) return;
+    if (!subject || exporting || sharing) return;
 
     setExporting(true);
     try {
-      const { exportNotebookPdf } = await import("@/lib/pdf");
-      await exportNotebookPdf(subject, notes);
+      const { downloadNotebookPdf } = await import("@/lib/pdf");
+      await downloadNotebookPdf(subject, notes);
     } catch (error) {
       console.error(error);
       window.alert("PDF oluşturulamadı. Lütfen tekrar dene.");
     } finally {
       setExporting(false);
+    }
+  }
+
+  async function shareNotebook() {
+    if (!subject || exporting || sharing) return;
+
+    setSharing(true);
+    try {
+      const { shareNotebookPdf } = await import("@/lib/pdf");
+      const result = await shareNotebookPdf(subject, notes);
+      if (result === "downloaded") {
+        window.alert(
+          "Bu tarayıcı dosya paylaşımını desteklemiyor. PDF indirildi.",
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      window.alert("PDF paylaşılamadı. Lütfen tekrar dene.");
+    } finally {
+      setSharing(false);
     }
   }
 
@@ -203,7 +224,9 @@ function App() {
         onNext={() => turnPage(1)}
         onNewPage={addPage}
         onExportPdf={exportNotebook}
+        onSharePdf={shareNotebook}
         exporting={exporting}
+        sharing={sharing}
         onDelete={() => {
           const ok = window.confirm("Delete this page?");
           if (!ok) return;
