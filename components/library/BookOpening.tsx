@@ -93,30 +93,40 @@ export function BookOpening({
       const pageRect = page.getBoundingClientRect();
       const editorRect = editorPage.getBoundingClientRect();
       const flyRect = fly.getBoundingClientRect();
+      const previewShellRect = document
+        .querySelector<HTMLElement>(".book-open-scene .book-preview-shell")
+        ?.getBoundingClientRect();
+      const editorShellRect = document
+        .querySelector<HTMLElement>(".desk .book-shell")
+        ?.getBoundingClientRect();
       if (pageRect.width === 0 || pageRect.height === 0) {
         setFadingOut(true);
         return;
       }
 
-      const scaleX = editorRect.width / pageRect.width;
-      const scaleY = editorRect.height / pageRect.height;
+      // Uniform scale: the type keeps its shape. Width matches the desk page;
+      // the extra height is allowed to run off the bottom of the viewport.
+      const scale = editorRect.width / pageRect.width;
+      const shellOffset = previewShellRect
+        ? Math.max(0, pageRect.top - previewShellRect.top)
+        : 0;
+      const targetTop = Math.max(
+        editorRect.top,
+        (editorShellRect?.top ?? editorRect.top) + shellOffset * scale,
+      );
       const dx =
         editorRect.left +
         editorRect.width / 2 -
         (pageRect.left + pageRect.width / 2);
-      const dy =
-        editorRect.top +
-        editorRect.height / 2 -
-        (pageRect.top + pageRect.height / 2);
+      const dy = targetTop - pageRect.top;
       const originX =
         ((pageRect.left + pageRect.width / 2 - flyRect.left) / flyRect.width) *
         100;
       const originY =
-        ((pageRect.top + pageRect.height / 2 - flyRect.top) / flyRect.height) *
-        100;
+        ((pageRect.top - flyRect.top) / flyRect.height) * 100;
 
       setZoom({
-        transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`,
+        transform: `translate(${dx}px, ${dy}px) scale(${scale})`,
         origin: `${originX}% ${originY}%`,
       });
 
