@@ -69,7 +69,7 @@ export function LibraryView({
     <div
       className={`library-scene library-room ${
         cycling ? "theme-cycling" : ""
-      }`}
+      } ${liftedId ? "is-quiet" : ""}`}
     >
       <header className="library-head">
         <div>

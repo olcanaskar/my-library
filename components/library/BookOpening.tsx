@@ -164,14 +164,18 @@ export function BookOpening({
       zoomOrigin={zoom?.origin}
       style={
         {
-          "--from-top": `${from.top}px`,
-          "--from-left": `${from.left}px`,
-          "--from-w": `${from.width}px`,
-          "--from-h": `${from.height}px`,
           "--to-top": `${to.top}px`,
           "--to-left": `${to.left}px`,
           "--to-w": `${to.width}px`,
           "--to-h": `${to.height}px`,
+          "--fly-from-x": `${
+            from.left + from.width / 2 - (to.left + to.width / 2)
+          }px`,
+          "--fly-from-y": `${
+            from.top + from.height / 2 - (to.top + to.height / 2)
+          }px`,
+          "--fly-from-sx": from.width / to.width,
+          "--fly-from-sy": from.height / to.height,
         } as React.CSSProperties
       }
     />

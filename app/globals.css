@@ -1197,29 +1197,24 @@ html[data-theme="dark"] .window-sill {
   }
 }
 
+/* The flight only moves and scales the already-laid-out book. Animating
+   width/height here forced a layout and a full repaint of the 3D model on
+   every frame, which is what made the opening stutter. */
 @keyframes book-fly {
   0% {
-    top: var(--from-top);
-    left: var(--from-left);
-    width: var(--from-w);
-    height: var(--from-h);
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    transform: translate(var(--fly-from-x), var(--fly-from-y)) rotateX(0deg)
+      rotateY(0deg) rotateZ(0deg) scale(var(--fly-from-sx), var(--fly-from-sy));
     animation-timing-function: cubic-bezier(0.25, 0.8, 0.35, 1);
   }
   26% {
-    top: calc(var(--from-top) - 24px);
-    left: var(--from-left);
-    width: var(--from-w);
-    height: var(--from-h);
-    transform: rotateX(9deg) rotateY(-11deg) rotateZ(1.2deg);
+    transform: translate(var(--fly-from-x), calc(var(--fly-from-y) - 24px))
+      rotateX(9deg) rotateY(-11deg) rotateZ(1.2deg)
+      scale(var(--fly-from-sx), var(--fly-from-sy));
     animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   100% {
-    top: var(--to-top);
-    left: var(--to-left);
-    width: var(--to-w);
-    height: var(--to-h);
-    transform: rotateX(4deg) rotateY(-2deg) rotateZ(0deg);
+    transform: translate(0px, 0px) rotateX(4deg) rotateY(-2deg)
+      rotateZ(0deg) scale(1, 1);
   }
 }
 
@@ -1298,20 +1293,20 @@ html[data-theme="dark"] .window-sill {
 
 .book-fly {
   position: fixed;
+  top: var(--to-top);
+  left: var(--to-left);
+  width: var(--to-w);
+  height: var(--to-h);
   transform-origin: center center;
   transform-style: preserve-3d;
   container-type: inline-size;
   animation: book-fly 380ms both;
-  will-change: top, left, width, height, transform;
+  will-change: transform;
 }
 
 /* Flatten the flying book before the page zoom so the shell's projected
    width and the ribbon offset match the real notebook exactly. */
 .book-fly.is-zooming {
-  top: var(--to-top);
-  left: var(--to-left);
-  width: var(--to-w);
-  height: var(--to-h);
   transform: none;
   animation: none;
   transition: transform 240ms ease-out;
@@ -1570,27 +1565,19 @@ html[data-theme="dark"] .window-sill {
 
 @keyframes book-fly-back {
   0% {
-    top: var(--to-top);
-    left: var(--to-left);
-    width: var(--to-w);
-    height: var(--to-h);
-    transform: rotateX(4deg) rotateY(-2deg) rotateZ(0deg);
+    transform: translate(0px, 0px) rotateX(4deg) rotateY(-2deg)
+      rotateZ(0deg) scale(1, 1);
     animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   74% {
-    top: calc(var(--from-top) - 24px);
-    left: var(--from-left);
-    width: var(--from-w);
-    height: var(--from-h);
-    transform: rotateX(9deg) rotateY(-11deg) rotateZ(1.2deg);
+    transform: translate(var(--fly-from-x), calc(var(--fly-from-y) - 24px))
+      rotateX(9deg) rotateY(-11deg) rotateZ(1.2deg)
+      scale(var(--fly-from-sx), var(--fly-from-sy));
     animation-timing-function: cubic-bezier(0.75, 0, 0.65, 0.2);
   }
   100% {
-    top: var(--from-top);
-    left: var(--from-left);
-    width: var(--from-w);
-    height: var(--from-h);
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    transform: translate(var(--fly-from-x), var(--fly-from-y)) rotateX(0deg)
+      rotateY(0deg) rotateZ(0deg) scale(var(--fly-from-sx), var(--fly-from-sy));
   }
 }
 
@@ -1662,6 +1649,13 @@ input::placeholder {
 /* ============================================================
    Cozy library wall — interactive bookshelf scene
    ============================================================ */
+
+/* The living shelves are behind the veil while a book is flying. Freeze
+   their ambient animation so they do not compete with the 3D book. */
+.library-scene.is-quiet,
+.library-scene.is-quiet * {
+  animation-play-state: paused !important;
+}
 
 .library-scene.library-room {
   --library-wall-top: #ddc8a7;

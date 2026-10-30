@@ -145,14 +145,18 @@ export function BookClosing({
       zoomOrigin={closingStart ? "50% 0%" : undefined}
       style={
         {
-          "--from-top": `${target.top}px`,
-          "--from-left": `${target.left}px`,
-          "--from-w": `${target.width}px`,
-          "--from-h": `${target.height}px`,
           "--to-top": `${to.top}px`,
           "--to-left": `${to.left}px`,
           "--to-w": `${to.width}px`,
           "--to-h": `${to.height}px`,
+          "--fly-from-x": `${
+            target.left + target.width / 2 - (to.left + to.width / 2)
+          }px`,
+          "--fly-from-y": `${
+            target.top + target.height / 2 - (to.top + to.height / 2)
+          }px`,
+          "--fly-from-sx": target.width / to.width,
+          "--fly-from-sy": target.height / to.height,
         } as React.CSSProperties
       }
     />
