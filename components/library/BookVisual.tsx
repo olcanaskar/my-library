@@ -49,9 +49,7 @@ export function BookVisual({
       aria-hidden="true"
       className={`book-scene fixed inset-0 z-40 ${sceneClass}`}
     >
-      <div
-        className={`book-veil absolute inset-0 bg-paper-deep ${veilClass}`}
-      />
+      <div className={`book-veil absolute inset-0 ${veilClass}`} />
 
       <div
         className={`book-fly ${flyClass}`}
