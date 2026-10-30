@@ -2340,6 +2340,133 @@ html[data-theme="dark"] .window-lake-glow--moon {
   opacity: 0.55;
 }
 
+/* ---------- a living window ----------
+   Small, slow loops: the clouds drift, the stars twinkle and dust slowly
+   shifts, a meteor crosses the night sky, and the lake catches the light. */
+
+@keyframes cloud-drift-a {
+  from {
+    transform: translate3d(-2.5%, 1%, 0);
+  }
+  to {
+    transform: translate3d(4%, -1.5%, 0);
+  }
+}
+
+@keyframes cloud-drift-b {
+  from {
+    transform: translate3d(3%, -1%, 0);
+  }
+  to {
+    transform: translate3d(-4%, 2%, 0);
+  }
+}
+
+.library-room .window-cloud-a {
+  animation: cloud-drift-a 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.library-room .window-cloud-b {
+  animation: cloud-drift-b 19s ease-in-out -8s infinite alternate;
+  will-change: transform;
+}
+
+@keyframes star-dust-drift {
+  from {
+    background-position:
+      13px 19px,
+      41px 7px;
+  }
+  to {
+    background-position:
+      74px 86px,
+      138px 96px;
+  }
+}
+
+.window-stars::before {
+  animation: star-dust-drift 55s linear infinite;
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 2px rgba(180, 220, 255, 0.55));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 7px rgba(180, 220, 255, 0.95));
+  }
+}
+
+.window-stars::after {
+  animation: star-twinkle 3.8s ease-in-out infinite;
+}
+
+@keyframes shooting-star-flight {
+  0%,
+  68% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-18deg);
+  }
+  72% {
+    opacity: calc(var(--stars-opacity) * 0.95);
+  }
+  84%,
+  100% {
+    opacity: 0;
+    transform: translate3d(-260%, 110px, 0) rotate(-18deg);
+  }
+}
+
+.window-shooting-star {
+  animation: shooting-star-flight 12s ease-in -3s infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes lake-ripple {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 10px;
+  }
+}
+
+.window-lake::after {
+  animation: lake-ripple 10s linear infinite;
+}
+
+@keyframes lake-glow-breathe {
+  from {
+    transform: scaleX(0.92) scaleY(1);
+    filter: blur(7px) brightness(0.9);
+  }
+  to {
+    transform: scaleX(1.08) scaleY(1.12);
+    filter: blur(5px) brightness(1.16);
+  }
+}
+
+.window-lake-glow {
+  transform-origin: bottom center;
+  animation: lake-glow-breathe 6s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .library-room .window-cloud-a,
+  .library-room .window-cloud-b,
+  .window-stars::before,
+  .window-stars::after,
+  .window-shooting-star,
+  .window-lake::after,
+  .window-lake-glow {
+    animation: none !important;
+  }
+}
+
 .window-muntin {
   position: absolute;
   z-index: 3;
