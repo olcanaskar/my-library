@@ -231,14 +231,14 @@ export function LibraryView({
 }
 
 const DUMMY_COLORS = [
-  "#6d5a4a",
-  "#8a6d55",
-  "#4f5d6b",
-  "#7a5a52",
-  "#5b6b5a",
-  "#8c7a5c",
-  "#6a5566",
-  "#7d6a4f",
+  "#8f6a4b",
+  "#b08455",
+  "#53799b",
+  "#a36855",
+  "#628c62",
+  "#b8945a",
+  "#866586",
+  "#927b4c",
 ];
 // Background stock: cloth spines with raised brass bands and a few title
 // labels. The books flex to fill the shelf, so they keep real thickness at
