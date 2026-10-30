@@ -2356,12 +2356,12 @@ html[data-theme="dark"] .window-lake-glow--moon {
 /* Each cloud crosses the whole window, disappears, then re-enters from the
    other side. Different speeds and negative delays keep the sky populated. */
 .library-room .window-cloud-a {
-  animation: cloud-cross 36s linear -16s infinite;
+  animation: cloud-cross 56s linear -22s infinite;
   will-change: transform;
 }
 
 .library-room .window-cloud-b {
-  animation: cloud-cross 29s linear -16s infinite;
+  animation: cloud-cross 44s linear -16s infinite;
   will-change: transform;
 }
 
@@ -2370,7 +2370,7 @@ html[data-theme="dark"] .window-lake-glow--moon {
   left: 12%;
   width: 25%;
   height: 6%;
-  animation: cloud-cross 33s linear -15s infinite;
+  animation: cloud-cross 50s linear -22s infinite;
   will-change: transform;
 }
 
