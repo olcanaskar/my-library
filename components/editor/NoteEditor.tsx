@@ -43,6 +43,7 @@ type NoteEditorProps = {
   subject: Subject;
   note: Note;
   theme: Theme;
+  pageMotion: "next" | "prev" | null;
   pageNo: number;
   totalPages: number;
   onChange: (patch: {
@@ -68,6 +69,7 @@ export function NoteEditor({
   subject,
   note,
   theme,
+  pageMotion,
   pageNo,
   totalPages,
   onChange,
@@ -87,6 +89,7 @@ export function NoteEditor({
   const timer = useRef<number | null>(null);
 
   const [tool, setTool] = useState<"type" | "pen">("type");
+  const [entryMotion] = useState(pageMotion);
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
   const runsRef = useRef(runs);
@@ -455,7 +458,13 @@ export function NoteEditor({
 
         <div
           key={note.id}
-          className="book-shell page-turn"
+          className={`book-shell page-turn ${
+            entryMotion === "next"
+              ? "page-turn--next"
+              : entryMotion === "prev"
+                ? "page-turn--prev"
+                : ""
+          }`}
           style={{ "--cover": subject.color } as React.CSSProperties}
         >
           <span aria-hidden="true" className="book-shell-spine">

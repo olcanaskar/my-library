@@ -41,6 +41,7 @@ function App() {
   } | null>(null);
   const [exporting, setExporting] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [pageMotion, setPageMotion] = useState<"next" | "prev" | null>(null);
   const bookRects = useRef<Record<string, BookRect>>({});
 
   const subjectId = params.get("kitap");
@@ -64,6 +65,7 @@ function App() {
     null;
 
   function goLibrary() {
+    setPageMotion(null);
     router.push("/", { scroll: false });
   }
 
@@ -133,6 +135,7 @@ function App() {
 
   /** Opening a book jumps straight into a page: no page list in between. */
   function openBook(subjectToOpen: string) {
+    setPageMotion(null);
     const bookNotes = lib.notesFor(subjectToOpen);
 
     if (bookNotes.length === 0) {
@@ -165,11 +168,14 @@ function App() {
     if (!subject || !note) return;
     const index = notes.findIndex((n) => n.id === note.id);
     const target = notes[index + offset];
-    if (target) goNote(subject.id, target.id);
+    if (!target) return;
+    setPageMotion(offset > 0 ? "next" : "prev");
+    goNote(subject.id, target.id);
   }
 
   function addPage() {
     if (!subject) return;
+    setPageMotion("next");
     goNote(subject.id, lib.addNote(subject.id));
   }
 
@@ -214,6 +220,7 @@ function App() {
       <NoteEditor
         key={note.id}
         theme={lib.store.theme}
+        pageMotion={pageMotion}
         subject={subject}
         note={note}
         pageNo={pageNo}
@@ -234,6 +241,7 @@ function App() {
 
           const remaining = notes.filter((n) => n.id !== note.id);
           const next = remaining[Math.min(index, remaining.length - 1)];
+          setPageMotion(null);
           if (next) {
             goNote(subject.id, next.id);
           } else {
@@ -299,7 +307,10 @@ function App() {
         onClose={() => setSearchOpen(false)}
         notes={lib.store.notes}
         subjects={lib.store.subjects}
-        onOpenNote={goNote}
+        onOpenNote={(subjectToOpen, noteToOpen) => {
+          setPageMotion(null);
+          goNote(subjectToOpen, noteToOpen);
+        }}
       />
     </>
   );
