@@ -1247,7 +1247,7 @@ html[data-theme="dark"] .window-sill {
 }
 
 .book-open-scene {
-  transition: opacity 420ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 460ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Fading only starts once the real page is behind the overlay. */
@@ -1273,7 +1273,7 @@ html[data-theme="dark"] .window-sill {
   inset: 0;
   transform-style: preserve-3d;
   transform-origin: center center;
-  transition: transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 460ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* 4% of the flying book's width, with a fallback for old browsers. */
   --book-depth: 12px;
@@ -1286,7 +1286,7 @@ html[data-theme="dark"] .window-sill {
 }
 
 .book-model.is-fading {
-  transform: scale(1.12);
+  transform: scale(1.2);
 }
 
 .book-back-cover {
@@ -3328,19 +3328,22 @@ html[data-theme="dark"] .book-spine {
     0 12px 24px -18px rgba(0, 0, 0, 0.7);
 }
 
-/* The shelf book hands off to this shell; a soft settle hides the scale
-   difference between the flying model and the full notebook. */
+/* The shelf book hands off to this shell; the notebook then zooms into the
+   workspace instead of simply appearing. */
 .book-shell--opening {
   transform-origin: center center;
-  animation: book-shell-arrive 560ms cubic-bezier(0.22, 0.8, 0.3, 1);
+  animation: book-shell-zoom 900ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes book-shell-arrive {
-  from {
-    transform: translateY(10px) scale(0.97);
+@keyframes book-shell-zoom {
+  0% {
+    transform: scale(0.55);
   }
-  to {
-    transform: translateY(0) scale(1);
+  55% {
+    transform: scale(0.72);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
