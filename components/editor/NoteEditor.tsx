@@ -44,8 +44,6 @@ type NoteEditorProps = {
   note: Note;
   theme: Theme;
   pageMotion: "next" | "prev" | "open" | null;
-  leaving: boolean;
-  onLeaveComplete: () => void;
   fromNote: Note | null;
   fromPageNo: number | null;
   fromTotalPages: number | null;
@@ -74,8 +72,6 @@ export function NoteEditor({
   note,
   theme,
   pageMotion,
-  leaving,
-  onLeaveComplete,
   fromNote,
   fromPageNo,
   fromTotalPages,
@@ -99,7 +95,6 @@ export function NoteEditor({
   const [tool, setTool] = useState<"type" | "pen">("type");
   const [entryMotion] = useState(pageMotion);
   const [turnDone, setTurnDone] = useState(false);
-  const [leaveDone, setLeaveDone] = useState(false);
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
   const runsRef = useRef(runs);
@@ -255,7 +250,6 @@ export function NoteEditor({
   const hasPrev = pageNo > 1;
   const flippingOut = entryMotion === "next" && fromNote !== null;
   const turningIn = entryMotion === "prev";
-  const leaveLeaf = leaving && !leaveDone;
   const fromPage = fromPageNo ?? Math.max(1, pageNo - 1);
   const fromTotal = fromTotalPages ?? totalPages;
 
@@ -485,11 +479,9 @@ export function NoteEditor({
           <div
             className="book-page-stack"
             data-page-motion={
-              leaving
-                ? "leave"
-                : entryMotion === "next" || entryMotion === "prev"
-                  ? entryMotion
-                  : undefined
+              entryMotion === "next" || entryMotion === "prev"
+                ? entryMotion
+                : undefined
             }
           >
             <div
@@ -639,27 +631,7 @@ export function NoteEditor({
           </div>
             </div>
 
-            {leaving ? (
-              <div
-                aria-hidden="true"
-                className={`book-page-underlay book-page--blank ${paperClass(subject.paper)}`}
-              />
-            ) : null}
-
-            {leaveLeaf ? (
-              <PageFace
-                subject={subject}
-                note={note}
-                theme={theme}
-                pageNo={pageNo}
-                totalPages={totalPages}
-                className="book-page--leaf page-turn page-turn--prev"
-                onAnimationEnd={() => {
-                  setLeaveDone(true);
-                  onLeaveComplete();
-                }}
-              />
-            ) : flippingOut && fromNote && !turnDone ? (
+            {flippingOut && fromNote && !turnDone ? (
               <PageFace
                 subject={subject}
                 note={fromNote}

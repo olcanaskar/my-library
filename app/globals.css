@@ -3548,13 +3548,6 @@ html[data-theme="dark"] .book-spine {
     0 30px 65px -28px rgba(0, 0, 0, 0.55);
 }
 
-/* While a page is being left, this bare sheet covers the editor so the leaf
-   turns onto real paper instead of the page it came from. */
-.book-page--blank {
-  z-index: 2;
-  pointer-events: auto;
-}
-
 /* A lit paper edge on the free side of the moving leaf. */
 .book-page--leaf::after,
 .desk .page-turn.page-turn--prev::after {
@@ -3592,8 +3585,7 @@ html[data-theme="dark"] .book-spine {
 }
 
 .book-page-stack[data-page-motion="next"]::after,
-.book-page-stack[data-page-motion="prev"]::after,
-.book-page-stack[data-page-motion="leave"]::after {
+.book-page-stack[data-page-motion="prev"]::after {
   animation: page-leaf-shade 640ms ease-out both;
 }
 
