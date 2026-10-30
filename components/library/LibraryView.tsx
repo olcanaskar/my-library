@@ -240,8 +240,10 @@ const DUMMY_COLORS = [
   "#6a5566",
   "#7d6a4f",
 ];
-const DUMMY_WIDTHS = [7, 10, 6, 12, 8, 9, 11, 7, 13, 8, 6, 10, 9, 7, 12, 8];
-const DUMMY_HEIGHTS = [62, 74, 56, 80, 68, 72, 58, 76, 64, 70, 54, 78, 60, 73, 66, 69];
+// Background stock: same cloth, brass rules and near-level heights as the
+// real notebooks, so the shelves read as one library rather than noise.
+const DUMMY_WIDTHS = [8, 9, 7, 10, 8, 9, 7, 10];
+const DUMMY_HEIGHTS = [92, 88, 90, 86, 93, 89, 91, 87, 92, 88, 90, 86];
 
 /** A quiet row of books on a shelf that is not part of the library. */
 function DecorativeShelf({ seed }: { seed: number }) {
@@ -254,8 +256,9 @@ function DecorativeShelf({ seed }: { seed: number }) {
           style={{
             width: DUMMY_WIDTHS[i % DUMMY_WIDTHS.length],
             height: `${DUMMY_HEIGHTS[(i + seed) % DUMMY_HEIGHTS.length]}%`,
-            backgroundColor: DUMMY_COLORS[(i + seed) % DUMMY_COLORS.length],
-            transform: i % 7 === 3 ? "rotate(-2.5deg)" : undefined,
+            // Runs of three keep the shelf looking arranged, not speckled.
+            backgroundColor:
+              DUMMY_COLORS[(Math.floor(i / 3) + seed) % DUMMY_COLORS.length],
           }}
         />
       ))}
