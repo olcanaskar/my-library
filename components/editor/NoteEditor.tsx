@@ -100,6 +100,7 @@ export function NoteEditor({
   const [entryMotion] = useState(pageMotion);
   const [turnDone, setTurnDone] = useState(false);
   const [leaveDone, setLeaveDone] = useState(false);
+  const [openDone, setOpenDone] = useState(false);
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
   const runsRef = useRef(runs);
@@ -124,11 +125,15 @@ export function NoteEditor({
   // If animationend is not delivered (backgrounded tab), do not leave the
   // sheet stuck edge-on.
   useEffect(() => {
-    if (turnDone) return;
-    if (entryMotion !== "prev" && entryMotion !== "open") return;
-    const safety = window.setTimeout(() => setTurnDone(true), 1200);
-    return () => window.clearTimeout(safety);
-  }, [entryMotion, turnDone]);
+    if (entryMotion === "open" && !openDone) {
+      const safety = window.setTimeout(() => setOpenDone(true), 1200);
+      return () => window.clearTimeout(safety);
+    }
+    if (entryMotion === "prev" && !turnDone) {
+      const safety = window.setTimeout(() => setTurnDone(true), 1200);
+      return () => window.clearTimeout(safety);
+    }
+  }, [entryMotion, turnDone, openDone]);
 
   // Page turns remount this editor (key={note.id}), so each page starts clean.
 
@@ -255,7 +260,8 @@ export function NoteEditor({
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
   const flippingOut = entryMotion === "next" && fromNote !== null;
-  const turningIn = entryMotion === "prev" || entryMotion === "open";
+  const turningIn = entryMotion === "prev";
+  const openLeaf = entryMotion === "open" && !openDone;
   const leaveLeaf = leaving && !leaveDone;
   const fromPage = fromPageNo ?? Math.max(1, pageNo - 1);
   const fromTotal = fromTotalPages ?? totalPages;
@@ -517,10 +523,8 @@ export function NoteEditor({
                 turningIn
                   ? turnDone
                     ? ""
-                    : entryMotion === "open"
-                      ? "page-turn page-turn--open"
-                      : "page-turn page-turn--prev"
-                  : flippingOut
+                    : "page-turn page-turn--prev"
+                  : flippingOut || entryMotion === "open"
                     ? ""
                     : "page-turn"
               } relative overflow-hidden rounded-[3px] bg-paper shadow-[inset_14px_0_18px_-18px_rgba(0,0,0,0.55),inset_-10px_0_18px_-16px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(0,0,0,0.05)]`}
@@ -643,6 +647,14 @@ export function NoteEditor({
               />
             ) : null}
 
+            {openLeaf ? (
+              <div
+                aria-hidden="true"
+                onAnimationEnd={() => setOpenDone(true)}
+                className={`book-page book-page--leaf page-turn page-turn--open overflow-hidden rounded-[3px] ${paperClass(subject.paper)}`}
+              />
+            ) : null}
+
             {leaveLeaf ? (
               <PageFace
                 subject={subject}
@@ -650,7 +662,7 @@ export function NoteEditor({
                 theme={theme}
                 pageNo={pageNo}
                 totalPages={totalPages}
-                className="book-page--leaf page-turn page-turn--next"
+                className="book-page--leaf page-turn page-turn--prev"
                 onAnimationEnd={() => {
                   setLeaveDone(true);
                   onLeaveComplete();
