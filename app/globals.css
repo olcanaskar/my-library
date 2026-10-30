@@ -3523,12 +3523,51 @@ html[data-theme="dark"] .book-spine {
   );
 }
 
+/* The two faces of a turning leaf. */
+.book-page--under,
+.book-page--leaf {
+  pointer-events: none;
+}
+
+.book-page.book-page--under,
+.book-page.book-page--leaf {
+  position: absolute;
+  inset: 0;
+}
+
+.book-page.book-page--under {
+  z-index: 0;
+}
+
+.book-page.book-page--leaf {
+  z-index: 2;
+  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.32));
+}
+
+/* A lit paper edge on the free side of the moving leaf. */
+.book-page--leaf::after,
+.desk .page-turn.page-turn--prev::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  border-radius: 0 3px 3px 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 249, 233, 0.42)
+  );
+}
+
 /* The shade a lifted leaf throws on the page underneath. */
 .book-page-stack::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 3;
   border-radius: 3px;
   pointer-events: none;
   opacity: 0;
@@ -3541,13 +3580,9 @@ html[data-theme="dark"] .book-spine {
   );
 }
 
-.book-page-stack[data-page-motion="prev"]::after {
-  transform: scaleX(-1);
-}
-
 .book-page-stack[data-page-motion="next"]::after,
 .book-page-stack[data-page-motion="prev"]::after {
-  animation: page-leaf-shade 560ms ease-out both;
+  animation: page-leaf-shade 640ms ease-out both;
 }
 
 .book-page {
@@ -3563,32 +3598,30 @@ html[data-theme="dark"] .book-spine {
 
 .desk .page-turn.page-turn--next {
   will-change: transform;
-  animation: page-leaf-next 560ms cubic-bezier(0.24, 0.72, 0.18, 1) both;
+  animation: page-leaf-out 640ms cubic-bezier(0.32, 0.06, 0.24, 1) both;
 }
 
 .desk .page-turn.page-turn--prev {
   will-change: transform;
-  animation: page-leaf-prev 560ms cubic-bezier(0.24, 0.72, 0.18, 1) both;
+  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.32));
+  animation: page-leaf-in 640ms cubic-bezier(0.2, 0.75, 0.28, 1) both;
 }
 
-@keyframes page-leaf-next {
+@keyframes page-leaf-out {
   from {
-    transform: rotateY(-78deg);
-  }
-  55% {
-    transform: rotateY(-14deg);
-  }
-  to {
     transform: rotateY(0deg);
   }
+  to {
+    transform: rotateY(-96deg);
+  }
 }
 
-@keyframes page-leaf-prev {
+@keyframes page-leaf-in {
   from {
-    transform: rotateY(78deg);
+    transform: rotateY(-96deg);
   }
-  55% {
-    transform: rotateY(14deg);
+  82% {
+    transform: rotateY(2deg);
   }
   to {
     transform: rotateY(0deg);
@@ -3597,10 +3630,13 @@ html[data-theme="dark"] .book-spine {
 
 @keyframes page-leaf-shade {
   0% {
-    opacity: 0.9;
+    opacity: 0;
   }
-  60% {
-    opacity: 0.32;
+  28% {
+    opacity: 0.55;
+  }
+  68% {
+    opacity: 0.24;
   }
   100% {
     opacity: 0;

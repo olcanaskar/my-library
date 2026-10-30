@@ -10,7 +10,7 @@ import { BookClosing } from "@/components/library/BookClosing";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
 import { pagesLabel } from "@/lib/format";
-import type { Paper, Subject } from "@/lib/types";
+import type { Note, Paper, Subject } from "@/lib/types";
 
 export default function Page() {
   return (
@@ -42,6 +42,11 @@ function App() {
   const [exporting, setExporting] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [pageMotion, setPageMotion] = useState<"next" | "prev" | null>(null);
+  const [pageFrom, setPageFrom] = useState<{
+    note: Note;
+    pageNo: number;
+    totalPages: number;
+  } | null>(null);
   const bookRects = useRef<Record<string, BookRect>>({});
 
   const subjectId = params.get("kitap");
@@ -66,6 +71,7 @@ function App() {
 
   function goLibrary() {
     setPageMotion(null);
+    setPageFrom(null);
     router.push("/", { scroll: false });
   }
 
@@ -136,6 +142,7 @@ function App() {
   /** Opening a book jumps straight into a page: no page list in between. */
   function openBook(subjectToOpen: string) {
     setPageMotion(null);
+    setPageFrom(null);
     const bookNotes = lib.notesFor(subjectToOpen);
 
     if (bookNotes.length === 0) {
@@ -170,12 +177,23 @@ function App() {
     const target = notes[index + offset];
     if (!target) return;
     setPageMotion(offset > 0 ? "next" : "prev");
+    setPageFrom({
+      note,
+      pageNo: index + 1,
+      totalPages: Math.max(notes.length, 1),
+    });
     goNote(subject.id, target.id);
   }
 
   function addPage() {
-    if (!subject) return;
+    if (!subject || !note) return;
+    const index = notes.findIndex((n) => n.id === note.id);
     setPageMotion("next");
+    setPageFrom({
+      note,
+      pageNo: index + 1,
+      totalPages: Math.max(notes.length, 1),
+    });
     goNote(subject.id, lib.addNote(subject.id));
   }
 
@@ -221,6 +239,9 @@ function App() {
         key={note.id}
         theme={lib.store.theme}
         pageMotion={pageMotion}
+        fromNote={pageFrom?.note ?? null}
+        fromPageNo={pageFrom?.pageNo ?? null}
+        fromTotalPages={pageFrom?.totalPages ?? null}
         subject={subject}
         note={note}
         pageNo={pageNo}
@@ -242,6 +263,7 @@ function App() {
           const remaining = notes.filter((n) => n.id !== note.id);
           const next = remaining[Math.min(index, remaining.length - 1)];
           setPageMotion(null);
+          setPageFrom(null);
           if (next) {
             goNote(subject.id, next.id);
           } else {
@@ -309,6 +331,7 @@ function App() {
         subjects={lib.store.subjects}
         onOpenNote={(subjectToOpen, noteToOpen) => {
           setPageMotion(null);
+          setPageFrom(null);
           goNote(subjectToOpen, noteToOpen);
         }}
       />

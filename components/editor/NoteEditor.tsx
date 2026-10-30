@@ -32,6 +32,7 @@ import {
   UndoIcon,
 } from "@/components/ui/icons";
 import { PenCanvas } from "./PenCanvas";
+import { PageFace } from "./PageFace";
 
 const INK_SIZES = [
   { name: "Fine", value: 0.004, dot: 3 },
@@ -44,6 +45,9 @@ type NoteEditorProps = {
   note: Note;
   theme: Theme;
   pageMotion: "next" | "prev" | null;
+  fromNote: Note | null;
+  fromPageNo: number | null;
+  fromTotalPages: number | null;
   pageNo: number;
   totalPages: number;
   onChange: (patch: {
@@ -70,6 +74,9 @@ export function NoteEditor({
   note,
   theme,
   pageMotion,
+  fromNote,
+  fromPageNo,
+  fromTotalPages,
   pageNo,
   totalPages,
   onChange,
@@ -90,6 +97,7 @@ export function NoteEditor({
 
   const [tool, setTool] = useState<"type" | "pen">("type");
   const [entryMotion] = useState(pageMotion);
+  const [turnDone, setTurnDone] = useState(false);
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
   const runsRef = useRef(runs);
@@ -236,6 +244,10 @@ export function NoteEditor({
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
   const hasNext = pageNo < totalPages;
+  const flippingOut = entryMotion === "next" && fromNote !== null;
+  const flippingIn = entryMotion === "prev";
+  const fromPage = fromPageNo ?? Math.max(1, pageNo - 1);
+  const fromTotal = fromTotalPages ?? totalPages;
 
   return (
     <div className="desk scene-grain min-h-dvh overflow-x-hidden">
@@ -477,13 +489,36 @@ export function NoteEditor({
               aria-hidden="true"
               className={`book-page-underlay ${paperClass(subject.paper)}`}
             />
+
+            {entryMotion === "prev" && fromNote && !turnDone ? (
+              <PageFace
+                subject={subject}
+                note={fromNote}
+                theme={theme}
+                pageNo={fromPage}
+                totalPages={fromTotal}
+                className="book-page--under"
+              />
+            ) : null}
+
             <div
-              className={`book-page page-turn ${
-                entryMotion === "next"
-                  ? "page-turn--next"
-                  : entryMotion === "prev"
-                    ? "page-turn--prev"
-                    : ""
+              onAnimationEnd={
+                flippingIn
+                  ? (event) => {
+                      if (event.target === event.currentTarget) {
+                        setTurnDone(true);
+                      }
+                    }
+                  : undefined
+              }
+              className={`book-page ${
+                flippingIn
+                  ? turnDone
+                    ? ""
+                    : "page-turn page-turn--prev"
+                  : flippingOut
+                    ? ""
+                    : "page-turn"
               } relative overflow-hidden rounded-[3px] bg-paper shadow-[inset_14px_0_18px_-18px_rgba(0,0,0,0.55),inset_-10px_0_18px_-16px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(0,0,0,0.05)]`}
             >
           <div className="px-5 pt-7 sm:px-14">
@@ -587,6 +622,18 @@ export function NoteEditor({
             </button>
           </div>
             </div>
+
+            {flippingOut && fromNote && !turnDone ? (
+              <PageFace
+                subject={subject}
+                note={fromNote}
+                theme={theme}
+                pageNo={fromPage}
+                totalPages={fromTotal}
+                className="book-page--leaf page-turn page-turn--next"
+                onAnimationEnd={() => setTurnDone(true)}
+              />
+            ) : null}
           </div>
         </div>
 
