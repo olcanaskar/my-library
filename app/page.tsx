@@ -49,7 +49,10 @@ function App() {
   } | null>(null);
   const [exporting, setExporting] = useState(false);
   const [sharing, setSharing] = useState(false);
-  const [pageMotion, setPageMotion] = useState<"next" | "prev" | null>(null);
+  const [pageMotion, setPageMotion] = useState<
+    "next" | "prev" | "open" | null
+  >(null);
+  const [pageLeaving, setPageLeaving] = useState(false);
   const [pageFrom, setPageFrom] = useState<{
     note: Note;
     pageNo: number;
@@ -80,6 +83,7 @@ function App() {
   function goLibrary() {
     setPageMotion(null);
     setPageFrom(null);
+    setPageLeaving(false);
     router.push("/", { scroll: false });
   }
 
@@ -96,11 +100,39 @@ function App() {
       return;
     }
 
-    setClosing({
-      subject,
-      from: bookRects.current[subject.id] ?? null,
-    });
+    if (!pageLeaving) setPageLeaving(true);
   }
+
+  /** The page has folded away; now the cover can close and the book fly back. */
+  function finishPageLeave() {
+    if (!subject) {
+      goLibrary();
+      return;
+    }
+
+    setClosing((current) =>
+      current ?? {
+        subject,
+        from: bookRects.current[subject.id] ?? null,
+      },
+    );
+  }
+
+  // Safety net: if animationend never fires (hidden tab, reduced compositing),
+  // the cover still closes so the reader is not stuck on a blank page.
+  useEffect(() => {
+    if (!pageLeaving || closing) return;
+    const timer = window.setTimeout(() => {
+      if (!subject) return;
+      setClosing((current) =>
+        current ?? {
+          subject,
+          from: bookRects.current[subject.id] ?? null,
+        },
+      );
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [pageLeaving, closing, subject]);
 
   async function exportNotebook() {
     if (!subject || exporting || sharing) return;
@@ -149,8 +181,9 @@ function App() {
 
   /** Opening a book jumps straight into a page: no page list in between. */
   function openBook(subjectToOpen: string) {
-    setPageMotion(null);
+    setPageMotion("open");
     setPageFrom(null);
+    setPageLeaving(false);
     const bookNotes = lib.notesFor(subjectToOpen);
 
     if (bookNotes.length === 0) {
@@ -255,6 +288,8 @@ function App() {
         key={note.id}
         theme={lib.store.theme}
         pageMotion={pageMotion}
+        leaving={pageLeaving}
+        onLeaveComplete={finishPageLeave}
         fromNote={pageFrom?.note ?? null}
         fromPageNo={pageFrom?.pageNo ?? null}
         fromTotalPages={pageFrom?.totalPages ?? null}
@@ -329,7 +364,10 @@ function App() {
           subject={closing.subject}
           from={closing.from}
           onNavigate={goLibrary}
-          onRemove={() => setClosing(null)}
+          onRemove={() => {
+            setClosing(null);
+            setPageLeaving(false);
+          }}
         />
       ) : null}
 

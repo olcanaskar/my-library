@@ -3540,8 +3540,19 @@ html[data-theme="dark"] .book-spine {
 }
 
 .book-page.book-page--leaf {
+  z-index: 3;
+  box-shadow:
+    inset 14px 0 18px -18px rgba(0, 0, 0, 0.55),
+    inset -10px 0 18px -16px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 30px 65px -28px rgba(0, 0, 0, 0.55);
+}
+
+/* While a page is being left, this bare sheet covers the editor so the leaf
+   turns onto real paper instead of the page it came from. */
+.book-page--blank {
   z-index: 2;
-  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.32));
+  pointer-events: auto;
 }
 
 /* A lit paper edge on the free side of the moving leaf. */
@@ -3567,7 +3578,7 @@ html[data-theme="dark"] .book-spine {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 4;
   border-radius: 3px;
   pointer-events: none;
   opacity: 0;
@@ -3581,8 +3592,15 @@ html[data-theme="dark"] .book-spine {
 }
 
 .book-page-stack[data-page-motion="next"]::after,
-.book-page-stack[data-page-motion="prev"]::after {
+.book-page-stack[data-page-motion="prev"]::after,
+.book-page-stack[data-page-motion="open"]::after,
+.book-page-stack[data-page-motion="leave"]::after {
   animation: page-leaf-shade 640ms ease-out both;
+}
+
+/* Let the flying cover finish fading before the real page unfolds. */
+.book-page-stack[data-page-motion="open"]::after {
+  animation-delay: 200ms;
 }
 
 .book-page {
@@ -3603,8 +3621,22 @@ html[data-theme="dark"] .book-spine {
 
 .desk .page-turn.page-turn--prev {
   will-change: transform;
-  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.32));
   animation: page-leaf-in 640ms cubic-bezier(0.2, 0.75, 0.28, 1) both;
+  box-shadow:
+    inset 14px 0 18px -18px rgba(0, 0, 0, 0.55),
+    inset -10px 0 18px -16px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 30px 65px -28px rgba(0, 0, 0, 0.55);
+}
+
+.desk .page-turn.page-turn--open {
+  will-change: transform;
+  animation: page-leaf-in 640ms cubic-bezier(0.2, 0.75, 0.28, 1) 200ms both;
+  box-shadow:
+    inset 14px 0 18px -18px rgba(0, 0, 0, 0.55),
+    inset -10px 0 18px -16px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 30px 65px -28px rgba(0, 0, 0, 0.55);
 }
 
 @keyframes page-leaf-out {

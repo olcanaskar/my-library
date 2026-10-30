@@ -43,7 +43,9 @@ type NoteEditorProps = {
   subject: Subject;
   note: Note;
   theme: Theme;
-  pageMotion: "next" | "prev" | null;
+  pageMotion: "next" | "prev" | "open" | null;
+  leaving: boolean;
+  onLeaveComplete: () => void;
   fromNote: Note | null;
   fromPageNo: number | null;
   fromTotalPages: number | null;
@@ -72,6 +74,8 @@ export function NoteEditor({
   note,
   theme,
   pageMotion,
+  leaving,
+  onLeaveComplete,
   fromNote,
   fromPageNo,
   fromTotalPages,
@@ -95,6 +99,7 @@ export function NoteEditor({
   const [tool, setTool] = useState<"type" | "pen">("type");
   const [entryMotion] = useState(pageMotion);
   const [turnDone, setTurnDone] = useState(false);
+  const [leaveDone, setLeaveDone] = useState(false);
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
   const runsRef = useRef(runs);
@@ -115,6 +120,15 @@ export function NoteEditor({
       if (timer.current) window.clearTimeout(timer.current);
     };
   }, []);
+
+  // If animationend is not delivered (backgrounded tab), do not leave the
+  // sheet stuck edge-on.
+  useEffect(() => {
+    if (turnDone) return;
+    if (entryMotion !== "prev" && entryMotion !== "open") return;
+    const safety = window.setTimeout(() => setTurnDone(true), 1200);
+    return () => window.clearTimeout(safety);
+  }, [entryMotion, turnDone]);
 
   // Page turns remount this editor (key={note.id}), so each page starts clean.
 
@@ -241,7 +255,8 @@ export function NoteEditor({
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
   const flippingOut = entryMotion === "next" && fromNote !== null;
-  const flippingIn = entryMotion === "prev";
+  const turningIn = entryMotion === "prev" || entryMotion === "open";
+  const leaveLeaf = leaving && !leaveDone;
   const fromPage = fromPageNo ?? Math.max(1, pageNo - 1);
   const fromTotal = fromTotalPages ?? totalPages;
 
@@ -470,7 +485,7 @@ export function NoteEditor({
 
           <div
             className="book-page-stack"
-            data-page-motion={entryMotion ?? undefined}
+            data-page-motion={leaving ? "leave" : (entryMotion ?? undefined)}
           >
             <div
               aria-hidden="true"
@@ -490,7 +505,7 @@ export function NoteEditor({
 
             <div
               onAnimationEnd={
-                flippingIn
+                turningIn
                   ? (event) => {
                       if (event.target === event.currentTarget) {
                         setTurnDone(true);
@@ -499,10 +514,12 @@ export function NoteEditor({
                   : undefined
               }
               className={`book-page ${
-                flippingIn
+                turningIn
                   ? turnDone
                     ? ""
-                    : "page-turn page-turn--prev"
+                    : entryMotion === "open"
+                      ? "page-turn page-turn--open"
+                      : "page-turn page-turn--prev"
                   : flippingOut
                     ? ""
                     : "page-turn"
@@ -619,7 +636,27 @@ export function NoteEditor({
           </div>
             </div>
 
-            {flippingOut && fromNote && !turnDone ? (
+            {leaving ? (
+              <div
+                aria-hidden="true"
+                className={`book-page-underlay book-page--blank ${paperClass(subject.paper)}`}
+              />
+            ) : null}
+
+            {leaveLeaf ? (
+              <PageFace
+                subject={subject}
+                note={note}
+                theme={theme}
+                pageNo={pageNo}
+                totalPages={totalPages}
+                className="book-page--leaf page-turn page-turn--next"
+                onAnimationEnd={() => {
+                  setLeaveDone(true);
+                  onLeaveComplete();
+                }}
+              />
+            ) : flippingOut && fromNote && !turnDone ? (
               <PageFace
                 subject={subject}
                 note={fromNote}
