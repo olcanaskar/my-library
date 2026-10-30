@@ -18,11 +18,23 @@ export type InkPoint = {
 /** Semantic ink names, so strokes keep their meaning across themes. */
 export type InkColor = "ink" | "red" | "blue" | "green" | "gold";
 
+export type InkBrush = "pen" | "pencil" | "marker" | "brush";
+
 export type InkStroke = {
   color: InkColor;
   size: number;
   mode: "pen" | "eraser";
+  /** Missing on old notes; those strokes render as a normal pen. */
+  brush?: InkBrush;
   points: InkPoint[];
+};
+
+/** Page-level handwriting style for typed text. */
+export type NoteTextStyle = {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strike?: boolean;
 };
 
 /** A contiguous stretch of typed text in one colour. */
@@ -52,6 +64,8 @@ export type Note = {
   textRuns?: TextRun[];
   /** Freehand ink, normalised to the page canvas. */
   ink?: InkStroke[];
+  /** Page-level style applied to the typed note text. */
+  textStyle?: NoteTextStyle;
   /** Photos and diagrams pasted below the writing area. */
   images?: NoteImage[];
   createdAt: number;

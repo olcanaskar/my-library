@@ -5,7 +5,7 @@ import { resolveInkColor } from "@/lib/ink";
 import { runsFromNote, runsToText } from "@/lib/textRuns";
 import { paperClass, type Note, type Subject, type Theme } from "@/lib/types";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/icons";
-import type { AnimationEventHandler } from "react";
+import type { AnimationEventHandler, CSSProperties } from "react";
 import { NoteImages } from "./NoteImages";
 import { PenCanvas } from "./PenCanvas";
 
@@ -42,6 +42,18 @@ export function PageFace({
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
   const hasNext = pageNo < totalPages;
+  const textStyle = note.textStyle ?? {};
+  const textStyleCss = {
+    fontWeight: textStyle.bold ? 600 : undefined,
+    fontStyle: textStyle.italic ? "italic" : undefined,
+    textDecorationLine:
+      [
+        textStyle.underline ? "underline" : "",
+        textStyle.strike ? "line-through" : "",
+      ]
+        .filter(Boolean)
+        .join(" ") || undefined,
+  } satisfies CSSProperties;
 
   return (
     <div
@@ -70,7 +82,7 @@ export function PageFace({
         <div className="relative">
           <div
             className="block min-h-[46dvh] w-full px-5 py-0 text-[16px] break-words whitespace-pre-wrap sm:px-14"
-            style={{ lineHeight: "32px" }}
+            style={{ lineHeight: "32px", ...textStyleCss }}
           >
             {empty ? (
               <span className="text-ink-soft/75">Start writing…</span>

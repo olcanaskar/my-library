@@ -180,6 +180,13 @@ function styledBody(note: Note): StyledChar[] {
   return chars;
 }
 
+function textFont(note: Note, family: string, size = BODY_SIZE): string {
+  const style = note.textStyle;
+  return `${style?.italic ? "italic " : ""}${
+    style?.bold ? "600 " : ""
+  }${size}px ${family}`;
+}
+
 function paintInk(
   ctx: CanvasRenderingContext2D,
   strokes: InkStroke[],
@@ -192,17 +199,45 @@ function paintInk(
     if (stroke.points.length === 0) continue;
 
     const color = resolveInkColor(stroke.color, "light");
+    const activeBrush =
+      stroke.mode === "eraser" ? "pen" : (stroke.brush ?? "pen");
+
     ctx.save();
     ctx.globalCompositeOperation =
       stroke.mode === "eraser" ? "destination-out" : "source-over";
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    ctx.globalAlpha =
+      activeBrush === "marker"
+        ? 0.34
+        : activeBrush === "pencil"
+          ? 0.62
+          : activeBrush === "brush"
+            ? 0.9
+            : 1;
+    ctx.lineCap = activeBrush === "marker" ? "butt" : "round";
+    ctx.lineJoin = activeBrush === "marker" ? "miter" : "round";
+
+    const lineWidthFor = (pressure: number) => {
+      const base = stroke.size * width;
+      let value: number;
+
+      if (activeBrush === "marker") {
+        value = base * 2.5;
+      } else if (activeBrush === "pencil") {
+        value = base * (0.4 + pressure * 0.55);
+      } else if (activeBrush === "brush") {
+        value = base * (0.7 + pressure * 1.2);
+      } else {
+        value = base * (0.55 + pressure * 0.9);
+      }
+
+      return Math.max(0.6, value);
+    };
 
     if (stroke.points.length === 1) {
       const point = stroke.points[0];
-      const lineWidth = stroke.size * width * (0.55 + point.p * 0.9);
+      const lineWidth = lineWidthFor(point.p);
       ctx.beginPath();
       ctx.arc(
         left + point.x * width,
@@ -217,10 +252,7 @@ function paintInk(
         const from = stroke.points[i - 1];
         const to = stroke.points[i];
         ctx.beginPath();
-        ctx.lineWidth = Math.max(
-          0.6,
-          stroke.size * width * (0.55 + to.p * 0.9),
-        );
+        ctx.lineWidth = lineWidthFor(to.p);
         ctx.moveTo(left + from.x * width, top + from.y * height);
         ctx.lineTo(left + to.x * width, top + to.y * height);
         ctx.stroke();
@@ -260,7 +292,7 @@ function buildPagePlans(
     const metaBaseline = 110 + titleHeight + 12;
     const paperTop = metaBaseline + 24;
 
-    ctx.font = `${BODY_SIZE}px ${bodyFont}`;
+    ctx.font = textFont(note, bodyFont);
     const lines = wrapChars(
       styledBody(note),
       ctx,
@@ -375,6 +407,8 @@ function drawTextLines(
   ctx: CanvasRenderingContext2D,
   lines: StyledLine[],
   top: number,
+  underline: boolean,
+  strike: boolean,
 ) {
   const left = MARGIN + 18;
 
@@ -387,6 +421,29 @@ function drawTextLines(
       ctx.fillStyle = char.color;
       ctx.fillText(char.char, x, baseline);
       x += ctx.measureText(char.char).width;
+    }
+
+    const width = x - left;
+    if ((underline || strike) && width > 0) {
+      ctx.save();
+      ctx.strokeStyle =
+        line.find((char) => char.char.trim().length > 0)?.color ??
+        line[0]?.color ??
+        "#2c2418";
+      ctx.lineWidth = 1;
+      if (underline) {
+        ctx.beginPath();
+        ctx.moveTo(left, baseline + 2);
+        ctx.lineTo(left + width, baseline + 2);
+        ctx.stroke();
+      }
+      if (strike) {
+        ctx.beginPath();
+        ctx.moveTo(left, baseline - BODY_SIZE * 0.32);
+        ctx.lineTo(left + width, baseline - BODY_SIZE * 0.32);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
   }
 }
@@ -514,8 +571,14 @@ function renderPage(
   );
   drawPaper(ctx, subject, paperTop, capacity);
 
-  ctx.font = `${BODY_SIZE}px ${bodyFont}`;
-  drawTextLines(ctx, plan.lines, paperTop);
+  ctx.font = textFont(plan.note, bodyFont);
+  drawTextLines(
+    ctx,
+    plan.lines,
+    paperTop,
+    plan.note.textStyle?.underline ?? false,
+    plan.note.textStyle?.strike ?? false,
+  );
 
   const hasImages =
     plan.first && (plan.note.images?.length ?? 0) > 0;

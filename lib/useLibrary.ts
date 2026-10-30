@@ -87,7 +87,13 @@ export function useLibrary() {
       patch: Partial<
         Pick<
           Note,
-          "title" | "body" | "ink" | "images" | "textColor" | "textRuns"
+          | "title"
+          | "body"
+          | "ink"
+          | "images"
+          | "textStyle"
+          | "textColor"
+          | "textRuns"
         >
       >,
     ) => {

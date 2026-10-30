@@ -12,10 +12,12 @@ import {
 } from "@/lib/textRuns";
 import {
   paperClass,
+  type InkBrush,
   type InkColor,
   type InkStroke,
   type Note,
   type NoteImage,
+  type NoteTextStyle,
   type Subject,
   type TextRun,
   type Theme,
@@ -23,9 +25,12 @@ import {
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  BrushIcon,
   DownloadIcon,
   EraserIcon,
   ImageIcon,
+  MarkerIcon,
+  PencilIcon,
   PenIcon,
   ShareIcon,
   TextIcon,
@@ -46,6 +51,34 @@ const INK_SIZES = [
   { name: "Bold", value: 0.014, dot: 7 },
 ] as const;
 
+const BRUSHES = [
+  { id: "pen", name: "Pen", Icon: PenIcon },
+  { id: "pencil", name: "Pencil", Icon: PencilIcon },
+  { id: "marker", name: "Marker", Icon: MarkerIcon },
+  { id: "brush", name: "Brush", Icon: BrushIcon },
+] as const satisfies readonly {
+  id: InkBrush;
+  name: string;
+  Icon: typeof PenIcon;
+}[];
+
+const TEXT_STYLES = [
+  { key: "bold", name: "Bold", sample: "B", className: "font-bold" },
+  { key: "italic", name: "Italic", sample: "I", className: "italic" },
+  { key: "underline", name: "Underline", sample: "U", className: "underline" },
+  {
+    key: "strike",
+    name: "Strikethrough",
+    sample: "S",
+    className: "line-through",
+  },
+] as const satisfies readonly {
+  key: keyof NoteTextStyle;
+  name: string;
+  sample: string;
+  className: string;
+}[];
+
 type NoteEditorProps = {
   subject: Subject;
   note: Note;
@@ -61,6 +94,7 @@ type NoteEditorProps = {
     body?: string;
     ink?: InkStroke[];
     images?: NoteImage[];
+    textStyle?: NoteTextStyle;
     textColor?: InkColor;
     textRuns?: TextRun[];
   }) => void;
@@ -116,11 +150,24 @@ export function NoteEditor({
     writingColorFromNote(note),
   );
   const [inkSize, setInkSize] = useState<number>(INK_SIZES[1].value);
+  const [brush, setBrush] = useState<InkBrush>("pen");
   const [eraser, setEraser] = useState(false);
   const penActive = tool === "pen";
   const textColorValue = resolveInkColor(textColor, theme);
   const body = runsToText(runs);
   const noteImages = note.images ?? [];
+  const textStyle = note.textStyle ?? {};
+  const textStyleCss: React.CSSProperties = {
+    fontWeight: textStyle.bold ? 600 : undefined,
+    fontStyle: textStyle.italic ? "italic" : undefined,
+    textDecorationLine:
+      [
+        textStyle.underline ? "underline" : "",
+        textStyle.strike ? "line-through" : "",
+      ]
+        .filter(Boolean)
+        .join(" ") || undefined,
+  };
 
   useEffect(() => {
     return () => {
@@ -190,6 +237,7 @@ export function NoteEditor({
     body?: string;
     ink?: InkStroke[];
     images?: NoteImage[];
+    textStyle?: NoteTextStyle;
     textColor?: InkColor;
     textRuns?: TextRun[];
   }) {
@@ -308,6 +356,12 @@ export function NoteEditor({
       event.preventDefault();
       void addImageFiles(files);
     }
+  }
+
+  function toggleTextStyle(key: keyof NoteTextStyle) {
+    handleChange({
+      textStyle: { ...textStyle, [key]: !textStyle[key] },
+    });
   }
 
   function chooseColor(next: InkColor) {
@@ -477,6 +531,34 @@ export function NoteEditor({
             </button>
           </div>
 
+          {!penActive ? (
+            <>
+              <span aria-hidden="true" className="pen-divider" />
+              <div
+                role="group"
+                aria-label="Text style"
+                className="pen-group flex items-center gap-0.5"
+              >
+                {TEXT_STYLES.map((style) => (
+                  <button
+                    key={style.key}
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => toggleTextStyle(style.key)}
+                    aria-label={style.name}
+                    aria-pressed={Boolean(textStyle[style.key])}
+                    title={style.name}
+                    className={`pen-tool text-[13px] ${style.className} ${
+                      textStyle[style.key] ? "is-active" : ""
+                    }`}
+                  >
+                    {style.sample}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : null}
+
           <span aria-hidden="true" className="pen-divider" />
 
           <div
@@ -503,36 +585,36 @@ export function NoteEditor({
             })}
           </div>
 
-          <div
-            className={`flex items-center gap-0.5 ${
-              penActive ? "" : "ml-auto"
-            }`}
-          >
-            <button
-              type="button"
-              onClick={() => imageInputRef.current?.click()}
-              disabled={
-                imageBusy || noteImages.length >= MAX_IMAGES_PER_NOTE
-              }
-              aria-label={
-                imageBusy ? "Adding image" : "Add image to this page"
-              }
-              title={
-                noteImages.length >= MAX_IMAGES_PER_NOTE
-                  ? `Up to ${MAX_IMAGES_PER_NOTE} images per page`
-                  : "Import an image (you can also drop or paste one)"
-              }
-              className="pen-tool"
-            >
-              <ImageIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">
-                {imageBusy ? "Adding…" : "Image"}
-              </span>
-            </button>
-          </div>
-
           {penActive ? (
             <>
+              <span aria-hidden="true" className="pen-divider" />
+
+              <div
+                role="group"
+                aria-label="Brush type"
+                className="pen-group flex items-center gap-0.5"
+              >
+                {BRUSHES.map(({ id, name, Icon }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => {
+                      setBrush(id);
+                      setEraser(false);
+                    }}
+                    aria-label={`${name} brush`}
+                    aria-pressed={!eraser && brush === id}
+                    title={`${name} brush`}
+                    className={`pen-tool ${
+                      !eraser && brush === id ? "is-active" : ""
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">{name}</span>
+                  </button>
+                ))}
+              </div>
+
               <span aria-hidden="true" className="pen-divider" />
 
               <div className="pen-group flex items-center gap-0.5">
@@ -596,6 +678,34 @@ export function NoteEditor({
               </div>
             </>
           ) : null}
+
+          <div
+            className={`flex items-center gap-0.5 ${
+              penActive ? "" : "ml-auto"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => imageInputRef.current?.click()}
+              disabled={
+                imageBusy || noteImages.length >= MAX_IMAGES_PER_NOTE
+              }
+              aria-label={
+                imageBusy ? "Adding image" : "Add image to this page"
+              }
+              title={
+                noteImages.length >= MAX_IMAGES_PER_NOTE
+                  ? `Up to ${MAX_IMAGES_PER_NOTE} images per page`
+                  : "Import an image (you can also drop or paste one)"
+              }
+              className="pen-tool"
+            >
+              <ImageIcon className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">
+                {imageBusy ? "Adding…" : "Image"}
+              </span>
+            </button>
+          </div>
         </div>
 
         <input
@@ -708,7 +818,10 @@ export function NoteEditor({
                 {runs.map((run, index) => (
                   <span
                     key={`${index}-${run.color}`}
-                    style={{ color: resolveInkColor(run.color, theme) }}
+                    style={{
+                      color: resolveInkColor(run.color, theme),
+                      ...textStyleCss,
+                    }}
                   >
                     {run.text}
                   </span>
@@ -734,6 +847,7 @@ export function NoteEditor({
                 style={{
                   lineHeight: "32px",
                   caretColor: textColorValue,
+                  ...textStyleCss,
                 }}
               />
 
@@ -743,6 +857,7 @@ export function NoteEditor({
                 active={penActive}
                 color={inkColor}
                 size={inkSize}
+                brush={brush}
                 eraser={eraser}
                 theme={theme}
                 onCommit={handleInkChange}

@@ -112,6 +112,37 @@ export function PenIcon(props: IconProps) {
   );
 }
 
+export function PencilIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="m4 20 .9-4.2L15.6 5.1a2 2 0 0 1 2.8 0l.5.5a2 2 0 0 1 0 2.8L8.2 19.1 4 20Z" />
+      <path d="m14.4 6.4 3.2 3.2" />
+      <path d="m5 16 3 3" />
+    </Svg>
+  );
+}
+
+export function MarkerIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M7 4h7l1.5 4.5H8.5L7 4Z" />
+      <path d="M8.5 8.5h5.5v4H8.5z" />
+      <path d="M9 12.5 7.5 20h6L12 12.5" />
+      <path d="M6 20h9" />
+    </Svg>
+  );
+}
+
+export function BrushIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M14.5 4.5 20 10l-8.2 8.2H6.5v-5.3L14.5 4.5Z" />
+      <path d="m12.8 6.2 5 5" />
+      <path d="M6.5 13.7c-2.4.6-3.5 2.4-3.5 5.3 2.9 0 4.7-1.1 5.3-3.5" />
+    </Svg>
+  );
+}
+
 export function EraserIcon(props: IconProps) {
   return (
     <Svg {...props}>

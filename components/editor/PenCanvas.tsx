@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { resolveInkColor } from "@/lib/ink";
 import type {
+  InkBrush,
   InkColor,
   InkPoint,
   InkStroke,
@@ -14,6 +15,7 @@ type PenCanvasProps = {
   active: boolean;
   color: InkColor;
   size: number;
+  brush?: InkBrush;
   eraser: boolean;
   theme: Theme;
   onCommit: (ink: InkStroke[]) => void;
@@ -43,6 +45,7 @@ export function PenCanvas({
   active,
   color,
   size,
+  brush = "pen",
   eraser,
   theme,
   onCommit,
@@ -64,40 +67,72 @@ export function PenCanvas({
     if (points.length === 0) return;
 
     const strokeColor = resolveInkColor(stroke.color, themeRef.current);
+    const activeBrush: InkBrush =
+      stroke.mode === "eraser" ? "pen" : (stroke.brush ?? "pen");
 
     ctx.save();
     ctx.globalCompositeOperation =
       stroke.mode === "eraser" ? "destination-out" : "source-over";
     ctx.strokeStyle = strokeColor;
     ctx.fillStyle = strokeColor;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
+    ctx.lineCap = activeBrush === "marker" ? "butt" : "round";
+    ctx.lineJoin = activeBrush === "marker" ? "miter" : "round";
 
-    if (points.length === 1) {
-      const point = points[0];
-      const lineWidth = stroke.size * width * (0.55 + point.p * 0.9);
-      ctx.beginPath();
-      ctx.arc(
-        point.x * width,
-        point.y * height,
-        Math.max(0.5, lineWidth / 2),
-        0,
-        Math.PI * 2,
-      );
-      ctx.fill();
-    } else {
+    const lineWidth = (pressure: number, scale = 1) => {
+      const base = stroke.size * width;
+      let value: number;
+
+      if (activeBrush === "marker") {
+        value = base * 2.5;
+      } else if (activeBrush === "pencil") {
+        value = base * (0.4 + pressure * 0.55);
+      } else if (activeBrush === "brush") {
+        value = base * (0.7 + pressure * 1.2);
+      } else {
+        value = base * (0.55 + pressure * 0.9);
+      }
+
+      return Math.max(0.6, value * scale);
+    };
+
+    const paint = (scale: number, alpha: number, offset = 0) => {
+      ctx.globalAlpha = alpha;
+
+      if (points.length === 1) {
+        const point = points[0];
+        ctx.beginPath();
+        ctx.arc(
+          point.x * width + offset,
+          point.y * height + offset,
+          Math.max(0.5, lineWidth(point.p, scale) / 2),
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+        return;
+      }
+
       for (let i = 1; i < points.length; i++) {
         const from = points[i - 1];
         const to = points[i];
         ctx.beginPath();
-        ctx.lineWidth = Math.max(
-          0.6,
-          stroke.size * width * (0.55 + to.p * 0.9),
-        );
-        ctx.moveTo(from.x * width, from.y * height);
-        ctx.lineTo(to.x * width, to.y * height);
+        ctx.lineWidth = lineWidth(to.p, scale);
+        ctx.moveTo(from.x * width + offset, from.y * height + offset);
+        ctx.lineTo(to.x * width + offset, to.y * height + offset);
         ctx.stroke();
       }
+    };
+
+    if (activeBrush === "pencil") {
+      paint(1, 0.55);
+      paint(0.72, 0.26, 0.6);
+    } else if (activeBrush === "brush") {
+      paint(1.85, 0.12);
+      paint(1, 0.9);
+    } else if (activeBrush === "marker") {
+      paint(1, 0.34);
+    } else {
+      paint(1, 1);
     }
 
     ctx.restore();
@@ -188,6 +223,7 @@ export function PenCanvas({
       color: eraser ? "ink" : color,
       size: eraser ? 0.03 : size,
       mode: eraser ? "eraser" : "pen",
+      brush: eraser ? "pen" : brush,
       points: [pointFrom(event, rect)],
     };
     render();
