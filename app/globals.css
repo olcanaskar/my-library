@@ -873,8 +873,8 @@ html[data-theme="dark"] .window-sill {
   position: relative;
   flex-grow: 1;
   flex-shrink: 1;
-  min-width: 10px;
-  max-width: 28px;
+  min-width: 13px;
+  max-width: 34px;
   border-radius: 3px 3px 1px 1px;
   background-image:
     linear-gradient(

@@ -194,11 +194,11 @@ export function LibraryView({
 
           <div className="window-cabinet">
             <div className="window-shelf">
-              <DecorativeShelf seed={12} count={10} />
+              <DecorativeShelf seed={12} count={8} />
               <span aria-hidden="true" className="glass-pane" />
             </div>
             <div className="window-shelf">
-              <DecorativeShelf seed={16} count={10} />
+              <DecorativeShelf seed={16} count={8} />
               <span aria-hidden="true" className="glass-pane" />
             </div>
           </div>
@@ -243,13 +243,13 @@ const DUMMY_COLORS = [
 // Background stock: cloth spines with raised brass bands and a few title
 // labels. The books flex to fill the shelf, so they keep real thickness at
 // every window size instead of stretching into thin slivers.
-const DUMMY_WIDTHS = [17, 20, 15, 22, 18, 16, 21, 19, 14, 20, 17, 22, 16, 18];
-const DUMMY_HEIGHTS = [94, 89, 92, 85, 96, 90, 93, 86, 91, 88, 95, 87, 92, 84];
+const DUMMY_WIDTHS = [19, 23, 17, 25, 21, 18, 24, 22, 16, 23, 20, 25, 18, 21];
+const DUMMY_HEIGHTS = [80, 74, 78, 69, 83, 76, 81, 71, 77, 75, 82, 73, 79, 68];
 
 /** A quiet row of books on a shelf that is not part of the library. */
 function DecorativeShelf({
   seed,
-  count = 14,
+  count = 12,
 }: {
   seed: number;
   count?: number;
