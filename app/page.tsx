@@ -10,7 +10,15 @@ import { BookClosing } from "@/components/library/BookClosing";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
 import { pagesLabel } from "@/lib/format";
+import { hasVisibleInk } from "@/lib/inkVisibility";
+import { runsFromNote, runsToText } from "@/lib/textRuns";
 import type { Note, Paper, Subject } from "@/lib/types";
+
+function noteIsBlank(note: Note): boolean {
+  if (note.title.trim().length > 0) return false;
+  if (runsToText(runsFromNote(note)).trim().length > 0) return false;
+  return !hasVisibleInk(note.ink ?? []);
+}
 
 export default function Page() {
   return (
@@ -174,27 +182,35 @@ function App() {
   function turnPage(offset: number) {
     if (!subject || !note) return;
     const index = notes.findIndex((n) => n.id === note.id);
-    const target = notes[index + offset];
-    if (!target) return;
-    setPageMotion(offset > 0 ? "next" : "prev");
-    setPageFrom({
-      note,
-      pageNo: index + 1,
-      totalPages: Math.max(notes.length, 1),
-    });
-    goNote(subject.id, target.id);
-  }
+    if (index < 0) return;
 
-  function addPage() {
-    if (!subject || !note) return;
-    const index = notes.findIndex((n) => n.id === note.id);
-    setPageMotion("next");
-    setPageFrom({
-      note,
-      pageNo: index + 1,
-      totalPages: Math.max(notes.length, 1),
-    });
-    goNote(subject.id, lib.addNote(subject.id));
+    const target = notes[index + offset];
+    const totalPages = Math.max(notes.length, 1);
+
+    if (!target) {
+      // Next on the last page opens a fresh page instead of stopping. If the
+      // current page is already that fresh, empty page, leave it as it is.
+      if (offset > 0 && !noteIsBlank(note)) {
+        setPageMotion("next");
+        setPageFrom({ note, pageNo: index + 1, totalPages });
+        goNote(subject.id, lib.addNote(subject.id));
+      }
+      return;
+    }
+
+    // An empty last page is the page Next created. Going back removes it
+    // rather than leaving an untouched sheet in the notebook.
+    if (offset < 0 && index === notes.length - 1 && noteIsBlank(note)) {
+      lib.deleteNote(subject.id, note.id);
+      setPageMotion("prev");
+      setPageFrom({ note, pageNo: index + 1, totalPages });
+      goNote(subject.id, target.id);
+      return;
+    }
+
+    setPageMotion(offset > 0 ? "next" : "prev");
+    setPageFrom({ note, pageNo: index + 1, totalPages });
+    goNote(subject.id, target.id);
   }
 
   function handleCreateBook(input: {
@@ -250,7 +266,6 @@ function App() {
         onBack={closeBook}
         onPrev={() => turnPage(-1)}
         onNext={() => turnPage(1)}
-        onNewPage={addPage}
         onExportPdf={exportNotebook}
         onSharePdf={shareNotebook}
         exporting={exporting}

@@ -25,7 +25,6 @@ import {
   DownloadIcon,
   EraserIcon,
   PenIcon,
-  PlusIcon,
   ShareIcon,
   TextIcon,
   TrashIcon,
@@ -60,7 +59,6 @@ type NoteEditorProps = {
   onBack: () => void;
   onPrev: () => void;
   onNext: () => void;
-  onNewPage: () => void;
   onDelete: () => void;
   onDeleteNotebook: () => void;
   onExportPdf: () => void;
@@ -83,7 +81,6 @@ export function NoteEditor({
   onBack,
   onPrev,
   onNext,
-  onNewPage,
   onDelete,
   onDeleteNotebook,
   onExportPdf,
@@ -243,7 +240,6 @@ export function NoteEditor({
 
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
-  const hasNext = pageNo < totalPages;
   const flippingOut = entryMotion === "next" && fromNote !== null;
   const flippingIn = entryMotion === "prev";
   const fromPage = fromPageNo ?? Math.max(1, pageNo - 1);
@@ -323,21 +319,12 @@ export function NoteEditor({
 
           <button
             type="button"
-            onClick={onNewPage}
-            aria-label="New page"
-            className="desk-btn inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-2 text-xs font-medium sm:px-3 sm:text-sm"
+            onClick={onDeleteNotebook}
+            aria-label="Delete notebook"
+            className="desk-btn inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-2 text-xs font-medium transition hover:text-red-300 sm:px-3 sm:text-sm"
           >
-            <PlusIcon className="h-4 w-4" />
-            <span className="hidden sm:inline">New page</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={onDelete}
-            aria-label="Delete page"
-            className="shrink-0 rounded-full p-2 text-[#c6ae83] transition hover:bg-red-500/15 hover:text-red-300"
-          >
-            <TrashIcon className="h-5 w-5" />
+            <TrashIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">Delete notebook</span>
           </button>
         </div>
       </header>
@@ -521,6 +508,16 @@ export function NoteEditor({
                     : "page-turn"
               } relative overflow-hidden rounded-[3px] bg-paper shadow-[inset_14px_0_18px_-18px_rgba(0,0,0,0.55),inset_-10px_0_18px_-16px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(0,0,0,0.05)]`}
             >
+              <button
+                type="button"
+                onClick={onDelete}
+                aria-label="Delete page"
+                title="Delete page"
+                className="absolute top-2 right-2 z-10 rounded-full p-2 text-ink-soft transition hover:bg-ink/5 hover:text-ink active:scale-95 sm:top-4 sm:right-4"
+              >
+                <TrashIcon className="h-4 w-4" />
+              </button>
+
           <div className="px-5 pt-7 sm:px-14">
             <input
               value={note.title}
@@ -529,7 +526,7 @@ export function NoteEditor({
               aria-label="Page title"
               maxLength={80}
               autoFocus={!note.title}
-              className="w-full bg-transparent font-hand text-3xl leading-tight outline-none sm:text-4xl"
+              className="w-full bg-transparent pr-10 font-hand text-3xl leading-tight outline-none sm:pr-12 sm:text-4xl"
             />
             <div className="mt-2 flex items-center justify-between text-[11px] text-ink-soft">
               <span>{formatDay(note.createdAt)}</span>
@@ -613,9 +610,8 @@ export function NoteEditor({
             <button
               type="button"
               onClick={onNext}
-              disabled={!hasNext}
               aria-label="Next page"
-              className="inline-flex items-center gap-1 rounded-md px-2 py-2 text-xs font-medium text-ink-soft transition hover:bg-ink/5 hover:text-ink disabled:pointer-events-none disabled:opacity-30 sm:px-3"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-2 text-xs font-medium text-ink-soft transition hover:bg-ink/5 hover:text-ink sm:px-3"
             >
               <span className="hidden sm:inline">Next</span>
               <ArrowRightIcon className="h-4 w-4" />
@@ -637,20 +633,11 @@ export function NoteEditor({
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-[11px] text-[#c6ae83]/80">
-          <span>
-            {penActive
-              ? "Draw directly on the page with a pen, Pencil or mouse."
-              : "Your writing is saved automatically."}
-          </span>
-          <button
-            type="button"
-            onClick={onDeleteNotebook}
-            className="rounded px-1 py-0.5 transition hover:text-red-300"
-          >
-            Delete notebook
-          </button>
-        </div>
+        <p className="mt-3 px-1 text-[11px] text-[#c6ae83]/80">
+          {penActive
+            ? "Draw directly on the page with a pen, Pencil or mouse."
+            : "Your writing is saved automatically."}
+        </p>
       </main>
     </div>
   );
