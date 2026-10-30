@@ -194,11 +194,11 @@ export function LibraryView({
 
           <div className="window-cabinet">
             <div className="window-shelf">
-              <DecorativeShelf seed={12} />
+              <DecorativeShelf seed={12} count={10} />
               <span aria-hidden="true" className="glass-pane" />
             </div>
             <div className="window-shelf">
-              <DecorativeShelf seed={16} />
+              <DecorativeShelf seed={16} count={10} />
               <span aria-hidden="true" className="glass-pane" />
             </div>
           </div>
@@ -240,27 +240,41 @@ const DUMMY_COLORS = [
   "#6a5566",
   "#7d6a4f",
 ];
-// Background stock: same cloth, brass rules and near-level heights as the
-// real notebooks, so the shelves read as one library rather than noise.
-const DUMMY_WIDTHS = [8, 9, 7, 10, 8, 9, 7, 10];
-const DUMMY_HEIGHTS = [92, 88, 90, 86, 93, 89, 91, 87, 92, 88, 90, 86];
+// Background stock: cloth spines with raised brass bands and a few title
+// labels. The books flex to fill the shelf, so they keep real thickness at
+// every window size instead of stretching into thin slivers.
+const DUMMY_WIDTHS = [17, 20, 15, 22, 18, 16, 21, 19, 14, 20, 17, 22, 16, 18];
+const DUMMY_HEIGHTS = [94, 89, 92, 85, 96, 90, 93, 86, 91, 88, 95, 87, 92, 84];
 
 /** A quiet row of books on a shelf that is not part of the library. */
-function DecorativeShelf({ seed }: { seed: number }) {
+function DecorativeShelf({
+  seed,
+  count = 14,
+}: {
+  seed: number;
+  count?: number;
+}) {
   return (
     <div aria-hidden="true" className="dummy-shelf">
-      {Array.from({ length: 28 }, (_, i) => (
+      {Array.from({ length: count }, (_, i) => (
         <span
           key={i}
           className="dummy-book"
           style={{
-            width: DUMMY_WIDTHS[i % DUMMY_WIDTHS.length],
+            flexBasis: `${DUMMY_WIDTHS[(i + seed) % DUMMY_WIDTHS.length]}px`,
             height: `${DUMMY_HEIGHTS[(i + seed) % DUMMY_HEIGHTS.length]}%`,
             // Runs of three keep the shelf looking arranged, not speckled.
             backgroundColor:
               DUMMY_COLORS[(Math.floor(i / 3) + seed) % DUMMY_COLORS.length],
           }}
-        />
+        >
+          {i % 3 === 0 ? (
+            <span
+              className="dummy-book-label"
+              style={{ top: `${21 + ((i + seed) % 3) * 4}%` }}
+            />
+          ) : null}
+        </span>
       ))}
     </div>
   );
