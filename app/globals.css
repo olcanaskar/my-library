@@ -2344,31 +2344,33 @@ html[data-theme="dark"] .window-lake-glow--moon {
    Small, slow loops: the clouds drift, the stars twinkle and dust slowly
    shifts, a meteor crosses the night sky, and the lake catches the light. */
 
-@keyframes cloud-drift-a {
+@keyframes cloud-cross {
   from {
-    transform: translate3d(-2.5%, 1%, 0);
+    transform: translate3d(-300%, 1.5%, 0);
   }
   to {
-    transform: translate3d(4%, -1.5%, 0);
+    transform: translate3d(400%, -1.5%, 0);
   }
 }
 
-@keyframes cloud-drift-b {
-  from {
-    transform: translate3d(3%, -1%, 0);
-  }
-  to {
-    transform: translate3d(-4%, 2%, 0);
-  }
-}
-
+/* Each cloud crosses the whole window, disappears, then re-enters from the
+   other side. Different speeds and negative delays keep the sky populated. */
 .library-room .window-cloud-a {
-  animation: cloud-drift-a 24s ease-in-out infinite alternate;
+  animation: cloud-cross 36s linear -16s infinite;
   will-change: transform;
 }
 
 .library-room .window-cloud-b {
-  animation: cloud-drift-b 19s ease-in-out -8s infinite alternate;
+  animation: cloud-cross 29s linear -16s infinite;
+  will-change: transform;
+}
+
+.library-room .window-cloud-c {
+  top: 15%;
+  left: 12%;
+  width: 25%;
+  height: 6%;
+  animation: cloud-cross 33s linear -15s infinite;
   will-change: transform;
 }
 
@@ -2426,6 +2428,11 @@ html[data-theme="dark"] .window-lake-glow--moon {
   will-change: transform, opacity;
 }
 
+/* A meteor belongs to the night sky only. */
+html[data-theme="light"] .window-shooting-star {
+  display: none;
+}
+
 @keyframes lake-ripple {
   from {
     background-position: 0 0;
@@ -2458,6 +2465,7 @@ html[data-theme="dark"] .window-lake-glow--moon {
 @media (prefers-reduced-motion: reduce) {
   .library-room .window-cloud-a,
   .library-room .window-cloud-b,
+  .library-room .window-cloud-c,
   .window-stars::before,
   .window-stars::after,
   .window-shooting-star,

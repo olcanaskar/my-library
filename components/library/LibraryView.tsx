@@ -133,6 +133,7 @@ export function LibraryView({
               <span className="window-stars" />
               <span className="window-cloud window-cloud-a" />
               <span className="window-cloud window-cloud-b" />
+              <span className="window-cloud window-cloud-c" />
               <span className="window-ridge window-ridge--far" />
               <span className="window-ridge window-ridge--mid" />
               <span className="window-treeline" />
