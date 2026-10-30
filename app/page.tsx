@@ -17,6 +17,7 @@ import type { Note, Paper, Subject } from "@/lib/types";
 function noteIsBlank(note: Note): boolean {
   if (note.title.trim().length > 0) return false;
   if (runsToText(runsFromNote(note)).trim().length > 0) return false;
+  if ((note.images?.length ?? 0) > 0) return false;
   return !hasVisibleInk(note.ink ?? []);
 }
 

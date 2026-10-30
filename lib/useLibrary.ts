@@ -85,7 +85,10 @@ export function useLibrary() {
     (
       noteId: string,
       patch: Partial<
-        Pick<Note, "title" | "body" | "ink" | "textColor" | "textRuns">
+        Pick<
+          Note,
+          "title" | "body" | "ink" | "images" | "textColor" | "textRuns"
+        >
       >,
     ) => {
       setStore((prev) => ({

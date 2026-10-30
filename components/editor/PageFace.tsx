@@ -6,6 +6,7 @@ import { runsFromNote, runsToText } from "@/lib/textRuns";
 import { paperClass, type Note, type Subject, type Theme } from "@/lib/types";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/icons";
 import type { AnimationEventHandler } from "react";
+import { NoteImages } from "./NoteImages";
 import { PenCanvas } from "./PenCanvas";
 
 type PageFaceProps = {
@@ -66,33 +67,40 @@ export function PageFace({
           margin ? "paper-margin" : ""
         }`}
       >
-        <div
-          className="block min-h-[46dvh] w-full px-5 py-0 text-[16px] break-words whitespace-pre-wrap sm:px-14"
-          style={{ lineHeight: "32px" }}
-        >
-          {empty ? (
-            <span className="text-ink-soft/75">Start writing…</span>
-          ) : (
-            runs.map((run, index) => (
-              <span
-                key={`${index}-${run.color}`}
-                style={{ color: resolveInkColor(run.color, theme) }}
-              >
-                {run.text}
-              </span>
-            ))
-          )}
-          {!empty && trailingBreak ? "\u200b" : null}
+        <div className="relative">
+          <div
+            className="block min-h-[46dvh] w-full px-5 py-0 text-[16px] break-words whitespace-pre-wrap sm:px-14"
+            style={{ lineHeight: "32px" }}
+          >
+            {empty ? (
+              <span className="text-ink-soft/75">Start writing…</span>
+            ) : (
+              runs.map((run, index) => (
+                <span
+                  key={`${index}-${run.color}`}
+                  style={{ color: resolveInkColor(run.color, theme) }}
+                >
+                  {run.text}
+                </span>
+              ))
+            )}
+            {!empty && trailingBreak ? "\u200b" : null}
+          </div>
+
+          <PenCanvas
+            ink={note.ink ?? []}
+            active={false}
+            color="ink"
+            size={0.008}
+            eraser={false}
+            theme={theme}
+            onCommit={() => {}}
+          />
         </div>
 
-        <PenCanvas
-          ink={note.ink ?? []}
-          active={false}
-          color="ink"
-          size={0.008}
-          eraser={false}
-          theme={theme}
-          onCommit={() => {}}
+        <NoteImages
+          images={note.images ?? []}
+          className="px-5 sm:px-14"
         />
       </div>
 

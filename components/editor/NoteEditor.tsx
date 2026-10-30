@@ -15,6 +15,7 @@ import {
   type InkColor,
   type InkStroke,
   type Note,
+  type NoteImage,
   type Subject,
   type TextRun,
   type Theme,
@@ -24,12 +25,18 @@ import {
   ArrowRightIcon,
   DownloadIcon,
   EraserIcon,
+  ImageIcon,
   PenIcon,
   ShareIcon,
   TextIcon,
   TrashIcon,
   UndoIcon,
 } from "@/components/ui/icons";
+import {
+  imageFileToNoteImage,
+  MAX_IMAGES_PER_NOTE,
+} from "@/lib/images";
+import { NoteImages } from "./NoteImages";
 import { PenCanvas } from "./PenCanvas";
 import { PageFace } from "./PageFace";
 
@@ -53,6 +60,7 @@ type NoteEditorProps = {
     title?: string;
     body?: string;
     ink?: InkStroke[];
+    images?: NoteImage[];
     textColor?: InkColor;
     textRuns?: TextRun[];
   }) => void;
@@ -89,7 +97,10 @@ export function NoteEditor({
   sharing,
 }: NoteEditorProps) {
   const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<"typing" | "saved">("saved");
+  const [imageBusy, setImageBusy] = useState(false);
+  const [draggingImage, setDraggingImage] = useState(false);
   const timer = useRef<number | null>(null);
 
   const [tool, setTool] = useState<"type" | "pen">("type");
@@ -109,6 +120,7 @@ export function NoteEditor({
   const penActive = tool === "pen";
   const textColorValue = resolveInkColor(textColor, theme);
   const body = runsToText(runs);
+  const noteImages = note.images ?? [];
 
   useEffect(() => {
     return () => {
@@ -177,6 +189,7 @@ export function NoteEditor({
     title?: string;
     body?: string;
     ink?: InkStroke[];
+    images?: NoteImage[];
     textColor?: InkColor;
     textRuns?: TextRun[];
   }) {
@@ -201,6 +214,100 @@ export function NoteEditor({
     });
     commitRuns(nextRuns);
     handleChange({ body: nextText, textRuns: nextRuns, textColor });
+  }
+
+  async function addImageFiles(files: FileList | File[]) {
+    const selected = Array.from(files).filter((file) =>
+      file.type.startsWith("image/"),
+    );
+    if (selected.length === 0 || imageBusy) return;
+
+    const room = MAX_IMAGES_PER_NOTE - noteImages.length;
+    if (room <= 0) {
+      window.alert(
+        `You can add up to ${MAX_IMAGES_PER_NOTE} images to one page.`,
+      );
+      return;
+    }
+
+    setImageBusy(true);
+    const added: NoteImage[] = [];
+
+    try {
+      for (const file of selected.slice(0, room)) {
+        try {
+          added.push(await imageFileToNoteImage(file));
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if (added.length > 0) {
+        handleChange({ images: [...noteImages, ...added] });
+      }
+
+      if (selected.length > room) {
+        window.alert(
+          `You can add up to ${MAX_IMAGES_PER_NOTE} images to one page.`,
+        );
+      } else if (added.length === 0) {
+        window.alert("That image could not be imported. Try a smaller file.");
+      }
+    } finally {
+      setImageBusy(false);
+      if (imageInputRef.current) imageInputRef.current.value = "";
+    }
+  }
+
+  function handleImageInput(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.currentTarget.files) {
+      void addImageFiles(event.currentTarget.files);
+    }
+  }
+
+  function removeImage(id: string) {
+    handleChange({ images: noteImages.filter((image) => image.id !== id) });
+  }
+
+  function handleDragOver(event: React.DragEvent<HTMLDivElement>) {
+    if (!event.dataTransfer.types.includes("Files")) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "copy";
+    setDraggingImage(true);
+  }
+
+  function handleDragLeave(event: React.DragEvent<HTMLDivElement>) {
+    const next = event.relatedTarget;
+    if (next instanceof Node && event.currentTarget.contains(next)) {
+      return;
+    }
+    setDraggingImage(false);
+  }
+
+  function handleDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setDraggingImage(false);
+    if (event.dataTransfer.files.length > 0) {
+      void addImageFiles(event.dataTransfer.files);
+    }
+  }
+
+  function handlePaste(event: React.ClipboardEvent<HTMLTextAreaElement>) {
+    const items = Array.from(event.clipboardData.items).filter(
+      (item) => item.kind === "file" && item.type.startsWith("image/"),
+    );
+    const files = items.length
+      ? items
+          .map((item) => item.getAsFile())
+          .filter((file): file is File => Boolean(file))
+      : Array.from(event.clipboardData.files).filter((file) =>
+          file.type.startsWith("image/"),
+        );
+
+    if (files.length > 0) {
+      event.preventDefault();
+      void addImageFiles(files);
+    }
   }
 
   function chooseColor(next: InkColor) {
@@ -396,6 +503,34 @@ export function NoteEditor({
             })}
           </div>
 
+          <div
+            className={`flex items-center gap-0.5 ${
+              penActive ? "" : "ml-auto"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => imageInputRef.current?.click()}
+              disabled={
+                imageBusy || noteImages.length >= MAX_IMAGES_PER_NOTE
+              }
+              aria-label={
+                imageBusy ? "Adding image" : "Add image to this page"
+              }
+              title={
+                noteImages.length >= MAX_IMAGES_PER_NOTE
+                  ? `Up to ${MAX_IMAGES_PER_NOTE} images per page`
+                  : "Import an image (you can also drop or paste one)"
+              }
+              className="pen-tool"
+            >
+              <ImageIcon className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">
+                {imageBusy ? "Adding…" : "Image"}
+              </span>
+            </button>
+          </div>
+
           {penActive ? (
             <>
               <span aria-hidden="true" className="pen-divider" />
@@ -463,9 +598,21 @@ export function NoteEditor({
           ) : null}
         </div>
 
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+          onChange={handleImageInput}
+        />
+
         <div
           key={note.id}
           className="book-shell"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           style={{ "--cover": subject.color } as React.CSSProperties}
         >
           <span aria-hidden="true" className="book-shell-spine">
@@ -572,6 +719,7 @@ export function NoteEditor({
                 ref={bodyRef}
                 value={body}
                 onChange={handleBodyChange}
+                onPaste={handlePaste}
                 placeholder={
                   penActive
                     ? "Switch to Type to write, or draw on the page…"
@@ -588,17 +736,23 @@ export function NoteEditor({
                   caretColor: textColorValue,
                 }}
               />
+
+              <PenCanvas
+                key={note.id}
+                ink={ink}
+                active={penActive}
+                color={inkColor}
+                size={inkSize}
+                eraser={eraser}
+                theme={theme}
+                onCommit={handleInkChange}
+              />
             </div>
 
-            <PenCanvas
-              key={note.id}
-              ink={ink}
-              active={penActive}
-              color={inkColor}
-              size={inkSize}
-              eraser={eraser}
-              theme={theme}
-              onCommit={handleInkChange}
+            <NoteImages
+              images={noteImages}
+              onRemove={removeImage}
+              className="px-5 sm:px-14"
             />
           </div>
 
@@ -628,6 +782,13 @@ export function NoteEditor({
               <ArrowRightIcon className="h-4 w-4" />
             </button>
           </div>
+
+          {draggingImage ? (
+            <div className="note-drop-overlay" aria-hidden="true">
+              <ImageIcon className="h-7 w-7" />
+              <span>Drop image onto this page</span>
+            </div>
+          ) : null}
             </div>
 
             {flippingOut && fromNote && !turnDone ? (

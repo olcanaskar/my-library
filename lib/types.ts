@@ -31,6 +31,16 @@ export type TextRun = {
   color: InkColor;
 };
 
+/** A photo or diagram imported onto a note page. */
+export type NoteImage = {
+  id: string;
+  /** Resized data URL, kept small enough for localStorage. */
+  src: string;
+  width: number;
+  height: number;
+  name?: string;
+};
+
 export type Note = {
   id: string;
   subjectId: string;
@@ -42,6 +52,8 @@ export type Note = {
   textRuns?: TextRun[];
   /** Freehand ink, normalised to the page canvas. */
   ink?: InkStroke[];
+  /** Photos and diagrams pasted below the writing area. */
+  images?: NoteImage[];
   createdAt: number;
   updatedAt: number;
 };

@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 import { formatDay } from "./format";
 import { resolveInkColor } from "./ink";
 import { runsFromNote } from "./textRuns";
-import type { InkStroke, Note, Subject } from "./types";
+import type { InkStroke, Note, NoteImage, Subject } from "./types";
 
 const PAGE_W = 794;
 const PAGE_H = 1123;
@@ -13,6 +13,17 @@ const PAPER_BOTTOM = PAGE_H - MARGIN;
 const BODY_SIZE = 14;
 const BODY_LINE = 26;
 const CONTINUED_TOP = 120;
+/** Space kept free at the bottom of a note's first PDF page for its images. */
+const IMAGE_RESERVE = 154;
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Could not load an imported image."));
+    image.src = src;
+  });
+}
 
 type StyledChar = { char: string; color: string };
 type StyledLine = StyledChar[];
@@ -257,9 +268,14 @@ function buildPagePlans(
     );
 
     const firstTextTop = paperTop + 10;
+    const imageReserve =
+      (note.images?.length ?? 0) > 0 ? IMAGE_RESERVE : 0;
     const firstCapacity = Math.max(
       1,
-      Math.floor((PAPER_BOTTOM - firstTextTop - BODY_SIZE) / BODY_LINE) + 1,
+      Math.floor(
+        (PAPER_BOTTOM - firstTextTop - BODY_SIZE - imageReserve) /
+          BODY_LINE,
+      ) + 1,
     );
     const continuedTextTop = CONTINUED_TOP + 10;
     const continuedCapacity = Math.max(
@@ -375,6 +391,50 @@ function drawTextLines(
   }
 }
 
+function drawNoteImages(
+  ctx: CanvasRenderingContext2D,
+  images: NoteImage[],
+  loaded: Map<string, HTMLImageElement>,
+  top: number,
+  height: number,
+) {
+  if (images.length === 0) return;
+
+  const left = MARGIN + 18;
+  const width = PAPER_W - 36;
+  const gap = 10;
+  const cellWidth = (width - gap * (images.length - 1)) / images.length;
+
+  images.forEach((image, index) => {
+    const element = loaded.get(image.src);
+    if (!element) return;
+
+    const innerWidth = Math.max(1, cellWidth - 8);
+    const innerHeight = Math.max(1, height - 8);
+    const scale = Math.min(
+      innerWidth / element.naturalWidth,
+      innerHeight / element.naturalHeight,
+    );
+    const drawWidth = Math.max(1, element.naturalWidth * scale);
+    const drawHeight = Math.max(1, element.naturalHeight * scale);
+    const x = left + index * (cellWidth + gap) + (cellWidth - drawWidth) / 2;
+    const y = top + (height - drawHeight) / 2;
+
+    ctx.save();
+    ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 2;
+    ctx.fillStyle = "#fffdf8";
+    ctx.fillRect(x - 4, y - 4, drawWidth + 8, drawHeight + 8);
+    ctx.restore();
+
+    ctx.drawImage(element, x, y, drawWidth, drawHeight);
+    ctx.strokeStyle = "rgba(70, 45, 20, 0.2)";
+    ctx.lineWidth = 0.6;
+    ctx.strokeRect(x - 4, y - 4, drawWidth + 8, drawHeight + 8);
+  });
+}
+
 function renderPage(
   subject: Subject,
   plan: PagePlan,
@@ -382,6 +442,7 @@ function renderPage(
   totalPages: number,
   bodyFont: string,
   titleFont: string,
+  loadedImages: Map<string, HTMLImageElement>,
 ): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = PAGE_W * SCALE;
@@ -456,6 +517,18 @@ function renderPage(
   ctx.font = `${BODY_SIZE}px ${bodyFont}`;
   drawTextLines(ctx, plan.lines, paperTop);
 
+  const hasImages =
+    plan.first && (plan.note.images?.length ?? 0) > 0;
+  if (hasImages) {
+    drawNoteImages(
+      ctx,
+      plan.note.images ?? [],
+      loadedImages,
+      PAPER_BOTTOM - IMAGE_RESERVE + 8,
+      IMAGE_RESERVE - 18,
+    );
+  }
+
   if (plan.first && plan.note.ink && plan.note.ink.length > 0) {
     const ink = document.createElement("canvas");
     ink.width = PAGE_W * SCALE;
@@ -463,13 +536,16 @@ function renderPage(
     const inkCtx = ink.getContext("2d");
     if (inkCtx) {
       inkCtx.scale(SCALE, SCALE);
+      const inkHeight = hasImages
+        ? PAPER_BOTTOM - IMAGE_RESERVE - paperTop
+        : PAPER_BOTTOM - paperTop;
       paintInk(
         inkCtx,
         plan.note.ink,
         MARGIN,
         paperTop,
         PAPER_W,
-        PAPER_BOTTOM - paperTop,
+        Math.max(1, inkHeight),
       );
       ctx.drawImage(ink, 0, 0, PAGE_W, PAGE_H);
     }
@@ -549,6 +625,21 @@ async function generateNotebookPdf(
     const ctx = measureCanvas.getContext("2d");
     if (!ctx) return null;
 
+    const imageSources = new Set<string>();
+    for (const note of notes) {
+      for (const image of note.images ?? []) imageSources.add(image.src);
+    }
+    const loadedImages = new Map<string, HTMLImageElement>();
+    await Promise.allSettled(
+      Array.from(imageSources, async (src) => {
+        try {
+          loadedImages.set(src, await loadImage(src));
+        } catch {
+          // A broken import should not stop the rest of the notebook.
+        }
+      }),
+    );
+
     const plans = buildPagePlans(subject, notes, ctx, bodyFont, titleFont);
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -566,6 +657,7 @@ async function generateNotebookPdf(
         plans.length,
         bodyFont,
         titleFont,
+        loadedImages,
       );
       pdf.addImage(
         page.toDataURL("image/jpeg", 0.94),
