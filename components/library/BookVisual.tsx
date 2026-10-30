@@ -75,26 +75,35 @@ export function BookVisual({
 
           {/* the page block and its visible edges */}
           <div className="book-pages-block absolute inset-0">
-            <div
-              className={`book-page ${paperClass(subject.paper)} absolute inset-0 overflow-hidden rounded-[3px] shadow-[0_30px_70px_-32px_rgba(0,0,0,0.5)]`}
-            >
-              <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/25 to-transparent" />
-              {preview ? (
-                <div className="absolute inset-0 flex flex-col px-6 pt-7 pb-6">
-                  <div className="flex items-baseline justify-between gap-2 text-[7px] uppercase tracking-[0.16em] text-ink-soft">
-                    <span className="truncate">{subject.name}</span>
-                    <span className="shrink-0">
-                      {preview.pageNo} / {preview.totalPages}
-                    </span>
+            <div className="book-shell book-preview-shell absolute inset-0">
+              <span aria-hidden="true" className="book-shell-spine">
+                <span className="max-h-[68%] overflow-hidden font-serif text-[7px] leading-none font-semibold tracking-[0.16em] text-[#f6e7c8]/80 uppercase [writing-mode:vertical-rl]">
+                  {subject.name}
+                </span>
+              </span>
+              <span aria-hidden="true" className="book-shell-cover" />
+              <span aria-hidden="true" className="book-ribbon book-preview-ribbon" />
+
+              <div
+                className={`book-preview-page ${paperClass(subject.paper)}`}
+              >
+                {preview ? (
+                  <div className="flex h-full flex-col px-4 pt-5 pb-4">
+                    <div className="flex items-baseline justify-between gap-2 text-[6px] uppercase tracking-[0.14em] text-ink-soft">
+                      <span className="truncate">{subject.name}</span>
+                      <span className="shrink-0">
+                        {preview.pageNo} / {preview.totalPages}
+                      </span>
+                    </div>
+                    <h2 className="mt-2.5 mb-0 font-hand text-[clamp(14px,6.4cqw,26px)] leading-tight break-words text-ink">
+                      {preview.title || "Untitled page"}
+                    </h2>
+                    <p className="mt-2.5 mb-0 overflow-hidden text-[clamp(6px,2.1cqw,9px)] leading-[1.8] whitespace-pre-wrap text-ink-soft">
+                      {preview.text || "Empty page"}
+                    </p>
                   </div>
-                  <h2 className="mt-3 mb-0 font-hand text-[clamp(16px,7cqw,30px)] leading-tight break-words text-ink">
-                    {preview.title || "Untitled page"}
-                  </h2>
-                  <p className="mt-3 mb-0 overflow-hidden text-[clamp(7px,2.3cqw,10px)] leading-[1.8] whitespace-pre-wrap text-ink-soft">
-                    {preview.text || "Empty page"}
-                  </p>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
             </div>
 
             <span aria-hidden="true" className="book-fore-edge" />
