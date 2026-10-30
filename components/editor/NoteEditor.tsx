@@ -100,7 +100,6 @@ export function NoteEditor({
   const [entryMotion] = useState(pageMotion);
   const [turnDone, setTurnDone] = useState(false);
   const [leaveDone, setLeaveDone] = useState(false);
-  const [openDone, setOpenDone] = useState(false);
   const [ink, setInk] = useState<InkStroke[]>(() => note.ink ?? []);
   const [runs, setRuns] = useState<TextRun[]>(() => runsFromNote(note));
   const runsRef = useRef(runs);
@@ -125,15 +124,10 @@ export function NoteEditor({
   // If animationend is not delivered (backgrounded tab), do not leave the
   // sheet stuck edge-on.
   useEffect(() => {
-    if (entryMotion === "open" && !openDone) {
-      const safety = window.setTimeout(() => setOpenDone(true), 1200);
-      return () => window.clearTimeout(safety);
-    }
-    if (entryMotion === "prev" && !turnDone) {
-      const safety = window.setTimeout(() => setTurnDone(true), 1200);
-      return () => window.clearTimeout(safety);
-    }
-  }, [entryMotion, turnDone, openDone]);
+    if (entryMotion !== "prev" || turnDone) return;
+    const safety = window.setTimeout(() => setTurnDone(true), 1200);
+    return () => window.clearTimeout(safety);
+  }, [entryMotion, turnDone]);
 
   // Page turns remount this editor (key={note.id}), so each page starts clean.
 
@@ -261,7 +255,6 @@ export function NoteEditor({
   const hasPrev = pageNo > 1;
   const flippingOut = entryMotion === "next" && fromNote !== null;
   const turningIn = entryMotion === "prev";
-  const openLeaf = entryMotion === "open" && !openDone;
   const leaveLeaf = leaving && !leaveDone;
   const fromPage = fromPageNo ?? Math.max(1, pageNo - 1);
   const fromTotal = fromTotalPages ?? totalPages;
@@ -491,7 +484,13 @@ export function NoteEditor({
 
           <div
             className="book-page-stack"
-            data-page-motion={leaving ? "leave" : (entryMotion ?? undefined)}
+            data-page-motion={
+              leaving
+                ? "leave"
+                : entryMotion === "next" || entryMotion === "prev"
+                  ? entryMotion
+                  : undefined
+            }
           >
             <div
               aria-hidden="true"
@@ -644,14 +643,6 @@ export function NoteEditor({
               <div
                 aria-hidden="true"
                 className={`book-page-underlay book-page--blank ${paperClass(subject.paper)}`}
-              />
-            ) : null}
-
-            {openLeaf ? (
-              <div
-                aria-hidden="true"
-                onAnimationEnd={() => setOpenDone(true)}
-                className={`book-page book-page--leaf page-turn page-turn--open overflow-hidden rounded-[3px] ${paperClass(subject.paper)}`}
               />
             ) : null}
 

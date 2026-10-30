@@ -7,6 +7,13 @@ export type BookRect = {
   height: number;
 };
 
+export type BookPagePreview = {
+  title: string;
+  text: string;
+  pageNo: number;
+  totalPages: number;
+};
+
 /** Where a book ends up when it comes forward: cover-shaped and centred. */
 export function landingRect(): BookRect {
   const vw = window.innerWidth;
@@ -24,6 +31,7 @@ export function landingRect(): BookRect {
 
 type BookVisualProps = {
   subject: Subject;
+  preview?: BookPagePreview | null;
   sceneClass?: string;
   veilClass?: string;
   flyClass?: string;
@@ -38,6 +46,7 @@ type BookVisualProps = {
  */
 export function BookVisual({
   subject,
+  preview,
   sceneClass = "",
   veilClass = "",
   flyClass = "",
@@ -70,6 +79,22 @@ export function BookVisual({
               className={`book-page ${paperClass(subject.paper)} absolute inset-0 overflow-hidden rounded-[3px] shadow-[0_30px_70px_-32px_rgba(0,0,0,0.5)]`}
             >
               <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-black/25 to-transparent" />
+              {preview ? (
+                <div className="absolute inset-0 flex flex-col px-6 pt-7 pb-6">
+                  <div className="flex items-baseline justify-between gap-2 text-[7px] uppercase tracking-[0.16em] text-ink-soft">
+                    <span className="truncate">{subject.name}</span>
+                    <span className="shrink-0">
+                      {preview.pageNo} / {preview.totalPages}
+                    </span>
+                  </div>
+                  <h2 className="mt-3 mb-0 font-hand text-[clamp(16px,7cqw,30px)] leading-tight break-words text-ink">
+                    {preview.title || "Untitled page"}
+                  </h2>
+                  <p className="mt-3 mb-0 overflow-hidden text-[clamp(7px,2.3cqw,10px)] leading-[1.8] whitespace-pre-wrap text-ink-soft">
+                    {preview.text || "Empty page"}
+                  </p>
+                </div>
+              ) : null}
             </div>
 
             <span aria-hidden="true" className="book-fore-edge" />

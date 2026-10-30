@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Subject } from "@/lib/types";
-import { BookVisual, landingRect, type BookRect } from "./BookVisual";
+import { BookVisual, landingRect, type BookPagePreview, type BookRect } from "./BookVisual";
 
-export type { BookRect } from "./BookVisual";
+export type { BookPagePreview, BookRect } from "./BookVisual";
 
 /** The page opens while the cover is still finishing its swing. */
 const NAVIGATE_AT = 620;
@@ -16,6 +16,7 @@ const BAIL_OUT_AT = 3000;
 type BookOpeningProps = {
   subject: Subject;
   from: BookRect;
+  preview: BookPagePreview | null;
   /** True once the page is rendered behind the overlay. */
   fading: boolean;
   onNavigate: () => void;
@@ -34,6 +35,7 @@ type BookOpeningProps = {
 export function BookOpening({
   subject,
   from,
+  preview,
   fading,
   onNavigate,
   onRemove,
@@ -68,6 +70,7 @@ export function BookOpening({
   return (
     <BookVisual
       subject={subject}
+      preview={preview}
       sceneClass={`book-open-scene ${fading ? "is-fading" : ""}`}
       veilClass="book-open-veil"
       modelClass={fading ? "is-fading" : ""}

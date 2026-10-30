@@ -1,11 +1,11 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NoteEditor } from "@/components/editor/NoteEditor";
 import { LibraryView } from "@/components/library/LibraryView";
 import { NewBookDialog } from "@/components/library/NewBookDialog";
-import { BookOpening, type BookRect } from "@/components/library/BookOpening";
+import { BookOpening, type BookPagePreview, type BookRect } from "@/components/library/BookOpening";
 import { BookClosing } from "@/components/library/BookClosing";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
@@ -18,6 +18,20 @@ function noteIsBlank(note: Note): boolean {
   if (note.title.trim().length > 0) return false;
   if (runsToText(runsFromNote(note)).trim().length > 0) return false;
   return !hasVisibleInk(note.ink ?? []);
+}
+
+function pagePreview(note: Note, notes: Note[]): BookPagePreview {
+  const index = notes.findIndex((n) => n.id === note.id);
+  const text = runsToText(runsFromNote(note))
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return {
+    title: note.title.trim(),
+    text: text.slice(0, 280),
+    pageNo: index >= 0 ? index + 1 : 1,
+    totalPages: Math.max(notes.length, 1),
+  };
 }
 
 export default function Page() {
@@ -42,10 +56,12 @@ function App() {
   const [opening, setOpening] = useState<{
     subject: Subject;
     from: BookRect;
+    preview: BookPagePreview | null;
   } | null>(null);
   const [closing, setClosing] = useState<{
     subject: Subject;
     from: BookRect | null;
+    preview: BookPagePreview | null;
   } | null>(null);
   const [exporting, setExporting] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -59,6 +75,7 @@ function App() {
     totalPages: number;
   } | null>(null);
   const bookRects = useRef<Record<string, BookRect>>({});
+  const pagePreviewRef = useRef<BookPagePreview | null>(null);
 
   const subjectId = params.get("kitap");
   const noteId = params.get("not");
@@ -67,7 +84,11 @@ function App() {
     ? (lib.store.subjects.find((s) => s.id === subjectId) ?? null)
     : null;
 
-  const notes = subject ? lib.notesFor(subject.id) : [];
+  const notesFor = lib.notesFor;
+  const notes = useMemo(
+    () => (subject ? notesFor(subject.id) : []),
+    [subject, notesFor],
+  );
 
   // The URL is the source of truth, but a stale link (deleted page, old
   // bookmark) falls back to the page the reader left off on.
@@ -79,6 +100,10 @@ function App() {
     notes.find((n) => n.id === lib.store.lastNoteBySubject[subject?.id ?? ""]) ??
     notes[0] ??
     null;
+
+  useEffect(() => {
+    pagePreviewRef.current = note ? pagePreview(note, notes) : null;
+  }, [note, notes]);
 
   function goLibrary() {
     setPageMotion(null);
@@ -113,6 +138,7 @@ function App() {
     setClosing((current) =>
       current ?? {
         subject,
+        preview: pagePreviewRef.current,
         from: bookRects.current[subject.id] ?? null,
       },
     );
@@ -127,6 +153,7 @@ function App() {
       setClosing((current) =>
         current ?? {
           subject,
+          preview: pagePreviewRef.current,
           from: bookRects.current[subject.id] ?? null,
         },
       );
@@ -209,7 +236,18 @@ function App() {
     }
 
     bookRects.current[subjectToOpen] = from;
-    setOpening({ subject: picked, from });
+    const bookNotes = lib.notesFor(subjectToOpen);
+    const targetNote =
+      bookNotes.find(
+        (n) => n.id === lib.store.lastNoteBySubject[subjectToOpen],
+      ) ??
+      bookNotes[0] ??
+      null;
+    setOpening({
+      subject: picked,
+      from,
+      preview: targetNote ? pagePreview(targetNote, bookNotes) : null,
+    });
   }
 
   function turnPage(offset: number) {
@@ -353,6 +391,7 @@ function App() {
         <BookOpening
           subject={opening.subject}
           from={opening.from}
+          preview={opening.preview}
           fading={Boolean(subject && note)}
           onNavigate={() => openBook(opening.subject.id)}
           onRemove={() => setOpening(null)}
@@ -362,6 +401,7 @@ function App() {
       {closing ? (
         <BookClosing
           subject={closing.subject}
+          preview={closing.preview}
           from={closing.from}
           onNavigate={goLibrary}
           onRemove={() => {

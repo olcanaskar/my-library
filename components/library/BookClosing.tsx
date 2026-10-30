@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Subject } from "@/lib/types";
-import { BookVisual, landingRect, type BookRect } from "./BookVisual";
+import { BookVisual, landingRect, type BookPagePreview, type BookRect } from "./BookVisual";
 
 /** The library is already mounted behind the veil when the flight starts. */
 const NAVIGATE_AT = 260;
@@ -15,6 +15,8 @@ const BAIL_OUT_AT = 3000;
 
 type BookClosingProps = {
   subject: Subject;
+  /** The page that was open when the cover started to close. */
+  preview: BookPagePreview | null;
   /** The shelf slot captured when the book was opened, if we have it. */
   from: BookRect | null;
   onNavigate: () => void;
@@ -39,6 +41,7 @@ function rectFromElement(element: HTMLElement): BookRect {
  */
 export function BookClosing({
   subject,
+  preview,
   from: fallbackFrom,
   onNavigate,
   onRemove,
@@ -88,6 +91,7 @@ export function BookClosing({
   return (
     <BookVisual
       subject={subject}
+      preview={preview}
       sceneClass="book-close-scene"
       veilClass={`book-close-veil ${revealing ? "is-revealing" : ""}`}
       flyClass={`book-fly--closing ${flying ? "is-flying" : ""}`}
