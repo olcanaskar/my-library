@@ -1247,7 +1247,7 @@ html[data-theme="dark"] .window-sill {
 }
 
 .book-open-scene {
-  transition: opacity 460ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 180ms ease-out;
 }
 
 /* Fading only starts once the real page is behind the overlay. */
@@ -1273,7 +1273,7 @@ html[data-theme="dark"] .window-sill {
   inset: 0;
   transform-style: preserve-3d;
   transform-origin: center center;
-  transition: transform 460ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 650ms cubic-bezier(0.35, 0.02, 0.2, 1);
 
   /* 4% of the flying book's width, with a fallback for old browsers. */
   --book-depth: 12px;
@@ -1285,8 +1285,11 @@ html[data-theme="dark"] .window-sill {
   --page-edge-dark: color-mix(in oklab, var(--paper) 88%, black);
 }
 
-.book-model.is-fading {
-  transform: scale(1.2);
+/* The cover has done its job; the page alone zooms into the editor. */
+.book-open-scene.is-zooming .book-cover-face,
+.book-open-scene.is-zooming .book-back-cover {
+  opacity: 0;
+  transition: opacity 180ms ease-out;
 }
 
 .book-back-cover {
@@ -3328,24 +3331,8 @@ html[data-theme="dark"] .book-spine {
     0 12px 24px -18px rgba(0, 0, 0, 0.7);
 }
 
-/* The shelf book hands off to this shell; the notebook then zooms into the
-   workspace instead of simply appearing. */
-.book-shell--opening {
-  transform-origin: center center;
-  animation: book-shell-zoom 900ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes book-shell-zoom {
-  0% {
-    transform: scale(0.55);
-  }
-  55% {
-    transform: scale(0.72);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+/* The shelf book hands off to the static notebook behind it; the overlay's
+   own page performs the zoom, so there is no second transition underneath. */
 
 .book-shell-cover {
   position: absolute;

@@ -36,6 +36,8 @@ type BookVisualProps = {
   veilClass?: string;
   flyClass?: string;
   modelClass?: string;
+  zoomTransform?: string;
+  zoomOrigin?: string;
   style?: React.CSSProperties;
 };
 
@@ -51,6 +53,8 @@ export function BookVisual({
   veilClass = "",
   flyClass = "",
   modelClass = "",
+  zoomTransform,
+  zoomOrigin,
   style,
 }: BookVisualProps) {
   return (
@@ -69,7 +73,14 @@ export function BookVisual({
           } as React.CSSProperties
         }
       >
-        <div className={`book-model ${modelClass}`}>
+        <div
+          className={`book-model ${modelClass}`}
+          style={
+            zoomTransform
+              ? { transform: zoomTransform, transformOrigin: zoomOrigin }
+              : undefined
+          }
+        >
           {/* the back board, giving the book its depth */}
           <div className="book-back-cover absolute inset-0 rounded-[3px]" />
 

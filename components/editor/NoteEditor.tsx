@@ -465,9 +465,7 @@ export function NoteEditor({
 
         <div
           key={note.id}
-          className={`book-shell ${
-            entryMotion === "open" ? "book-shell--opening" : ""
-          }`}
+          className="book-shell"
           style={{ "--cover": subject.color } as React.CSSProperties}
         >
           <span aria-hidden="true" className="book-shell-spine">

@@ -6,10 +6,12 @@ import { BookVisual, landingRect, type BookPagePreview, type BookRect } from "./
 
 export type { BookPagePreview, BookRect } from "./BookVisual";
 
-/** The page opens while the cover is still finishing its swing. */
-const NAVIGATE_AT = 620;
-/** How long the fade over the real page takes. */
-const FADE_MS = 520;
+/** The existing flight and cover swing finish before the page starts to zoom. */
+const NAVIGATE_AT = 700;
+/** How long the opened page takes to grow to the editor's page size. */
+const ZOOM_MS = 650;
+/** Quick hand-off once the zoomed page fills the editor area. */
+const FADE_MS = 220;
 /** Safety net: never leave the overlay on screen if the view did not switch. */
 const BAIL_OUT_AT = 3000;
 
@@ -41,6 +43,11 @@ export function BookOpening({
   onRemove,
 }: BookOpeningProps) {
   const [to] = useState<BookRect>(landingRect);
+  const [zoom, setZoom] = useState<{
+    transform: string;
+    origin: string;
+  } | null>(null);
+  const [fadingOut, setFadingOut] = useState(false);
 
   // Fresh callbacks without restarting the timers.
   const navigate = useRef(onNavigate);
@@ -63,17 +70,83 @@ export function BookOpening({
 
   useEffect(() => {
     if (!fading) return;
+
+    let cancelled = false;
+    let zoomTimer = 0;
+
+    const startZoom = () => {
+      if (cancelled) return;
+
+      const page = document.querySelector<HTMLElement>(
+        ".book-open-scene .book-preview-page",
+      );
+      const editorPage = document.querySelector<HTMLElement>(".desk .book-page");
+      const fly = document.querySelector<HTMLElement>(
+        ".book-open-scene .book-fly",
+      );
+
+      if (!page || !editorPage || !fly) {
+        setFadingOut(true);
+        return;
+      }
+
+      const pageRect = page.getBoundingClientRect();
+      const editorRect = editorPage.getBoundingClientRect();
+      const flyRect = fly.getBoundingClientRect();
+      if (pageRect.width === 0 || pageRect.height === 0) {
+        setFadingOut(true);
+        return;
+      }
+
+      const scaleX = editorRect.width / pageRect.width;
+      const scaleY = editorRect.height / pageRect.height;
+      const dx =
+        editorRect.left +
+        editorRect.width / 2 -
+        (pageRect.left + pageRect.width / 2);
+      const dy =
+        editorRect.top +
+        editorRect.height / 2 -
+        (pageRect.top + pageRect.height / 2);
+      const originX =
+        ((pageRect.left + pageRect.width / 2 - flyRect.left) / flyRect.width) *
+        100;
+      const originY =
+        ((pageRect.top + pageRect.height / 2 - flyRect.top) / flyRect.height) *
+        100;
+
+      setZoom({
+        transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`,
+        origin: `${originX}% ${originY}%`,
+      });
+
+      zoomTimer = window.setTimeout(() => setFadingOut(true), ZOOM_MS);
+    };
+
+    const frame = window.requestAnimationFrame(startZoom);
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+      if (zoomTimer) window.clearTimeout(zoomTimer);
+    };
+  }, [fading]);
+
+  useEffect(() => {
+    if (!fadingOut) return;
     const timer = window.setTimeout(() => remove.current(), FADE_MS);
     return () => window.clearTimeout(timer);
-  }, [fading]);
+  }, [fadingOut]);
 
   return (
     <BookVisual
       subject={subject}
       preview={preview}
-      sceneClass={`book-open-scene ${fading ? "is-fading" : ""}`}
+      sceneClass={`book-open-scene ${zoom ? "is-zooming" : ""} ${
+        fadingOut ? "is-fading" : ""
+      }`}
       veilClass="book-open-veil"
-      modelClass={fading ? "is-fading" : ""}
+      zoomTransform={zoom?.transform}
+      zoomOrigin={zoom?.origin}
       style={
         {
           "--from-top": `${from.top}px`,
