@@ -4,6 +4,7 @@ import {
   type Subject,
   type Theme,
 } from "@/lib/types";
+import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/icons";
 import { PenCanvas } from "@/components/editor/PenCanvas";
 
 export type BookRect = {
@@ -137,9 +138,6 @@ export function BookVisual({
                       </h2>
                       <div className="book-preview-meta">
                         <span>{preview.date}</span>
-                        <span className="truncate pl-3">
-                          {subject.name} notebook
-                        </span>
                       </div>
                     </div>
                     <div
@@ -168,6 +166,32 @@ export function BookVisual({
                         theme={theme}
                         onCommit={() => {}}
                       />
+                    </div>
+
+                    <div className="book-preview-footer">
+                      <span
+                        className={`book-preview-footer-side ${
+                          preview.pageNo > 1 ? "" : "is-disabled"
+                        }`}
+                      >
+                        <ArrowLeftIcon className="book-preview-footer-icon" />
+                        <span className="book-preview-footer-label">
+                          Previous
+                        </span>
+                      </span>
+                      <span className="book-preview-footer-count">
+                        {preview.pageNo} / {preview.totalPages}
+                      </span>
+                      <span
+                        className={`book-preview-footer-side ${
+                          preview.pageNo < preview.totalPages
+                            ? ""
+                            : "is-disabled"
+                        }`}
+                      >
+                        <span className="book-preview-footer-label">Next</span>
+                        <ArrowRightIcon className="book-preview-footer-icon" />
+                      </span>
                     </div>
                   </>
                 ) : null}

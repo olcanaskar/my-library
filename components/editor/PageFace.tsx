@@ -52,9 +52,8 @@ export function PageFace({
         >
           {note.title.trim() || "Page title"}
         </h1>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-ink-soft">
+        <div className="mt-2 text-[11px] text-ink-soft">
           <span>{formatDay(note.createdAt)}</span>
-          <span className="truncate pl-3">{subject.name} notebook</span>
         </div>
       </div>
 

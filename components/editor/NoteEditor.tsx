@@ -540,9 +540,8 @@ export function NoteEditor({
               autoFocus={!note.title}
               className="w-full bg-transparent pr-10 font-hand text-3xl leading-tight outline-none sm:pr-12 sm:text-4xl"
             />
-            <div className="mt-2 flex items-center justify-between text-[11px] text-ink-soft">
+            <div className="mt-2 text-[11px] text-ink-soft">
               <span>{formatDay(note.createdAt)}</span>
-              <span className="truncate pl-3">{subject.name} notebook</span>
             </div>
           </div>
 

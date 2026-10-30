@@ -3626,6 +3626,46 @@ html[data-theme="dark"] .book-spine {
   white-space: pre-wrap;
 }
 
+.book-preview-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(8px * var(--preview-scale, 1));
+  padding: calc(6px * var(--preview-scale, 1))
+    calc(8px * var(--preview-scale, 1));
+  border-top: 1px solid
+    color-mix(in oklab, var(--rule) 70%, transparent);
+  color: var(--ink-soft);
+  font-size: calc(11px * var(--preview-scale, 1));
+  line-height: 1.2;
+}
+
+.book-preview-footer-side {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(4px * var(--preview-scale, 1));
+  padding: calc(8px * var(--preview-scale, 1)) 0;
+}
+
+.book-preview-footer-side.is-disabled {
+  opacity: 0.3;
+}
+
+.book-preview-footer-icon {
+  width: calc(16px * var(--preview-scale, 1));
+  height: calc(16px * var(--preview-scale, 1));
+}
+
+.book-preview-footer-count {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.book-preview-footer-label {
+  display: none;
+}
+
 @media (min-width: 640px) {
   .book-preview-copy {
     padding-right: calc(56px * var(--preview-scale, 1));
@@ -3639,6 +3679,15 @@ html[data-theme="dark"] .book-spine {
 
   .book-preview-title {
     font-size: calc(36px * var(--preview-scale, 1));
+  }
+
+  .book-preview-footer {
+    padding-right: calc(12px * var(--preview-scale, 1));
+    padding-left: calc(12px * var(--preview-scale, 1));
+  }
+
+  .book-preview-footer-label {
+    display: inline;
   }
 }
 
