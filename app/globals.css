@@ -2668,6 +2668,157 @@ html[data-theme="light"] .window-shooting-star {
   height: 60px;
 }
 
+/* --- framed paintings and potted plants on the cabinet --- */
+
+.art-shelf {
+  z-index: 1;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(10px, 2vw, 18px);
+}
+
+.bookcase-bay > .art-shelf {
+  padding: 0 10px 1px;
+}
+
+.shelf-frame {
+  position: relative;
+  display: block;
+  flex: none;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 3px solid #6b482b;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #f2e8d2, #dccdb0);
+  box-shadow:
+    0 6px 10px -5px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 1px rgba(201, 166, 78, 0.35);
+  transform-origin: bottom center;
+}
+
+.shelf-frame--large {
+  width: 44%;
+  height: 66%;
+}
+
+.shelf-frame--medium {
+  width: 40%;
+  height: 58%;
+}
+
+.shelf-frame--small {
+  width: 32%;
+  height: 48%;
+}
+
+.shelf-frame--left {
+  transform: rotate(-2.2deg);
+}
+
+.shelf-frame--right {
+  transform: rotate(1.8deg);
+}
+
+.shelf-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 1px;
+  box-shadow:
+    inset 0 0 0 1px rgba(43, 27, 12, 0.35),
+    inset 0 0 10px rgba(0, 0, 0, 0.16);
+}
+
+.shelf-art--dusk {
+  background:
+    radial-gradient(circle at 71% 24%, #f5e7c0 0 8%, transparent 8.5%),
+    linear-gradient(
+      166deg,
+      transparent 0 52%,
+      #2f3747 52.5% 66%,
+      transparent 66.5%
+    ),
+    linear-gradient(
+      166deg,
+      transparent 0 62%,
+      #465264 62.5% 76%,
+      transparent 76.5%
+    ),
+    linear-gradient(180deg, #4c5b78 0%, #8d7f87 62%, #cba985 100%);
+}
+
+.shelf-art--garden {
+  background:
+    radial-gradient(ellipse 18% 40% at 36% 52%, #6d8458 0 58%, transparent 60%),
+    radial-gradient(ellipse 15% 34% at 58% 58%, #8b9c69 0 58%, transparent 60%),
+    radial-gradient(ellipse 11% 26% at 48% 72%, #536d44 0 58%, transparent 60%),
+    linear-gradient(180deg, #efe4cc 0%, #d5c09a 100%);
+}
+
+.shelf-art--sea {
+  background:
+    radial-gradient(circle at 72% 28%, #f5e8c8 0 7%, transparent 7.5%),
+    linear-gradient(
+      180deg,
+      transparent 0 45%,
+      #5e7480 45.5% 62%,
+      transparent 62.5%
+    ),
+    linear-gradient(180deg, #d7c7a7 0 45%, #8fa3a5 45.5% 100%);
+}
+
+.shelf-art--terracotta {
+  background:
+    linear-gradient(
+      120deg,
+      transparent 0 34%,
+      #b36b4e 34.5% 62%,
+      transparent 62.5%
+    ),
+    linear-gradient(
+      60deg,
+      transparent 0 48%,
+      #6f7d5a 48.5% 72%,
+      transparent 72.5%
+    ),
+    linear-gradient(180deg, #eadfc7 0%, #cbb38c 100%);
+}
+
+.plant-shelf {
+  z-index: 1;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(10px, 1.8vw, 18px);
+}
+
+.bookcase-bay > .plant-shelf {
+  padding: 0 8px 0;
+}
+
+.shelf-plant {
+  transform-origin: bottom center;
+}
+
+.shelf-plant--tall {
+  transform: scale(1.5);
+}
+
+.shelf-plant--medium {
+  transform: scale(1.3);
+}
+
+.shelf-plant--small {
+  transform: scale(1.15);
+}
+
+.shelf-plant--medium::after {
+  filter: hue-rotate(16deg) saturate(0.92);
+}
+
+.shelf-plant--small::after {
+  filter: hue-rotate(-14deg) brightness(1.06);
+}
+
 .window-books {
   position: absolute;
   right: 8px;

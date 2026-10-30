@@ -104,7 +104,7 @@ export function LibraryView({
       <div className="library-wall">
         <section className="bookcase bookcase--left" aria-label="Your library">
           <div className="bookcase-bay">
-            <DecorativeShelf seed={1} />
+            <ArtShelf variant={1} />
             <span aria-hidden="true" className="glass-pane" />
           </div>
 
@@ -113,7 +113,7 @@ export function LibraryView({
             <span aria-hidden="true" className="glass-pane" />
           </div>
           <div className="bookcase-bay">
-            <DecorativeShelf seed={5} />
+            <ArtShelf variant={2} />
             <span aria-hidden="true" className="glass-pane" />
           </div>
           <div className="bookcase-bay">
@@ -210,7 +210,7 @@ export function LibraryView({
             <span aria-hidden="true" className="glass-pane" />
           </div>
           <div className="bookcase-bay">
-            <DecorativeShelf seed={6} />
+            <PlantShelf />
             <span aria-hidden="true" className="glass-pane" />
           </div>
           <div className="bookcase-bay">
@@ -262,6 +262,44 @@ function DecorativeShelf({ seed }: { seed: number }) {
           }}
         />
       ))}
+    </div>
+  );
+}
+
+const ART_SHELVES = {
+  1: [
+    { size: "large", art: "dusk", tilt: "left" },
+    { size: "small", art: "garden", tilt: "right" },
+  ],
+  2: [
+    { size: "medium", art: "sea", tilt: "left" },
+    { size: "small", art: "terracotta", tilt: "right" },
+  ],
+} as const;
+
+/** Two small framed paintings resting on a cabinet shelf. */
+function ArtShelf({ variant }: { variant: keyof typeof ART_SHELVES }) {
+  return (
+    <div aria-hidden="true" className="dummy-shelf art-shelf">
+      {ART_SHELVES[variant].map((frame) => (
+        <span
+          key={frame.art}
+          className={`shelf-frame shelf-frame--${frame.size} shelf-frame--${frame.tilt}`}
+        >
+          <span className={`shelf-art shelf-art--${frame.art}`} />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/** A few potted plants on the right-hand cabinet. */
+function PlantShelf() {
+  return (
+    <div aria-hidden="true" className="dummy-shelf plant-shelf">
+      <span className="sill-plant shelf-plant shelf-plant--tall" />
+      <span className="sill-plant shelf-plant shelf-plant--small" />
+      <span className="sill-plant shelf-plant shelf-plant--medium" />
     </div>
   );
 }
