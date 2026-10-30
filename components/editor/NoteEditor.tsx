@@ -610,7 +610,6 @@ export function NoteEditor({
                     }`}
                   >
                     <Icon className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">{name}</span>
                   </button>
                 ))}
               </div>
