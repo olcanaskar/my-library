@@ -644,11 +644,6 @@ export function NoteEditor({
           </div>
         </div>
 
-        <p className="mt-3 px-1 text-[11px] text-[#c6ae83]/80">
-          {penActive
-            ? "Draw directly on the page with a pen, Pencil or mouse."
-            : "Your writing is saved automatically."}
-        </p>
       </main>
     </div>
   );
