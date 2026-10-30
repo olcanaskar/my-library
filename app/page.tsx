@@ -9,7 +9,7 @@ import { BookOpening, type BookPagePreview, type BookRect } from "@/components/l
 import { BookClosing } from "@/components/library/BookClosing";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { useLibrary } from "@/lib/useLibrary";
-import { pagesLabel } from "@/lib/format";
+import { formatDay, pagesLabel } from "@/lib/format";
 import { hasVisibleInk } from "@/lib/inkVisibility";
 import { runsFromNote, runsToText } from "@/lib/textRuns";
 import type { Note, Paper, Subject } from "@/lib/types";
@@ -28,7 +28,8 @@ function pagePreview(note: Note, notes: Note[]): BookPagePreview {
     .trim();
   return {
     title: note.title.trim(),
-    text: text.slice(0, 280),
+    text: text.slice(0, 2000),
+    date: formatDay(note.createdAt),
     pageNo: index >= 0 ? index + 1 : 1,
     totalPages: Math.max(notes.length, 1),
   };

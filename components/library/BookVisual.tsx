@@ -10,6 +10,7 @@ export type BookRect = {
 export type BookPagePreview = {
   title: string;
   text: string;
+  date: string;
   pageNo: number;
   totalPages: number;
 };
@@ -29,9 +30,17 @@ export function landingRect(): BookRect {
   };
 }
 
+/** Width of the real notebook shell, used to keep the mini page proportional. */
+export function editorShellWidthEstimate(): number {
+  if (typeof document === "undefined") return 728;
+  const vw = document.documentElement.clientWidth;
+  return Math.min(768, vw) - (vw >= 640 ? 40 : 16);
+}
+
 type BookVisualProps = {
   subject: Subject;
   preview?: BookPagePreview | null;
+  previewScale?: number;
   sceneClass?: string;
   veilClass?: string;
   flyClass?: string;
@@ -49,6 +58,7 @@ type BookVisualProps = {
 export function BookVisual({
   subject,
   preview,
+  previewScale,
   sceneClass = "",
   veilClass = "",
   flyClass = "",
@@ -57,6 +67,11 @@ export function BookVisual({
   zoomOrigin,
   style,
 }: BookVisualProps) {
+  const resolvedPreviewScale =
+    previewScale ??
+    (preview ? landingRect().width / editorShellWidthEstimate() : 1);
+  const margin = subject.paper === "lined" || subject.paper === "grid";
+
   return (
     <div
       aria-hidden="true"
@@ -65,7 +80,7 @@ export function BookVisual({
       <div className={`book-veil absolute inset-0 ${veilClass}`} />
 
       <div
-        className={`book-fly ${flyClass}`}
+        className={`book-fly ${flyClass} ${zoomTransform ? "is-zooming" : ""}`}
         style={
           {
             ...style,
@@ -86,33 +101,46 @@ export function BookVisual({
 
           {/* the page block and its visible edges */}
           <div className="book-pages-block absolute inset-0">
-            <div className="book-shell book-preview-shell absolute inset-0">
+            <div
+              className="book-shell book-preview-shell absolute inset-0"
+              style={
+                {
+                  "--preview-scale": resolvedPreviewScale,
+                } as React.CSSProperties
+              }
+            >
               <span aria-hidden="true" className="book-shell-spine">
-                <span className="max-h-[68%] overflow-hidden font-serif text-[7px] leading-none font-semibold tracking-[0.16em] text-[#f6e7c8]/80 uppercase [writing-mode:vertical-rl]">
+                <span className="book-preview-spine-label font-serif">
                   {subject.name}
                 </span>
               </span>
               <span aria-hidden="true" className="book-shell-cover" />
               <span aria-hidden="true" className="book-ribbon book-preview-ribbon" />
 
-              <div
-                className={`book-preview-page ${paperClass(subject.paper)}`}
-              >
+              <div className="book-preview-page">
                 {preview ? (
-                  <div className="flex h-full flex-col px-4 pt-5 pb-4">
-                    <div className="flex items-baseline justify-between gap-2 text-[6px] uppercase tracking-[0.14em] text-ink-soft">
-                      <span className="truncate">{subject.name}</span>
-                      <span className="shrink-0">
-                        {preview.pageNo} / {preview.totalPages}
-                      </span>
+                  <>
+                    <div className="book-preview-copy">
+                      <h2 className="book-preview-title font-hand text-ink">
+                        {preview.title || "Page title"}
+                      </h2>
+                      <div className="book-preview-meta">
+                        <span>{preview.date}</span>
+                        <span className="truncate pl-3">
+                          {subject.name} notebook
+                        </span>
+                      </div>
                     </div>
-                    <h2 className="mt-2.5 mb-0 font-hand text-[clamp(14px,6.4cqw,26px)] leading-tight break-words text-ink">
-                      {preview.title || "Untitled page"}
-                    </h2>
-                    <p className="mt-2.5 mb-0 overflow-hidden text-[clamp(6px,2.1cqw,9px)] leading-[1.8] whitespace-pre-wrap text-ink-soft">
-                      {preview.text || "Empty page"}
-                    </p>
-                  </div>
+                    <div
+                      className={`book-preview-paper ${paperClass(subject.paper)} ${
+                        margin ? "paper-margin" : ""
+                      }`}
+                    >
+                      <p className="book-preview-text">
+                        {preview.text || "Start writing…"}
+                      </p>
+                    </div>
+                  </>
                 ) : null}
               </div>
             </div>
