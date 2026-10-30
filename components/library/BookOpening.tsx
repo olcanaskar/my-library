@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Subject } from "@/lib/types";
+import type { Subject, Theme } from "@/lib/types";
 import {
   BookVisual,
   editorShellWidthEstimate,
@@ -25,6 +25,7 @@ const BAIL_OUT_AT = 3000;
 
 type BookOpeningProps = {
   subject: Subject;
+  theme: Theme;
   from: BookRect;
   preview: BookPagePreview | null;
   /** True once the page is rendered behind the overlay. */
@@ -44,6 +45,7 @@ type BookOpeningProps = {
  */
 export function BookOpening({
   subject,
+  theme,
   from,
   preview,
   fading,
@@ -54,6 +56,7 @@ export function BookOpening({
   const [previewScale, setPreviewScale] = useState(
     () => to.width / editorShellWidthEstimate(),
   );
+  const [paperHeight, setPaperHeight] = useState<number | null>(null);
   const [zoom, setZoom] = useState<{
     transform: string;
     origin: string;
@@ -98,6 +101,12 @@ export function BookOpening({
       }
 
       const editorRect = editorShell.getBoundingClientRect();
+      const editorCanvas = document.querySelector<HTMLCanvasElement>(
+        ".desk .book-page .pen-canvas",
+      );
+      const editorPaperHeight = editorCanvas
+        ? editorCanvas.getBoundingClientRect().height
+        : 0;
       if (to.width === 0 || to.height === 0) {
         setFadingOut(true);
         return;
@@ -114,6 +123,9 @@ export function BookOpening({
       const dy = editorRect.top - to.top;
 
       setPreviewScale(to.width / editorRect.width);
+      if (editorPaperHeight > 0) {
+        setPaperHeight(editorPaperHeight * (to.width / editorRect.width));
+      }
       setZoom({
         transform: `translate(${dx}px, ${dy}px) scale(${scale})`,
         origin: "50% 0%",
@@ -142,8 +154,10 @@ export function BookOpening({
   return (
     <BookVisual
       subject={subject}
+      theme={theme}
       preview={preview}
       previewScale={previewScale}
+      paperHeight={paperHeight}
       sceneClass={`book-open-scene ${zoom ? "is-zooming" : ""} ${
         fadingOut ? "is-fading" : ""
       }`}

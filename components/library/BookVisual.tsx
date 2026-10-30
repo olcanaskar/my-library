@@ -1,4 +1,10 @@
-import { paperClass, type Subject } from "@/lib/types";
+import {
+  paperClass,
+  type InkStroke,
+  type Subject,
+  type Theme,
+} from "@/lib/types";
+import { PenCanvas } from "@/components/editor/PenCanvas";
 
 export type BookRect = {
   top: number;
@@ -13,6 +19,7 @@ export type BookPagePreview = {
   date: string;
   pageNo: number;
   totalPages: number;
+  ink: InkStroke[];
 };
 
 /** Where a book ends up when it comes forward: cover-shaped and centred. */
@@ -39,8 +46,10 @@ export function editorShellWidthEstimate(): number {
 
 type BookVisualProps = {
   subject: Subject;
+  theme: Theme;
   preview?: BookPagePreview | null;
   previewScale?: number;
+  paperHeight?: number | null;
   sceneClass?: string;
   veilClass?: string;
   flyClass?: string;
@@ -57,8 +66,10 @@ type BookVisualProps = {
  */
 export function BookVisual({
   subject,
+  theme,
   preview,
   previewScale,
+  paperHeight,
   sceneClass = "",
   veilClass = "",
   flyClass = "",
@@ -135,10 +146,27 @@ export function BookVisual({
                       className={`book-preview-paper ${paperClass(subject.paper)} ${
                         margin ? "paper-margin" : ""
                       }`}
+                      style={
+                        paperHeight
+                          ? {
+                              height: `${paperHeight}px`,
+                              flex: "0 0 auto",
+                            }
+                          : undefined
+                      }
                     >
                       <p className="book-preview-text">
                         {preview.text || "Start writing…"}
                       </p>
+                      <PenCanvas
+                        ink={preview.ink}
+                        active={false}
+                        color="ink"
+                        size={0.008}
+                        eraser={false}
+                        theme={theme}
+                        onCommit={() => {}}
+                      />
                     </div>
                   </>
                 ) : null}

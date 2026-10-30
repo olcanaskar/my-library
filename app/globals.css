@@ -3568,6 +3568,7 @@ html[data-theme="dark"] .book-spine {
 }
 
 .book-preview-paper {
+  position: relative;
   flex: 1;
   min-height: 0;
   margin-top: calc(20px * var(--preview-scale, 1));

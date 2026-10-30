@@ -32,6 +32,7 @@ function pagePreview(note: Note, notes: Note[]): BookPagePreview {
     date: formatDay(note.createdAt),
     pageNo: index >= 0 ? index + 1 : 1,
     totalPages: Math.max(notes.length, 1),
+    ink: note.ink ?? [],
   };
 }
 
@@ -352,6 +353,7 @@ function App() {
       {opening ? (
         <BookOpening
           subject={opening.subject}
+          theme={lib.store.theme}
           from={opening.from}
           preview={opening.preview}
           fading={Boolean(subject && note)}
@@ -363,6 +365,7 @@ function App() {
       {closing ? (
         <BookClosing
           subject={closing.subject}
+          theme={lib.store.theme}
           preview={closing.preview}
           from={closing.from}
           onNavigate={goLibrary}
