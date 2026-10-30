@@ -2781,6 +2781,30 @@ html[data-theme="light"] .window-shooting-star {
   transform: rotate(1.8deg);
 }
 
+.shelf-frame--walnut {
+  border-color: #5b3d28;
+  background: linear-gradient(180deg, #f3ead9, #dbcbb0);
+}
+
+.shelf-frame--brass {
+  border-color: #a9843f;
+  background: linear-gradient(180deg, #f8f1e0, #e7d6b4);
+  box-shadow:
+    0 6px 10px -5px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 1px rgba(255, 244, 206, 0.85),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.shelf-frame--oak {
+  border-color: #8a6740;
+  background: linear-gradient(180deg, #f4ead7, #e0cfb2);
+}
+
+.shelf-frame--black {
+  border-color: #2e2924;
+  background: linear-gradient(180deg, #f7f2e8, #e8dfd2);
+}
+
 .shelf-art {
   position: relative;
   display: block;

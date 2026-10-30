@@ -1,32 +1,35 @@
-type ArtKind = "dusk" | "garden" | "sea" | "terracotta";
+import { PaintingArt, type ArtKind } from "./ShelfPhotos";
+
 type FrameSize = "large" | "medium" | "small";
 type FrameTilt = "left" | "right";
+type FrameStyle = "walnut" | "brass" | "oak" | "black";
 
 type FrameSpec = {
   size: FrameSize;
   art: ArtKind;
   tilt: FrameTilt;
+  frame: FrameStyle;
 };
 
 const ART_SHELVES: Record<1 | 2, readonly FrameSpec[]> = {
   1: [
-    { size: "large", art: "dusk", tilt: "left" },
-    { size: "small", art: "garden", tilt: "right" },
+    { size: "large", art: "family", tilt: "left", frame: "walnut" },
+    { size: "small", art: "couple", tilt: "right", frame: "brass" },
   ],
   2: [
-    { size: "medium", art: "sea", tilt: "left" },
-    { size: "small", art: "terracotta", tilt: "right" },
+    { size: "medium", art: "beach", tilt: "left", frame: "oak" },
+    { size: "small", art: "child", tilt: "right", frame: "black" },
   ],
 };
 
-/** Two framed paintings resting on a cabinet shelf. */
+/** Two framed family photographs resting on a cabinet shelf. */
 export function ArtShelf({ variant }: { variant: 1 | 2 }) {
   return (
     <div aria-hidden="true" className="dummy-shelf art-shelf">
       {ART_SHELVES[variant].map((frame) => (
         <span
           key={frame.art}
-          className={`shelf-frame shelf-frame--${frame.size} shelf-frame--${frame.tilt}`}
+          className={`shelf-frame shelf-frame--${frame.size} shelf-frame--${frame.tilt} shelf-frame--${frame.frame}`}
         >
           <span className="shelf-art">
             <PaintingArt kind={frame.art} />
@@ -51,383 +54,6 @@ export function PlantShelf() {
         <SnakePlant />
       </span>
     </div>
-  );
-}
-
-function PaintingArt({ kind }: { kind: ArtKind }) {
-  switch (kind) {
-    case "dusk":
-      return <DuskPainting />;
-    case "garden":
-      return <GardenPainting />;
-    case "sea":
-      return <SeaPainting />;
-    case "terracotta":
-      return <StillLifePainting />;
-  }
-}
-
-function DuskPainting() {
-  return (
-    <svg
-      viewBox="0 0 160 110"
-      preserveAspectRatio="xMidYMid slice"
-      role="presentation"
-    >
-      <defs>
-        <linearGradient id="paint-dusk-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#2f3b58" />
-          <stop offset="0.52" stopColor="#655c7a" />
-          <stop offset="0.8" stopColor="#b47e70" />
-          <stop offset="1" stopColor="#dfa976" />
-        </linearGradient>
-        <linearGradient id="paint-dusk-water" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#786b73" />
-          <stop offset="0.45" stopColor="#4d5266" />
-          <stop offset="1" stopColor="#262f43" />
-        </linearGradient>
-        <radialGradient id="paint-dusk-moon">
-          <stop offset="0" stopColor="#fff7dd" />
-          <stop offset="1" stopColor="#eed4a2" />
-        </radialGradient>
-        <radialGradient id="paint-dusk-halo">
-          <stop offset="0" stopColor="#ffe9b5" stopOpacity="0.5" />
-          <stop offset="1" stopColor="#ffe9b5" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      <rect width="160" height="110" fill="url(#paint-dusk-sky)" />
-      <circle cx="116" cy="30" r="22" fill="url(#paint-dusk-halo)" />
-      <circle cx="116" cy="30" r="8" fill="url(#paint-dusk-moon)" />
-      <g fill="#fff4d8">
-        <circle cx="24" cy="18" r="1" opacity="0.7" />
-        <circle cx="43" cy="29" r="0.7" opacity="0.55" />
-        <circle cx="64" cy="16" r="0.9" opacity="0.65" />
-        <circle cx="84" cy="27" r="0.6" opacity="0.5" />
-        <circle cx="101" cy="14" r="0.7" opacity="0.55" />
-        <circle cx="137" cy="22" r="0.8" opacity="0.6" />
-      </g>
-
-      <path
-        d="M0 66 L22 48 L44 62 L67 42 L92 61 L115 50 L138 64 L160 54 V90 H0 Z"
-        fill="#3d4560"
-      />
-      <path
-        d="M0 74 L24 60 L48 72 L70 56 L96 73 L118 62 L142 74 L160 66 V92 H0 Z"
-        fill="#2b3449"
-      />
-      <path
-        d="M0 82 L18 73 L40 82 L62 69 L86 81 L108 71 L132 82 L150 74 L160 80 V94 H0 Z"
-        fill="#1e2838"
-      />
-      <g fill="#17212d">
-        <path d="M8 84 l4 -11 4 11z" />
-        <path d="M17 84 l3 -8 3 8z" />
-        <path d="M31 84 l4 -10 4 10z" />
-        <path d="M48 82 l3 -8 3 8z" />
-        <path d="M60 83 l4 -10 4 10z" />
-        <path d="M126 83 l3 -8 3 8z" />
-        <path d="M137 84 l4 -11 4 11z" />
-      </g>
-
-      <rect y="88" width="160" height="22" fill="url(#paint-dusk-water)" />
-      <g stroke="#f2dba9" strokeWidth="0.9" opacity="0.45">
-        <path d="M108 92 h16" />
-        <path d="M112 96 h10" />
-        <path d="M118 100 h6" />
-        <path d="M98 94 h6" opacity="0.5" />
-      </g>
-      <g stroke="#9aa2ad" strokeWidth="0.6" opacity="0.28">
-        <path d="M8 96 h24" />
-        <path d="M14 100 h18" />
-        <path d="M46 94 h20" />
-        <path d="M36 102 h30" />
-        <path d="M128 97 h22" />
-      </g>
-
-      <path d="M115 84 h8 l-1.4 2.4 h-5.2z" fill="#121822" />
-      <path d="M119 79 v5" stroke="#121822" strokeWidth="0.9" />
-      <path d="M0 104 Q30 100 55 104 T110 104 T160 102 V110 H0Z" fill="#15120f" opacity="0.6" />
-    </svg>
-  );
-}
-
-function GardenPainting() {
-  return (
-    <svg
-      viewBox="0 0 160 110"
-      preserveAspectRatio="xMidYMid slice"
-      role="presentation"
-    >
-      <defs>
-        <linearGradient id="paint-garden-leaf" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#8da66d" />
-          <stop offset="0.55" stopColor="#6f8b57" />
-          <stop offset="1" stopColor="#4f6a43" />
-        </linearGradient>
-        <linearGradient id="paint-garden-paper" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f5ecd9" />
-          <stop offset="1" stopColor="#e7d8ba" />
-        </linearGradient>
-      </defs>
-
-      <rect width="160" height="110" fill="url(#paint-garden-paper)" />
-      <rect
-        x="5"
-        y="5"
-        width="150"
-        height="100"
-        fill="none"
-        stroke="#c9b88e"
-        strokeWidth="0.8"
-        opacity="0.8"
-      />
-
-      <g stroke="#5e754d" strokeWidth="1.25" fill="none" strokeLinecap="round">
-        <path d="M80 101 C80 83 78 62 76 42" />
-        <path d="M78 73 C63 65 51 54 43 40" />
-        <path d="M78 83 C94 77 105 65 111 49" />
-        <path d="M76 59 C68 47 66 35 70 24" />
-        <path d="M80 93 C92 89 101 82 108 74" />
-      </g>
-
-      <g fill="url(#paint-garden-leaf)" stroke="#4e6540" strokeWidth="0.5">
-        <path d="M78 83 C60 81 48 69 45 54 C62 58 76 67 78 83Z" />
-        <path d="M79 75 C94 71 104 59 106 44 C91 49 80 59 79 75Z" />
-        <path d="M77 65 C62 59 53 48 53 34 C68 39 78 50 77 65Z" />
-        <path d="M78 55 C86 47 88 34 82 24 C73 33 72 45 78 55Z" />
-        <path d="M80 91 C94 87 104 79 110 69 C96 71 84 79 80 91Z" />
-      </g>
-
-      <g stroke="#b4c795" strokeWidth="0.5" opacity="0.75" fill="none">
-        <path d="M77 81 C68 75 58 67 49 57" />
-        <path d="M80 73 C88 66 96 58 101 49" />
-        <path d="M77 63 C69 56 61 47 58 38" />
-        <path d="M78 53 C80 45 81 35 81 29" />
-        <path d="M82 88 C91 84 99 78 105 71" />
-      </g>
-
-      {[
-        [53, 36],
-        [104, 49],
-        [71, 22],
-      ].map(([x, y]) => (
-        <g key={`${x}-${y}`} transform={`translate(${x} ${y})`}>
-          {[0, 72, 144, 216, 288].map((angle) => (
-            <ellipse
-              key={angle}
-              cx="0"
-              cy="-3"
-              rx="1.45"
-              ry="2.8"
-              fill="#faf0dc"
-              stroke="#c8a45f"
-              strokeWidth="0.4"
-              transform={`rotate(${angle})`}
-            />
-          ))}
-          <circle r="1.5" fill="#c99a45" />
-        </g>
-      ))}
-
-      <g transform="translate(118 28) rotate(-12)" fill="#b06b52" opacity="0.9">
-        <path d="M0 0 C-5 -5 -8 -1 -5 3 C-2 6 0 3 0 0Z" />
-        <path d="M0 0 C5 -5 8 -1 5 3 C2 6 0 3 0 0Z" />
-      </g>
-      <path
-        d="M112 97 q7 -4 14 0"
-        fill="none"
-        stroke="#9a8358"
-        strokeWidth="0.7"
-        opacity="0.8"
-      />
-    </svg>
-  );
-}
-
-function SeaPainting() {
-  return (
-    <svg
-      viewBox="0 0 160 110"
-      preserveAspectRatio="xMidYMid slice"
-      role="presentation"
-    >
-      <defs>
-        <linearGradient id="paint-sea-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#a8bcc4" />
-          <stop offset="0.55" stopColor="#d8d1bd" />
-          <stop offset="1" stopColor="#ead7b5" />
-        </linearGradient>
-        <linearGradient id="paint-sea-water" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#6f8c92" />
-          <stop offset="0.55" stopColor="#496a72" />
-          <stop offset="1" stopColor="#2f4c56" />
-        </linearGradient>
-        <radialGradient id="paint-sea-sun">
-          <stop offset="0" stopColor="#fff3cf" />
-          <stop offset="1" stopColor="#e9c78d" />
-        </radialGradient>
-      </defs>
-
-      <rect width="160" height="110" fill="url(#paint-sea-sky)" />
-      <circle cx="116" cy="29" r="17" fill="#f7e3b8" opacity="0.28" />
-      <circle cx="116" cy="29" r="8" fill="url(#paint-sea-sun)" />
-
-      <g fill="#f3ead6" opacity="0.55">
-        <path d="M18 28 q10 -4 20 0 q-10 3 -20 0Z" />
-        <path d="M42 35 q8 -3 16 0 q-8 2 -16 0Z" />
-        <path d="M92 18 q9 -3 18 0 q-9 2 -18 0Z" />
-      </g>
-
-      <path d="M0 58 L16 43 L31 52 L46 41 L60 58 V70 H0Z" fill="#526462" />
-      <path d="M112 58 L126 44 L142 54 L154 46 L160 53 V70 H112Z" fill="#415553" />
-      <path d="M0 60 L14 50 L30 60 L44 51 L60 61 V70 H0Z" fill="#637471" opacity="0.7" />
-      <path d="M116 61 L129 52 L145 61 L156 54 L160 58 V70 H116Z" fill="#526664" opacity="0.75" />
-
-      <rect y="64" width="160" height="46" fill="url(#paint-sea-water)" />
-      <path d="M0 64 H160" stroke="#d9d2bb" strokeWidth="0.8" opacity="0.65" />
-
-      <g stroke="#a7c0bd" strokeWidth="0.7" opacity="0.5">
-        <path d="M8 73 q10 -2 20 0" />
-        <path d="M38 78 q12 -2 24 0" />
-        <path d="M12 84 q14 -2 28 0" />
-        <path d="M58 90 q10 -2 20 0" />
-        <path d="M26 96 q16 -2 32 0" />
-        <path d="M96 82 q10 -2 20 0" />
-        <path d="M118 92 q8 -2 16 0" />
-      </g>
-      <g stroke="#f1dfb7" strokeWidth="0.7" opacity="0.25">
-        <path d="M108 72 h16" />
-        <path d="M112 78 h10" />
-        <path d="M116 85 h7" />
-      </g>
-
-      <g>
-        <path d="M73 79 H94 L91 83 H76 Z" fill="#3b2c20" />
-        <path d="M83 66 V79" stroke="#3b2c20" strokeWidth="1" />
-        <path d="M84 66 L84 77 L94 77 Z" fill="#f2e7d2" />
-        <path d="M82 68 L76 77 H82 Z" fill="#d79a6c" />
-        <path d="M83 82 q6 1 10 0" stroke="#d7b987" strokeWidth="0.6" opacity="0.6" />
-      </g>
-
-      <g fill="none" stroke="#4b4f4e" strokeWidth="0.8" strokeLinecap="round">
-        <path d="M34 24 q3 -3 6 0" />
-        <path d="M43 20 q3 -3 6 0" />
-        <path d="M139 33 q3 -3 6 0" />
-      </g>
-      <path d="M0 105 Q34 100 62 104 T120 105 T160 102 V110 H0Z" fill="#1d2627" opacity="0.45" />
-    </svg>
-  );
-}
-
-function StillLifePainting() {
-  return (
-    <svg
-      viewBox="0 0 160 110"
-      preserveAspectRatio="xMidYMid slice"
-      role="presentation"
-    >
-      <defs>
-        <linearGradient id="paint-still-paper" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f0e3c8" />
-          <stop offset="1" stopColor="#dcc8a4" />
-        </linearGradient>
-        <linearGradient id="paint-still-vase" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#cf8960" />
-          <stop offset="0.55" stopColor="#b36545" />
-          <stop offset="1" stopColor="#843f2d" />
-        </linearGradient>
-        <linearGradient id="paint-still-leaf" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#7d9663" />
-          <stop offset="1" stopColor="#536a45" />
-        </linearGradient>
-      </defs>
-
-      <rect width="160" height="110" fill="url(#paint-still-paper)" />
-      <rect
-        x="5"
-        y="5"
-        width="150"
-        height="100"
-        fill="none"
-        stroke="#c6ac80"
-        strokeWidth="0.8"
-        opacity="0.7"
-      />
-      <circle cx="82" cy="42" r="26" fill="#d9a15f" opacity="0.22" />
-      <rect y="82" width="160" height="28" fill="#d5bc93" />
-      <path d="M0 82 H160" stroke="#a98456" strokeWidth="0.9" opacity="0.8" />
-      <ellipse cx="81" cy="87" rx="28" ry="4.5" fill="#6b4a32" opacity="0.22" />
-
-      <g>
-        <path
-          d="M69 50 C61 61 62 77 70 86 L94 86 C102 77 103 61 95 50 Z"
-          fill="url(#paint-still-vase)"
-          stroke="#6d3625"
-          strokeWidth="0.8"
-        />
-        <ellipse cx="82" cy="50" rx="13" ry="3.6" fill="#d99872" stroke="#6d3625" strokeWidth="0.8" />
-        <ellipse cx="82" cy="50" rx="9" ry="2.2" fill="#5a3325" />
-        <path
-          d="M69 56 C65 60 65 66 68 70"
-          fill="none"
-          stroke="#843f2d"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-        />
-        <path
-          d="M95 56 C99 60 99 66 96 70"
-          fill="none"
-          stroke="#843f2d"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-        />
-        <path
-          d="M76 60 C74 69 76 78 80 83"
-          fill="none"
-          stroke="#e0a077"
-          strokeWidth="1.2"
-          opacity="0.45"
-        />
-      </g>
-
-      <g stroke="#5d7049" strokeWidth="1.15" fill="none" strokeLinecap="round">
-        <path d="M82 50 C78 38 68 30 56 26" />
-        <path d="M83 50 C88 36 98 28 110 26" />
-        <path d="M82 50 C82 38 84 28 90 18" />
-        <path d="M80 50 C72 42 64 38 52 38" />
-      </g>
-
-      <g fill="url(#paint-still-leaf)" stroke="#4f6240" strokeWidth="0.45">
-        <ellipse cx="58" cy="27" rx="7" ry="3" transform="rotate(-26 58 27)" />
-        <ellipse cx="68" cy="34" rx="6" ry="2.7" transform="rotate(-35 68 34)" />
-        <ellipse cx="104" cy="30" rx="7" ry="3" transform="rotate(24 104 30)" />
-        <ellipse cx="96" cy="38" rx="6" ry="2.6" transform="rotate(34 96 38)" />
-        <ellipse cx="90" cy="21" rx="6" ry="2.7" transform="rotate(16 90 21)" />
-        <ellipse cx="55" cy="39" rx="6" ry="2.6" transform="rotate(-8 55 39)" />
-      </g>
-      <g fill="#7b4a3a">
-        <circle cx="49" cy="30" r="1.6" />
-        <circle cx="66" cy="24" r="1.4" />
-        <circle cx="108" cy="36" r="1.5" />
-        <circle cx="88" cy="17" r="1.2" />
-      </g>
-
-      <ellipse cx="126" cy="87" rx="7" ry="5.5" fill="#c98a4e" stroke="#9a6638" strokeWidth="0.5" />
-      <path
-        d="M126 82 q2 -4 5 -5"
-        fill="none"
-        stroke="#7a5a35"
-        strokeWidth="0.7"
-      />
-      <path
-        d="M20 90 q12 -2 24 0"
-        fill="none"
-        stroke="#b8986d"
-        strokeWidth="0.6"
-        opacity="0.7"
-      />
-    </svg>
   );
 }
 
