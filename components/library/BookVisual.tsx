@@ -159,6 +159,7 @@ export function BookVisual({
                         {preview.text || "Start writing…"}
                       </p>
                       <PenCanvas
+                        key={`${paperHeight ?? "auto"}-${resolvedPreviewScale}`}
                         ink={preview.ink}
                         active={false}
                         color="ink"

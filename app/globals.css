@@ -1472,21 +1472,38 @@ html[data-theme="dark"] .window-sill {
 }
 
 .book-close-veil {
-  animation: book-veil-in 220ms ease-out both;
+  animation: book-veil-in 650ms ease-out both;
 }
 
 .book-close-veil.is-revealing {
   animation: book-veil-out 180ms ease-in both;
 }
 
-.book-model--closing {
-  animation: book-model-settle 260ms cubic-bezier(0.35, 0, 0.25, 1) both;
+/* Opening the cover in reverse: the page starts at the editor's size, the
+   veil settles in, then the cover fades in and closes. */
+.book-close-scene.is-zooming-out .book-cover-face {
+  animation: book-cover-reveal 300ms ease-out 350ms both;
+}
+
+.book-close-scene.is-zooming-out .book-pages-block {
+  transform: translateZ(0);
+  transition: transform 240ms ease-out;
+}
+
+@keyframes book-cover-reveal {
+  from {
+    opacity: 0;
+    transform: rotateY(-106deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(-106deg);
+  }
 }
 
 .book-close-scene .book-cover-face {
   transform: rotateY(-106deg);
-  animation: book-cover-close 300ms cubic-bezier(0.45, 0.05, 0.3, 1) 220ms
-    both;
+  animation: book-cover-close 300ms cubic-bezier(0.45, 0.05, 0.3, 1) both;
 }
 
 .book-close-scene .book-title-in {
@@ -1504,6 +1521,11 @@ html[data-theme="dark"] .window-sill {
   height: var(--to-h);
   transform: rotateX(4deg) rotateY(-2deg) rotateZ(0deg);
   animation: none;
+}
+
+.book-fly--closing.is-flat {
+  transform: none;
+  transition: transform 300ms ease-out;
 }
 
 .book-fly--closing.is-flying {

@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import type { Subject, Theme } from "@/lib/types";
 import { BookVisual, landingRect, type BookPagePreview, type BookRect } from "./BookVisual";
 
-/** The library is already mounted behind the veil when the flight starts. */
-const NAVIGATE_AT = 260;
-/** Let the central page settle and the cover close first. */
-const FLY_AT = 560;
+/** The zoom-out runs first, then the cover closes and the book flies home. */
+const ZOOM_OUT_MS = 650;
+/** Let the library mount behind the veil after the page has shrunk. */
+const NAVIGATE_AT = 720;
+/** Cover close finishes before the flight starts. */
+const FLY_AT = 1000;
 const FLIGHT_MS = 380;
 const REVEAL_AT = FLY_AT + FLIGHT_MS;
 const REMOVE_AT = REVEAL_AT + 180;
@@ -49,6 +51,31 @@ export function BookClosing({
   onRemove,
 }: BookClosingProps) {
   const [to] = useState<BookRect>(landingRect);
+  const [closingStart] = useState(() => {
+    const shell = document.querySelector<HTMLElement>(".desk .book-shell");
+    if (!shell) return null;
+
+    const canvas = document.querySelector<HTMLCanvasElement>(
+      ".desk .book-page .pen-canvas",
+    );
+    const rect = shell.getBoundingClientRect();
+    if (rect.width === 0 || to.width === 0) return null;
+
+    const scale = rect.width / to.width;
+    return {
+      transform: `translate(${
+        rect.left + rect.width / 2 - (to.left + to.width / 2)
+      }px, ${rect.top - to.top}px) scale(${scale})`,
+      previewScale: to.width / rect.width,
+      paperHeight: canvas
+        ? canvas.getBoundingClientRect().height * (to.width / rect.width)
+        : null,
+    };
+  });
+  const [modelTransform, setModelTransform] = useState(
+    closingStart?.transform ?? "none",
+  );
+  const [zoomedOut, setZoomedOut] = useState(!closingStart);
   const [from, setFrom] = useState<BookRect | null>(fallbackFrom);
   const [flying, setFlying] = useState(false);
   const [revealing, setRevealing] = useState(false);
@@ -60,6 +87,18 @@ export function BookClosing({
     navigate.current = onNavigate;
     remove.current = onRemove;
   }, [onNavigate, onRemove]);
+
+  useEffect(() => {
+    if (!closingStart) return;
+
+    const frame = window.requestAnimationFrame(() => setModelTransform("none"));
+    const timer = window.setTimeout(() => setZoomedOut(true), ZOOM_OUT_MS);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [closingStart]);
 
   useEffect(() => {
     const navTimer = window.setTimeout(() => navigate.current(), NAVIGATE_AT);
@@ -95,10 +134,17 @@ export function BookClosing({
       subject={subject}
       theme={theme}
       preview={preview}
-      sceneClass="book-close-scene"
+      previewScale={closingStart?.previewScale}
+      paperHeight={closingStart?.paperHeight}
+      sceneClass={`book-close-scene ${
+        closingStart && !zoomedOut ? "is-zooming-out" : ""
+      }`}
       veilClass={`book-close-veil ${revealing ? "is-revealing" : ""}`}
-      flyClass={`book-fly--closing ${flying ? "is-flying" : ""}`}
-      modelClass="book-model--closing"
+      flyClass={`book-fly--closing ${flying ? "is-flying" : ""} ${
+        closingStart && !zoomedOut ? "is-flat" : ""
+      }`}
+      zoomTransform={closingStart ? modelTransform : undefined}
+      zoomOrigin={closingStart ? "50% 0%" : undefined}
       style={
         {
           "--from-top": `${target.top}px`,
