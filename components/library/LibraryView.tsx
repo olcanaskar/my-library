@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/icons";
 import type { BookRect } from "./BookOpening";
 import { BookSpine } from "./BookSpine";
+import { ArtShelf, PlantShelf } from "./ShelfDecor";
 
 type LibraryViewProps = {
   subjects: Subject[];
@@ -296,40 +297,4 @@ function DecorativeShelf({
   );
 }
 
-const ART_SHELVES = {
-  1: [
-    { size: "large", art: "dusk", tilt: "left" },
-    { size: "small", art: "garden", tilt: "right" },
-  ],
-  2: [
-    { size: "medium", art: "sea", tilt: "left" },
-    { size: "small", art: "terracotta", tilt: "right" },
-  ],
-} as const;
 
-/** Two small framed paintings resting on a cabinet shelf. */
-function ArtShelf({ variant }: { variant: keyof typeof ART_SHELVES }) {
-  return (
-    <div aria-hidden="true" className="dummy-shelf art-shelf">
-      {ART_SHELVES[variant].map((frame) => (
-        <span
-          key={frame.art}
-          className={`shelf-frame shelf-frame--${frame.size} shelf-frame--${frame.tilt}`}
-        >
-          <span className={`shelf-art shelf-art--${frame.art}`} />
-        </span>
-      ))}
-    </div>
-  );
-}
-
-/** A few potted plants on the right-hand cabinet. */
-function PlantShelf() {
-  return (
-    <div aria-hidden="true" className="dummy-shelf plant-shelf">
-      <span className="sill-plant shelf-plant shelf-plant--tall" />
-      <span className="sill-plant shelf-plant shelf-plant--small" />
-      <span className="sill-plant shelf-plant shelf-plant--medium" />
-    </div>
-  );
-}
