@@ -239,7 +239,23 @@ const DUMMY_COLORS = [
   "#b8945a",
   "#866586",
   "#927b4c",
+  "#8a5750",
+  "#537a72",
 ];
+
+/** A seeded shuffle keeps neighbouring spines from matching in blocks. */
+function mixedDummyColors(seed: number): string[] {
+  const colors = [...DUMMY_COLORS];
+  let state = (seed + 1) * 2654435761;
+
+  for (let i = colors.length - 1; i > 0; i -= 1) {
+    state = (state * 1664525 + 1013904223) >>> 0;
+    const j = state % (i + 1);
+    [colors[i], colors[j]] = [colors[j], colors[i]];
+  }
+
+  return colors;
+}
 // Background stock: cloth spines with raised brass bands and a few title
 // labels. The books flex to fill the shelf, so they keep real thickness at
 // every window size instead of stretching into thin slivers.
@@ -254,6 +270,8 @@ function DecorativeShelf({
   seed: number;
   count?: number;
 }) {
+  const palette = mixedDummyColors(seed);
+
   return (
     <div aria-hidden="true" className="dummy-shelf">
       {Array.from({ length: count }, (_, i) => (
@@ -263,9 +281,7 @@ function DecorativeShelf({
           style={{
             flexBasis: `${DUMMY_WIDTHS[(i + seed) % DUMMY_WIDTHS.length]}px`,
             height: `${DUMMY_HEIGHTS[(i + seed) % DUMMY_HEIGHTS.length]}%`,
-            // Runs of three keep the shelf looking arranged, not speckled.
-            backgroundColor:
-              DUMMY_COLORS[(Math.floor(i / 3) + seed) % DUMMY_COLORS.length],
+            backgroundColor: palette[i % palette.length],
           }}
         >
           {i % 3 === 0 ? (
