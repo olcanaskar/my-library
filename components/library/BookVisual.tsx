@@ -1,11 +1,5 @@
-import {
-  paperClass,
-  type InkStroke,
-  type Subject,
-  type Theme,
-} from "@/lib/types";
-import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/icons";
-import { PenCanvas } from "@/components/editor/PenCanvas";
+import type { Note, Subject, Theme } from "@/lib/types";
+import { PageFace } from "@/components/editor/PageFace";
 
 export type BookRect = {
   top: number;
@@ -15,12 +9,9 @@ export type BookRect = {
 };
 
 export type BookPagePreview = {
-  title: string;
-  text: string;
-  date: string;
+  note: Note;
   pageNo: number;
   totalPages: number;
-  ink: InkStroke[];
 };
 
 /** Where a book ends up when it comes forward: cover-shaped and centred. */
@@ -45,12 +36,18 @@ export function editorShellWidthEstimate(): number {
   return Math.min(768, vw) - (vw >= 640 ? 40 : 16);
 }
 
+/** Width of the page inside the notebook shell (28px spine, 10px edge). */
+export function editorPageWidthEstimate(): number {
+  return Math.max(1, editorShellWidthEstimate() - 38);
+}
+
 type BookVisualProps = {
   subject: Subject;
   theme: Theme;
   preview?: BookPagePreview | null;
   previewScale?: number;
-  paperHeight?: number | null;
+  /** Unscaled width of the page; it is laid out like the editor page. */
+  pageWidth?: number;
   sceneClass?: string;
   veilClass?: string;
   flyClass?: string;
@@ -70,7 +67,7 @@ export function BookVisual({
   theme,
   preview,
   previewScale,
-  paperHeight,
+  pageWidth,
   sceneClass = "",
   veilClass = "",
   flyClass = "",
@@ -82,7 +79,7 @@ export function BookVisual({
   const resolvedPreviewScale =
     previewScale ??
     (preview ? landingRect().width / editorShellWidthEstimate() : 1);
-  const margin = subject.paper === "lined" || subject.paper === "grid";
+  const resolvedPageWidth = pageWidth ?? editorPageWidthEstimate();
 
   return (
     <div
@@ -131,69 +128,18 @@ export function BookVisual({
 
               <div className="book-preview-page">
                 {preview ? (
-                  <>
-                    <div className="book-preview-copy">
-                      <h2 className="book-preview-title font-hand text-ink">
-                        {preview.title || "Page title"}
-                      </h2>
-                      <div className="book-preview-meta">
-                        <span>{preview.date}</span>
-                      </div>
-                    </div>
-                    <div
-                      className={`book-preview-paper ${paperClass(subject.paper)} ${
-                        margin ? "paper-margin" : ""
-                      }`}
-                      style={
-                        paperHeight
-                          ? {
-                              height: `${paperHeight}px`,
-                              flex: "0 0 auto",
-                            }
-                          : undefined
-                      }
-                    >
-                      <p className="book-preview-text">
-                        {preview.text || "Start writing…"}
-                      </p>
-                      <PenCanvas
-                        key={`${paperHeight ?? "auto"}-${resolvedPreviewScale}`}
-                        ink={preview.ink}
-                        active={false}
-                        color="ink"
-                        size={0.008}
-                        eraser={false}
-                        theme={theme}
-                        onCommit={() => {}}
-                      />
-                    </div>
-
-                    <div className="book-preview-footer">
-                      <span
-                        className={`book-preview-footer-side ${
-                          preview.pageNo > 1 ? "" : "is-disabled"
-                        }`}
-                      >
-                        <ArrowLeftIcon className="book-preview-footer-icon" />
-                        <span className="book-preview-footer-label">
-                          Previous
-                        </span>
-                      </span>
-                      <span className="book-preview-footer-count">
-                        {preview.pageNo} / {preview.totalPages}
-                      </span>
-                      <span
-                        className={`book-preview-footer-side ${
-                          preview.pageNo < preview.totalPages
-                            ? ""
-                            : "is-disabled"
-                        }`}
-                      >
-                        <span className="book-preview-footer-label">Next</span>
-                        <ArrowRightIcon className="book-preview-footer-icon" />
-                      </span>
-                    </div>
-                  </>
+                  <div
+                    className="book-preview-sheet"
+                    style={{ width: `${resolvedPageWidth}px` }}
+                  >
+                    <PageFace
+                      subject={subject}
+                      note={preview.note}
+                      theme={theme}
+                      pageNo={preview.pageNo}
+                      totalPages={preview.totalPages}
+                    />
+                  </div>
                 ) : null}
               </div>
             </div>

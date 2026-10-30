@@ -3571,8 +3571,6 @@ html[data-theme="dark"] .book-spine {
 .book-preview-page {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
   height: 100%;
   overflow: hidden;
   border-radius: calc(3px * var(--preview-scale, 1));
@@ -3582,113 +3580,20 @@ html[data-theme="dark"] .book-spine {
     inset 10px 0 14px -14px rgba(0, 0, 0, 0.4);
 }
 
-.book-preview-copy {
+/* The preview is the real page, laid out at the editor's width and scaled
+   down uniformly. Text wraps in the same places and ink keeps its shape. */
+.book-preview-sheet {
   flex: none;
-  padding:
-    calc(28px * var(--preview-scale, 1))
-    calc(20px * var(--preview-scale, 1)) 0;
+  transform: scale(var(--preview-scale, 1));
+  transform-origin: top left;
+  will-change: transform;
 }
 
-.book-preview-paper {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  margin-top: calc(20px * var(--preview-scale, 1));
-  padding: 0 calc(20px * var(--preview-scale, 1));
-  overflow: hidden;
-  background-color: var(--paper);
-}
-
-.book-preview-title {
-  margin: 0;
-  font-size: calc(30px * var(--preview-scale, 1));
-  line-height: 1.25;
-  overflow-wrap: break-word;
-}
-
-.book-preview-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(12px * var(--preview-scale, 1));
-  margin-top: calc(8px * var(--preview-scale, 1));
-  color: var(--ink-soft);
-  font-size: calc(11px * var(--preview-scale, 1));
-  line-height: 1.2;
-}
-
-.book-preview-text {
-  margin: 0;
-  overflow: hidden;
-  color: var(--ink);
-  font-size: calc(16px * var(--preview-scale, 1));
-  line-height: calc(32px * var(--preview-scale, 1));
-  white-space: pre-wrap;
-}
-
-.book-preview-footer {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(8px * var(--preview-scale, 1));
-  padding: calc(6px * var(--preview-scale, 1))
-    calc(8px * var(--preview-scale, 1));
-  border-top: 1px solid
-    color-mix(in oklab, var(--rule) 70%, transparent);
-  color: var(--ink-soft);
-  font-size: calc(11px * var(--preview-scale, 1));
-  line-height: 1.2;
-}
-
-.book-preview-footer-side {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(4px * var(--preview-scale, 1));
-  padding: calc(8px * var(--preview-scale, 1)) 0;
-}
-
-.book-preview-footer-side.is-disabled {
-  opacity: 0.3;
-}
-
-.book-preview-footer-icon {
-  width: calc(16px * var(--preview-scale, 1));
-  height: calc(16px * var(--preview-scale, 1));
-}
-
-.book-preview-footer-count {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-.book-preview-footer-label {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .book-preview-copy {
-    padding-right: calc(56px * var(--preview-scale, 1));
-    padding-left: calc(56px * var(--preview-scale, 1));
-  }
-
-  .book-preview-paper {
-    padding-right: calc(56px * var(--preview-scale, 1));
-    padding-left: calc(56px * var(--preview-scale, 1));
-  }
-
-  .book-preview-title {
-    font-size: calc(36px * var(--preview-scale, 1));
-  }
-
-  .book-preview-footer {
-    padding-right: calc(12px * var(--preview-scale, 1));
-    padding-left: calc(12px * var(--preview-scale, 1));
-  }
-
-  .book-preview-footer-label {
-    display: inline;
-  }
+/* While the page is zoomed to the editor, a long note can run past the book
+   and off the bottom of the screen; it must not be clipped. */
+.book-open-scene.is-zooming .book-preview-page,
+.book-close-scene.is-zooming-out .book-preview-page {
+  overflow: visible;
 }
 
 /* the desk header */

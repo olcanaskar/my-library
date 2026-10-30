@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Subject, Theme } from "@/lib/types";
 import {
   BookVisual,
+  editorPageWidthEstimate,
   editorShellWidthEstimate,
   landingRect,
   type BookPagePreview,
@@ -56,10 +57,7 @@ export function BookOpening({
   const [previewScale, setPreviewScale] = useState(
     () => to.width / editorShellWidthEstimate(),
   );
-  const [paperHeight, setPaperHeight] = useState<number | null>(() => {
-    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    return vh * 0.46 * (to.width / editorShellWidthEstimate());
-  });
+  const [pageWidth, setPageWidth] = useState(editorPageWidthEstimate);
   const [zoom, setZoom] = useState<{
     transform: string;
     origin: string;
@@ -104,12 +102,9 @@ export function BookOpening({
       }
 
       const editorRect = editorShell.getBoundingClientRect();
-      const editorCanvas = document.querySelector<HTMLCanvasElement>(
-        ".desk .book-page .pen-canvas",
+      const editorPage = document.querySelector<HTMLElement>(
+        ".desk .book-page-stack > .book-page",
       );
-      const editorPaperHeight = editorCanvas
-        ? editorCanvas.getBoundingClientRect().height
-        : 0;
       if (to.width === 0 || to.height === 0) {
         setFadingOut(true);
         return;
@@ -126,8 +121,8 @@ export function BookOpening({
       const dy = editorRect.top - to.top;
 
       setPreviewScale(to.width / editorRect.width);
-      if (editorPaperHeight > 0) {
-        setPaperHeight(editorPaperHeight * (to.width / editorRect.width));
+      if (editorPage && editorPage.clientWidth > 0) {
+        setPageWidth(editorPage.clientWidth);
       }
       setZoom({
         transform: `translate(${dx}px, ${dy}px) scale(${scale})`,
@@ -160,7 +155,7 @@ export function BookOpening({
       theme={theme}
       preview={preview}
       previewScale={previewScale}
-      paperHeight={paperHeight}
+      pageWidth={pageWidth}
       sceneClass={`book-open-scene ${zoom ? "is-zooming" : ""} ${
         fadingOut ? "is-fading" : ""
       }`}

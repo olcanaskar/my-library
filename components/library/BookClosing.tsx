@@ -55,8 +55,8 @@ export function BookClosing({
     const shell = document.querySelector<HTMLElement>(".desk .book-shell");
     if (!shell) return null;
 
-    const canvas = document.querySelector<HTMLCanvasElement>(
-      ".desk .book-page .pen-canvas",
+    const page = document.querySelector<HTMLElement>(
+      ".desk .book-page-stack > .book-page",
     );
     const rect = shell.getBoundingClientRect();
     if (rect.width === 0 || to.width === 0) return null;
@@ -67,9 +67,7 @@ export function BookClosing({
         rect.left + rect.width / 2 - (to.left + to.width / 2)
       }px, ${rect.top - to.top}px) scale(${scale})`,
       previewScale: to.width / rect.width,
-      paperHeight: canvas
-        ? canvas.getBoundingClientRect().height * (to.width / rect.width)
-        : null,
+      pageWidth: page && page.clientWidth > 0 ? page.clientWidth : undefined,
     };
   });
   const [modelTransform, setModelTransform] = useState(
@@ -135,7 +133,7 @@ export function BookClosing({
       theme={theme}
       preview={preview}
       previewScale={closingStart?.previewScale}
-      paperHeight={closingStart?.paperHeight}
+      pageWidth={closingStart?.pageWidth}
       sceneClass={`book-close-scene ${
         closingStart && !zoomedOut ? "is-zooming-out" : ""
       }`}

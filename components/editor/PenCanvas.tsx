@@ -109,10 +109,13 @@ export function PenCanvas({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
+    // Layout size, not the projected rect: a scaled copy of the page (book
+    // opening, page turn) must keep a crisp bitmap at its real resolution.
+    const cssWidth = canvas.clientWidth;
+    const cssHeight = canvas.clientHeight;
     const ratio = window.devicePixelRatio || 1;
-    const width = Math.max(1, Math.round(rect.width * ratio));
-    const height = Math.max(1, Math.round(rect.height * ratio));
+    const width = Math.max(1, Math.round(cssWidth * ratio));
+    const height = Math.max(1, Math.round(cssHeight * ratio));
 
     if (canvas.width !== width || canvas.height !== height) {
       canvas.width = width;
@@ -120,13 +123,13 @@ export function PenCanvas({
     }
 
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
 
     for (const stroke of inkRef.current) {
-      drawStroke(ctx, stroke, rect.width, rect.height);
+      drawStroke(ctx, stroke, cssWidth, cssHeight);
     }
     if (currentRef.current) {
-      drawStroke(ctx, currentRef.current, rect.width, rect.height);
+      drawStroke(ctx, currentRef.current, cssWidth, cssHeight);
     }
   }
 

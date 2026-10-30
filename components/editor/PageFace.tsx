@@ -33,7 +33,11 @@ export function PageFace({
   onAnimationEnd,
 }: PageFaceProps) {
   const runs = runsFromNote(note);
-  const empty = runsToText(runs).length === 0;
+  const text = runsToText(runs);
+  const empty = text.length === 0;
+  // A textarea keeps a final empty line after a trailing newline; a plain
+  // block would swallow it, leaving the page one line shorter than the editor.
+  const trailingBreak = text.endsWith("\n");
   const margin = subject.paper === "lined" || subject.paper === "grid";
   const hasPrev = pageNo > 1;
   const hasNext = pageNo < totalPages;
@@ -78,6 +82,7 @@ export function PageFace({
               </span>
             ))
           )}
+          {!empty && trailingBreak ? "\u200b" : null}
         </div>
 
         <PenCanvas
