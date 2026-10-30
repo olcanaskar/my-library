@@ -458,13 +458,7 @@ export function NoteEditor({
 
         <div
           key={note.id}
-          className={`book-shell page-turn ${
-            entryMotion === "next"
-              ? "page-turn--next"
-              : entryMotion === "prev"
-                ? "page-turn--prev"
-                : ""
-          }`}
+          className="book-shell"
           style={{ "--cover": subject.color } as React.CSSProperties}
         >
           <span aria-hidden="true" className="book-shell-spine">
@@ -475,7 +469,23 @@ export function NoteEditor({
           <span aria-hidden="true" className="book-shell-cover" />
           <span aria-hidden="true" className="book-ribbon" />
 
-          <div className="relative overflow-hidden rounded-[3px] bg-paper shadow-[inset_14px_0_18px_-18px_rgba(0,0,0,0.55),inset_-10px_0_18px_-16px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(0,0,0,0.05)]">
+          <div
+            className="book-page-stack"
+            data-page-motion={entryMotion ?? undefined}
+          >
+            <div
+              aria-hidden="true"
+              className={`book-page-underlay ${paperClass(subject.paper)}`}
+            />
+            <div
+              className={`book-page page-turn ${
+                entryMotion === "next"
+                  ? "page-turn--next"
+                  : entryMotion === "prev"
+                    ? "page-turn--prev"
+                    : ""
+              } relative overflow-hidden rounded-[3px] bg-paper shadow-[inset_14px_0_18px_-18px_rgba(0,0,0,0.55),inset_-10px_0_18px_-16px_rgba(0,0,0,0.45),inset_0_0_0_1px_rgba(0,0,0,0.05)]`}
+            >
           <div className="px-5 pt-7 sm:px-14">
             <input
               value={note.title}
@@ -576,6 +586,7 @@ export function NoteEditor({
               <ArrowRightIcon className="h-4 w-4" />
             </button>
           </div>
+            </div>
           </div>
         </div>
 
