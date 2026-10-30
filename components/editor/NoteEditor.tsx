@@ -22,6 +22,7 @@ import {
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  DownloadIcon,
   EraserIcon,
   PenIcon,
   PlusIcon,
@@ -56,6 +57,8 @@ type NoteEditorProps = {
   onNewPage: () => void;
   onDelete: () => void;
   onDeleteNotebook: () => void;
+  onExportPdf: () => void;
+  exporting: boolean;
 };
 
 export function NoteEditor({
@@ -71,6 +74,8 @@ export function NoteEditor({
   onNewPage,
   onDelete,
   onDeleteNotebook,
+  onExportPdf,
+  exporting,
 }: NoteEditorProps) {
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const [status, setStatus] = useState<"typing" | "saved">("saved");
@@ -267,6 +272,19 @@ export function NoteEditor({
               {status === "saved" ? "Saved" : "Saving…"}
             </span>
           </span>
+
+          <button
+            type="button"
+            onClick={onExportPdf}
+            disabled={exporting}
+            aria-label={exporting ? "Preparing PDF" : "Export notebook as PDF"}
+            className="desk-btn inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-2 text-xs font-medium disabled:cursor-wait disabled:opacity-60 sm:px-3 sm:text-sm"
+          >
+            <DownloadIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">
+              {exporting ? "Preparing…" : "PDF"}
+            </span>
+          </button>
 
           <button
             type="button"

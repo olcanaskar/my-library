@@ -39,6 +39,7 @@ function App() {
     subject: Subject;
     from: BookRect | null;
   } | null>(null);
+  const [exporting, setExporting] = useState(false);
   const bookRects = useRef<Record<string, BookRect>>({});
 
   const subjectId = params.get("kitap");
@@ -82,6 +83,21 @@ function App() {
       subject,
       from: bookRects.current[subject.id] ?? null,
     });
+  }
+
+  async function exportNotebook() {
+    if (!subject || exporting) return;
+
+    setExporting(true);
+    try {
+      const { exportNotebookPdf } = await import("@/lib/pdf");
+      await exportNotebookPdf(subject, notes);
+    } catch (error) {
+      console.error(error);
+      window.alert("PDF oluşturulamadı. Lütfen tekrar dene.");
+    } finally {
+      setExporting(false);
+    }
   }
 
   function goNote(subjectToOpen: string, noteToOpen: string) {
@@ -186,6 +202,8 @@ function App() {
         onPrev={() => turnPage(-1)}
         onNext={() => turnPage(1)}
         onNewPage={addPage}
+        onExportPdf={exportNotebook}
+        exporting={exporting}
         onDelete={() => {
           const ok = window.confirm("Delete this page?");
           if (!ok) return;
