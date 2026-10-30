@@ -56,7 +56,10 @@ export function BookOpening({
   const [previewScale, setPreviewScale] = useState(
     () => to.width / editorShellWidthEstimate(),
   );
-  const [paperHeight, setPaperHeight] = useState<number | null>(null);
+  const [paperHeight, setPaperHeight] = useState<number | null>(() => {
+    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+    return vh * 0.46 * (to.width / editorShellWidthEstimate());
+  });
   const [zoom, setZoom] = useState<{
     transform: string;
     origin: string;
