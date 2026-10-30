@@ -9,7 +9,7 @@ export type { BookPagePreview, BookRect } from "./BookVisual";
 /** The page opens while the cover is still finishing its swing. */
 const NAVIGATE_AT = 620;
 /** How long the fade over the real page takes. */
-const FADE_MS = 220;
+const FADE_MS = 480;
 /** Safety net: never leave the overlay on screen if the view did not switch. */
 const BAIL_OUT_AT = 3000;
 
