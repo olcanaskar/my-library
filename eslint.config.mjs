@@ -15,6 +15,9 @@ const eslintConfig = defineConfig([
     "desktop/out/**",
     "desktop/release/**",
     "desktop/node_modules/**",
+    "mobile/android/**",
+    "mobile/release/**",
+    "mobile/node_modules/**",
   ]),
   {
     files: ["desktop/**/*.cjs"],

@@ -9,7 +9,10 @@
     "lint": "eslint",
     "desktop:install": "npm --prefix desktop install",
     "desktop:build": "npm run build && npm --prefix desktop run build",
-    "desktop:start": "npm --prefix desktop run sync && npm --prefix desktop run start"
+    "desktop:build:mac": "npm run build && npm --prefix desktop run build:mac",
+    "desktop:start": "npm --prefix desktop run sync && npm --prefix desktop run start",
+    "mobile:install": "npm --prefix mobile install",
+    "mobile:build:apk": "npm run build && npm --prefix mobile run build:apk"
   },
   "dependencies": {
     "jspdf": "^4.2.1",

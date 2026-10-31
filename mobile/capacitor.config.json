@@ -1,0 +1,9 @@
+{
+  "appId": "com.olcanaskar.mylibrary",
+  "appName": "My Library",
+  "webDir": "../out",
+  "backgroundColor": "#150d06",
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6e0a8"/>
+      <stop offset="0.45" stop-color="#d6b264"/>
+      <stop offset="1" stop-color="#8f6826"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0.65" y2="1">
+      <stop offset="0" stop-color="#fdf5e1"/>
+      <stop offset="0.6" stop-color="#f2e4c4"/>
+      <stop offset="1" stop-color="#e2cfa5"/>
+    </linearGradient>
+    <linearGradient id="penBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f5277"/>
+      <stop offset="0.45" stop-color="#263554"/>
+      <stop offset="1" stop-color="#151f34"/>
+    </linearGradient>
+    <linearGradient id="nib" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a97f35"/>
+      <stop offset="0.4" stop-color="#e8c983"/>
+      <stop offset="0.75" stop-color="#d8b364"/>
+      <stop offset="1" stop-color="#f3dfa6"/>
+    </linearGradient>
+    <filter id="pageShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="7" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="penShadow" x="-30%" y="-70%" width="160%" height="240%">
+      <feDropShadow dx="4" dy="7" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <g transform="translate(256 252) scale(0.85) translate(-256 -252)">
+    <!-- notebook page -->
+    <g transform="rotate(-7 256 250)" filter="url(#pageShadow)">
+      <rect x="146" y="86" width="224" height="324" rx="12" fill="url(#paper)"/>
+      <path d="M330 86 L370 86 L370 126 Z" fill="#d9c299"/>
+      <path d="M330 86 L370 126 L330 126 Z" fill="#efdfba"/>
+      <path d="M330 86 L370 86 L370 126" fill="none" stroke="#b99e6d" stroke-width="2" stroke-linejoin="round"/>
+
+      <line x1="178" y1="152" x2="308" y2="152" stroke="#607089" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
+      <line x1="178" y1="192" x2="338" y2="192" stroke="#8794a8" stroke-opacity="0.5" stroke-width="4" stroke-linecap="round"/>
+      <line x1="178" y1="228" x2="338" y2="228" stroke="#8794a8" stroke-opacity="0.5" stroke-width="4" stroke-linecap="round"/>
+      <line x1="178" y1="264" x2="316" y2="264" stroke="#8794a8" stroke-opacity="0.5" stroke-width="4" stroke-linecap="round"/>
+      <line x1="178" y1="300" x2="338" y2="300" stroke="#8794a8" stroke-opacity="0.5" stroke-width="4" stroke-linecap="round"/>
+      <line x1="178" y1="336" x2="296" y2="336" stroke="#8794a8" stroke-opacity="0.5" stroke-width="4" stroke-linecap="round"/>
+      <line x1="178" y1="372" x2="322" y2="372" stroke="#8794a8" stroke-opacity="0.45" stroke-width="4" stroke-linecap="round"/>
+
+      <line x1="198" y1="132" x2="198" y2="386" stroke="#b3705e" stroke-opacity="0.45" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- fountain pen -->
+    <g transform="translate(118 366) rotate(-40)" filter="url(#penShadow)">
+      <rect x="0" y="-15" width="178" height="30" rx="14" fill="url(#penBody)"/>
+      <rect x="3" y="-15" width="172" height="30" rx="14" fill="none" stroke="#0d1524" stroke-opacity="0.55" stroke-width="2"/>
+      <rect x="18" y="-10" width="142" height="4" rx="2" fill="#ffffff" fill-opacity="0.16"/>
+
+      <rect x="20" y="-15" width="10" height="30" fill="url(#brass)"/>
+      <rect x="146" y="-15" width="9" height="30" fill="url(#brass)"/>
+      <rect x="146" y="-15" width="9" height="30" fill="#5b4118" fill-opacity="0.2"/>
+
+      <rect x="28" y="-21" width="96" height="7" rx="3.5" fill="url(#brass)"/>
+      <rect x="28" y="-21" width="12" height="7" rx="3.5" fill="#f0d492"/>
+
+      <path d="M178 -15 L206 -9 L206 9 L178 15 Z" fill="#1d293f"/>
+      <rect x="176" y="-15" width="7" height="30" fill="url(#brass)"/>
+
+      <path d="M206 -10 L232 -7 L266 0 L232 7 L206 10 Z" fill="url(#nib)"/>
+      <path d="M206 -10 L232 -7 L266 0 L232 7 L206 10 Z" fill="none" stroke="#7e5a20" stroke-opacity="0.55" stroke-width="1.5"/>
+      <path d="M232 0 L260 0" stroke="#5f4517" stroke-width="2"/>
+      <circle cx="232" cy="0" r="3.2" fill="#4a3512"/>
+      <path d="M212 -5 L230 -3" stroke="#fff3cf" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

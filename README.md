@@ -18,22 +18,54 @@ npx vercel --prod # deploy (project: my-library)
 Pushes to `master` are deployed automatically by Vercel; the command above is
 only the manual fallback.
 
-## Desktop app (Windows)
+## Desktop app (Windows / macOS)
 
 The Electron shell in `desktop/` serves the exported site from a local HTTP
 server (`127.0.0.1:47823`), so the desktop app runs without the Next.js dev
 server. It is a separate build and does not affect the web deployment.
 
 ```bash
-npm run desktop:install # install Electron dependencies (once)
-npm run desktop:build   # Next build + portable exe
+npm run desktop:install   # install Electron dependencies (once)
+npm run desktop:build     # Next build + Windows portable exe
 # -> desktop/release/MyLibrary-0.1.0-portable.exe
-npm run desktop:start   # run from source (needs out/ from npm run build)
+npm run desktop:build:mac # macOS universal dmg + zip (run on macOS)
+npm run desktop:start     # run from source (needs out/ from npm run build)
 ```
 
-The portable exe stores its library under its own app data folder; browser and
-desktop `localStorage` are independent. The build is unsigned, so Windows may
-show a SmartScreen warning on first launch.
+Linux and Windows can build the Windows target; macOS `dmg`/`zip` targets must
+be built on macOS. The `Native builds` GitHub Actions workflow builds both the
+macOS artifacts and the Android APK on GitHub runners:
+
+```bash
+gh workflow run builds.yml
+gh run list --workflow=builds.yml
+gh run download <run-id> -D desktop/release/ci
+```
+
+The desktop app stores its library under its own app data folder; browser and
+desktop `localStorage` are independent. Builds are unsigned, so Windows may
+show a SmartScreen warning and macOS Gatekeeper may block the first launch
+(right-click **Open**, or `xattr -cr "/Applications/My Library.app"`).
+
+## Android app
+
+The Capacitor shell in `mobile/` bundles the same static export into a local
+WebView. It does not need the dev server or an internet connection.
+
+```bash
+npm run build
+npm run mobile:install
+npm run mobile:build:apk
+# -> mobile/release/MyLibrary-0.1.0-debug.apk
+adb install -r mobile/release/MyLibrary-0.1.0-debug.apk
+```
+
+Requirements for a local build: Node.js 22+, JDK 21, Android SDK with platform
+36 and build-tools 36. The APK is debug-signed and installable by sideloading;
+publishing to Google Play needs a release keystore and a signed AAB/APK.
+
+The Android app also has its own `localStorage`, separate from the browser and
+desktop libraries.
 
 ## What's inside
 
@@ -56,7 +88,8 @@ show a SmartScreen warning on first launch.
 
 ## Architecture notes
 
-- `output: "export"` — no server side, so the app can move to Capacitor later.
+- `output: "export"` - no server side; the same output is bundled by Electron
+  and Capacitor.
 - Route: `/?kitap=<id>&not=<id>`. No dynamic segments.
 - Paper rules are 32px apart; body text must use `line-height: 32px`.
   If those two drift apart, the theme breaks.
@@ -72,6 +105,8 @@ components/
   editor/       paper page + editor + page navigation
   search/       search
   ui/           icons, modal
+desktop/        Electron shell + electron-builder config
+mobile/         Capacitor Android shell
 lib/            types, storage, hooks, formatting
 ```
 
