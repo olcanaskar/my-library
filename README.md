@@ -1,119 +1,98 @@
 # My Library
 
-Every subject a book, every note a page. A small browser app that keeps class
-notes on a library shelf.
+Her konu bir kitap, her not bir sayfa.
 
-**Live:** https://my-library-pi-one.vercel.app
+Ders notlarını kütüphane rafında tutan, hesap gerektirmeyen ve cihazında
+çalışan bir not defteri. Konular kitap sırtı olur; sayfalar doldukça sırt
+kalınlaşır.
 
-## Running
+[Web uygulamasını aç](https://my-library-pi-one.vercel.app) ·
+[Son sürümü indir](https://github.com/olcanaskar/my-library/releases/latest)
 
-```bash
-npm install
-npm run dev      # http://localhost:3000
-npm run build    # static output: out/
-npm run lint
-npx vercel --prod # deploy (project: my-library)
-```
+| Masaüstü | Android |
+|:---:|:---:|
+| <img src="docs/screenshot-desktop.png" alt="My Library masaüstü görünümü" width="640" /> | <img src="docs/screenshot-android.png" alt="My Library Android görünümü" width="220" /> |
 
-Pushes to `master` are deployed automatically by Vercel; the command above is
-only the manual fallback.
+## İndir
 
-## Desktop app (Windows / macOS)
+| Platform | Dosya | Not |
+|---|---|---|
+| Windows 10+ | [MyLibrary-0.1.0-portable.exe](https://github.com/olcanaskar/my-library/releases/download/v0.1.0/MyLibrary-0.1.0-portable.exe) | Kurulum gerekmez; imzasız |
+| macOS 13+ | [MyLibrary-0.1.0-mac-universal.dmg](https://github.com/olcanaskar/my-library/releases/download/v0.1.0/MyLibrary-0.1.0-mac-universal.dmg) | Intel + Apple Silicon; notarize edilmemiş |
+| Android 7+ | [MyLibrary-0.1.0-debug.apk](https://github.com/olcanaskar/my-library/releases/download/v0.1.0/MyLibrary-0.1.0-debug.apk) | Play Store dışı; yerel kurulum |
+| Web | [Tarayıcıda aç](https://my-library-pi-one.vercel.app) | Kurulum gerekmez |
 
-The Electron shell in `desktop/` serves the exported site from a local HTTP
-server (`127.0.0.1:47823`), so the desktop app runs without the Next.js dev
-server. It is a separate build and does not affect the web deployment.
+Tüm sürümler, checksum'lar ve sürüm notları:
+[Releases](https://github.com/olcanaskar/my-library/releases).
 
-```bash
-npm run desktop:install   # install Electron dependencies (once)
-npm run desktop:build     # Next build + Windows portable exe
-# -> desktop/release/MyLibrary-0.1.0-portable.exe
-npm run desktop:build:mac # macOS universal dmg + zip (run on macOS)
-npm run desktop:start     # run from source (needs out/ from npm run build)
-```
+## Kurulum
 
-Linux and Windows can build the Windows target; macOS `dmg`/`zip` targets must
-be built on macOS. The `Native builds` GitHub Actions workflow builds both the
-macOS artifacts and the Android APK on GitHub runners:
+### Windows
 
-```bash
-gh workflow run builds.yml
-gh run list --workflow=builds.yml
-gh run download <run-id> -D desktop/release/ci
-```
+1. `.exe` dosyasını indir ve çalıştır.
+2. SmartScreen uyarırsa **More info → Run anyway** seç.
+3. Uygulama kurulum gerektirmez; istediğin yere taşıyabilirsin.
 
-The desktop app stores its library under its own app data folder; browser and
-desktop `localStorage` are independent. Windows builds are unsigned, so
-SmartScreen may warn. The CI macOS build is ad-hoc signed but not notarized, so
-Gatekeeper may still block the first launch (right-click **Open**, or
-`xattr -cr "/Applications/My Library.app"`).
+### macOS
 
-## Android app
+1. `.dmg` dosyasını aç.
+2. **My Library**'yi Applications klasörüne sürükle.
+3. İlk açılışta uygulamaya sağ tıkla → **Open**.
 
-The Capacitor shell in `mobile/` bundles the same static export into a local
-WebView. It does not need the dev server or an internet connection.
+macOS sürümü ad-hoc imzalıdır ama Apple tarafından notarize edilmemiştir.
+Gatekeeper yine de engellerse Terminal'de şunu çalıştır:
 
 ```bash
-npm run build
-npm run mobile:install
-npm run mobile:build:apk
-# -> mobile/release/MyLibrary-0.1.0-debug.apk
-adb install -r mobile/release/MyLibrary-0.1.0-debug.apk
+xattr -cr "/Applications/My Library.app"
 ```
 
-Requirements for a local build: Node.js 22+, JDK 21, Android SDK with platform
-36 and build-tools 36. The APK is debug-signed and installable by sideloading;
-publishing to Google Play needs a release keystore and a signed AAB/APK.
+### Android
 
-The Android app also has its own `localStorage`, separate from the browser and
-desktop libraries.
+1. `.apk` dosyasını indir.
+2. Telefonda bilinmeyen kaynaklardan kuruluma izin ver.
+3. APK'yı açıp kur.
 
-## What's inside
+APK debug imzalıdır; Play Store dışında, yerel kurulum için hazırlanmıştır.
+“App not installed” hatası alırsan eski sürümü kaldırıp tekrar kur.
 
-- **Library:** subjects as book spines; the spine grows thicker with the page count
-- **Page:** clicking a book lifts it off the shelf and the cover swings open;
-  arrows then turn pages one by one
-- **Editor:** lined / grid / dotted / plain paper, autosave
-- **Search:** across titles, content and subject names
-- **Dark mode**
-- Data lives in `localStorage`: no account, no server, no internet needed
+### Web
 
-## Stack
+[my-library-pi-one.vercel.app](https://my-library-pi-one.vercel.app) adresini aç.
+Kurulum veya hesap gerekmez.
 
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router, static export) |
-| Language | TypeScript |
-| Styling | Tailwind CSS 4 |
-| Storage | `localStorage` (single entry point: `lib/storage.ts`) |
+## Kullanım
 
-## Architecture notes
+- **Yeni defter:** Sağ üstteki **+** düğmesi veya raftaki **+ New book**.
+- **Not yaz:** Bir kitaba tıkla/dokun; kapak açılır. Alt oklarla sayfalar arasında gez.
+- **Otomatik kayıt:** Yazarken kaydedilir; ayrıca kaydetmen gerekmez.
+- **Ara:** Büyüteç simgesi; defter adı, not başlığı ve içerikte arar.
+- **Tema:** Güneş/ay simgesiyle aydınlık ve karanlık tema arasında geçiş yap.
+- **Kağıt:** Çizgili, kareli, noktalı veya düz sayfa seç.
+- **Kitap sırtı:** Sayfa sayısı arttıkça kitap kalınlaşır.
 
-- `output: "export"` - no server side; the same output is bundled by Electron
-  and Capacitor.
-- Route: `/?kitap=<id>&not=<id>`. No dynamic segments.
-- Paper rules are 32px apart; body text must use `line-height: 32px`.
-  If those two drift apart, the theme breaks.
-- `useHydrated()` skips the first paint so the server and the client never
-  disagree about the content.
+## Verileriniz
 
-## Folders
+- Hesap, abonelik veya sunucu yok.
+- Notlar cihazın yerel deposunda tutulur; masaüstü ve Android sürümleri
+  çevrimdışı çalışır.
+- Tarayıcı, Windows/macOS ve Android kütüphaneleri ayrıdır. Notlar aralarında
+  otomatik olarak senkronize olmaz.
+- Tarayıcı verilerini veya uygulama verilerini temizlemek notları siler. Şu an
+  otomatik bulut yedeği yoktur.
 
-```
-app/            single page + theme tokens
-components/
-  library/      shelf, book spine, new book
-  editor/       paper page + editor + page navigation
-  search/       search
-  ui/           icons, modal
-desktop/        Electron shell + electron-builder config
-mobile/         Capacitor Android shell
-lib/            types, storage, hooks, formatting
-```
+## Sorun giderme
 
-## Team
+- **Windows uyarısı:** SmartScreen → **More info → Run anyway**.
+- **macOS “uygulama hasarlı” diyor:** Sağ tık → **Open**; gerekirse yukarıdaki
+  `xattr` komutunu çalıştır.
+- **Android kurulmuyor:** Eski APK'yı kaldır; farklı imzayla kurulmuş bir sürüm
+  olabilir.
+- **Notlar kayboldu:** Tarayıcı/uygulama verileri temizlenmiş olabilir; My Library
+  notları yerel olarak tutar.
 
-- **A — Front of house:** `components/library/*`, `app/page.tsx`
-- **B — Content:** `components/editor/*`, `components/search/*`, `lib/*`
+## Geliştirme
 
-Roadmap and work split: [PLAN.md](./PLAN.md)
+Kaynaktan çalıştırma, derleme komutları, mimari ve klasör yapısı:
+[DEVELOPMENT.md](DEVELOPMENT.md).
+
+Yol haritası: [PLAN.md](PLAN.md).
