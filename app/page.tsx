@@ -4,7 +4,10 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NoteEditor } from "@/components/editor/NoteEditor";
 import { LibraryView } from "@/components/library/LibraryView";
-import { NewBookDialog } from "@/components/library/NewBookDialog";
+import {
+  EditBookDialog,
+  NewBookDialog,
+} from "@/components/library/NewBookDialog";
 import { BookOpening, type BookPagePreview, type BookRect } from "@/components/library/BookOpening";
 import { BookClosing } from "@/components/library/BookClosing";
 import { SearchDialog } from "@/components/search/SearchDialog";
@@ -48,6 +51,7 @@ function App() {
   const params = useSearchParams();
 
   const [newBookOpen, setNewBookOpen] = useState(false);
+  const [editingBook, setEditingBook] = useState<Subject | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [opening, setOpening] = useState<{
     subject: Subject;
@@ -298,6 +302,7 @@ function App() {
         onNext={() => turnPage(1)}
         onExportPdf={exportNotebook}
         onSharePdf={shareNotebook}
+        onEditNotebook={() => setEditingBook(subject)}
         exporting={exporting}
         sharing={sharing}
         onDelete={() => {
@@ -371,6 +376,17 @@ function App() {
         open={newBookOpen}
         onClose={() => setNewBookOpen(false)}
         onCreate={handleCreateBook}
+      />
+
+      <EditBookDialog
+        open={Boolean(editingBook)}
+        subject={editingBook}
+        onClose={() => setEditingBook(null)}
+        onSave={(input) => {
+          if (!editingBook) return;
+          lib.updateSubject(editingBook.id, input);
+          setEditingBook(null);
+        }}
       />
 
       <SearchDialog

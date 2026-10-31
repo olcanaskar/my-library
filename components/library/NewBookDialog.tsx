@@ -2,38 +2,75 @@
 
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
-import { PAPERS, SUBJECT_COLORS, paperClass, type Paper } from "@/lib/types";
+import {
+  PAPERS,
+  SUBJECT_COLORS,
+  paperClass,
+  type Paper,
+  type Subject,
+} from "@/lib/types";
 
-type NewBookDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  onCreate: (input: { name: string; color: string; paper: Paper }) => void;
+type BookValues = {
+  name: string;
+  color: string;
+  paper: Paper;
 };
 
-export function NewBookDialog({ open, onClose, onCreate }: NewBookDialogProps) {
+type BookDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  submitLabel: string;
+  initial?: BookValues;
+  onSubmit: (input: BookValues) => void;
+};
+
+/**
+ * Shared book form. The modal is unmounted while closed, so the fields start
+ * from the current book values every time the dialog opens.
+ */
+function BookDialog({
+  open,
+  onClose,
+  title,
+  submitLabel,
+  initial,
+  onSubmit,
+}: BookDialogProps) {
   return (
-    <Modal open={open} onClose={onClose} title="New book">
-      <NewBookForm onClose={onClose} onCreate={onCreate} />
+    <Modal open={open} onClose={onClose} title={title}>
+      <BookForm
+        initial={initial}
+        submitLabel={submitLabel}
+        onClose={onClose}
+        onSubmit={onSubmit}
+      />
     </Modal>
   );
 }
 
-/**
- * Never mounted while the modal is closed, so the form starts clean every time.
- */
-function NewBookForm({
+function BookForm({
+  initial,
+  submitLabel,
   onClose,
-  onCreate,
-}: Omit<NewBookDialogProps, "open">) {
-  const [name, setName] = useState("");
-  const [color, setColor] = useState<string>(SUBJECT_COLORS[0]);
-  const [paper, setPaper] = useState<Paper>("lined");
+  onSubmit,
+}: {
+  initial?: BookValues;
+  submitLabel: string;
+  onClose: () => void;
+  onSubmit: (input: BookValues) => void;
+}) {
+  const [name, setName] = useState(initial?.name ?? "");
+  const [color, setColor] = useState<string>(
+    initial?.color ?? SUBJECT_COLORS[0],
+  );
+  const [paper, setPaper] = useState<Paper>(initial?.paper ?? "lined");
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
-    onCreate({ name: trimmed, color, paper });
+    onSubmit({ name: trimmed, color, paper });
   }
 
   return (
@@ -126,9 +163,64 @@ function NewBookForm({
           disabled={!name.trim()}
           className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Add to shelf
+          {submitLabel}
         </button>
       </div>
     </form>
+  );
+}
+
+type NewBookDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  onCreate: (input: BookValues) => void;
+};
+
+export function NewBookDialog({
+  open,
+  onClose,
+  onCreate,
+}: NewBookDialogProps) {
+  return (
+    <BookDialog
+      open={open}
+      onClose={onClose}
+      title="New book"
+      submitLabel="Add to shelf"
+      onSubmit={onCreate}
+    />
+  );
+}
+
+type EditBookDialogProps = {
+  open: boolean;
+  subject: Subject | null;
+  onClose: () => void;
+  onSave: (input: BookValues) => void;
+};
+
+export function EditBookDialog({
+  open,
+  subject,
+  onClose,
+  onSave,
+}: EditBookDialogProps) {
+  return (
+    <BookDialog
+      open={open}
+      onClose={onClose}
+      title="Edit book"
+      submitLabel="Save changes"
+      initial={
+        subject
+          ? {
+              name: subject.name,
+              color: subject.color,
+              paper: subject.paper,
+            }
+          : undefined
+      }
+      onSubmit={onSave}
+    />
   );
 }

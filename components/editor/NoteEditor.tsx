@@ -103,6 +103,7 @@ type NoteEditorProps = {
   onNext: () => void;
   onDelete: () => void;
   onDeleteNotebook: () => void;
+  onEditNotebook: () => void;
   onExportPdf: () => void;
   onSharePdf: () => void;
   exporting: boolean;
@@ -125,6 +126,7 @@ export function NoteEditor({
   onNext,
   onDelete,
   onDeleteNotebook,
+  onEditNotebook,
   onExportPdf,
   exporting,
   onSharePdf,
@@ -484,6 +486,17 @@ export function NoteEditor({
             <span className="hidden sm:inline">
               {sharing ? "Preparing…" : "Share"}
             </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onEditNotebook}
+            aria-label="Edit notebook"
+            title="Edit notebook name, color and paper"
+            className="desk-btn inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-2 text-xs font-medium sm:px-3 sm:text-sm"
+          >
+            <PencilIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">Edit</span>
           </button>
 
           <button

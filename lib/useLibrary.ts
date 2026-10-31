@@ -46,6 +46,28 @@ export function useLibrary() {
     return id;
   }, []);
 
+  /** Change the book itself; its notes keep the same subjectId and content. */
+  const updateSubject = useCallback(
+    (
+      subjectId: string,
+      patch: Partial<Pick<Subject, "name" | "color" | "paper">>,
+    ) => {
+      setStore((prev) => ({
+        ...prev,
+        subjects: prev.subjects.map((subject) =>
+          subject.id === subjectId
+            ? {
+                ...subject,
+                ...patch,
+                name: patch.name?.trim() || subject.name,
+              }
+            : subject,
+        ),
+      }));
+    },
+    [],
+  );
+
   const deleteSubject = useCallback((subjectId: string) => {
     setStore((prev) => {
       const lastNoteBySubject = { ...prev.lastNoteBySubject };
@@ -156,6 +178,7 @@ export function useLibrary() {
     store,
     ready,
     addSubject,
+    updateSubject,
     deleteSubject,
     addNote,
     updateNote,
