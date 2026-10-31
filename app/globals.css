@@ -2857,9 +2857,37 @@ html[data-theme="light"] .window-shooting-star {
   --spine-base: clamp(125px, 23vh, 170px);
 }
 
+.window-books-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--brass) 58%, transparent)
+    rgba(0, 0, 0, 0.18);
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.window-books-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.window-books-scroll::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.window-books-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--brass) 58%, transparent);
+}
+
 .window-books-row {
   display: flex;
   align-items: flex-end;
+  width: max-content;
+  margin: 0 auto;
   gap: 0;
 }
 

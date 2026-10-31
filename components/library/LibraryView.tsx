@@ -82,6 +82,15 @@ export function LibraryView({
         <div className="library-actions">
           <button
             type="button"
+            onClick={onNewBook}
+            aria-label="New book"
+            title="New book"
+            className="library-action"
+          >
+            <PlusIcon className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
             onClick={onOpenSearch}
             aria-label="Search notes"
             className="library-action"
@@ -164,31 +173,42 @@ export function LibraryView({
                   </button>
                 </div>
               ) : (
-                <div className="window-books-row">
-                  {subjects.map((subject, index) => (
-                    <BookSpine
-                      key={subject.id}
-                      index={index}
-                      subject={subject}
-                      noteCount={countBySubject.get(subject.id) ?? 0}
-                      compact
-                      lifted={liftedId === subject.id}
-                      onOpen={(from) => handleOpen(subject, from)}
-                    />
-                  ))}
+                <div
+                  className="window-books-scroll"
+                  onWheel={(event) => {
+                    const el = event.currentTarget;
+                    if (el.scrollWidth <= el.clientWidth) return;
+                    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+                      el.scrollLeft += event.deltaY;
+                    }
+                  }}
+                >
+                  <div className="window-books-row">
+                    {subjects.map((subject, index) => (
+                      <BookSpine
+                        key={subject.id}
+                        index={index}
+                        subject={subject}
+                        noteCount={countBySubject.get(subject.id) ?? 0}
+                        compact
+                        lifted={liftedId === subject.id}
+                        onOpen={(from) => handleOpen(subject, from)}
+                      />
+                    ))}
 
-                  <button
-                    type="button"
-                    onClick={onNewBook}
-                    aria-label="Add a new subject"
-                    className="book-spine book-spine--compact book-spine-new"
-                    style={{
-                      width: 26,
-                      height: "calc(var(--spine-base) - 8px)",
-                    }}
-                  >
-                    <span className="book-spine-label">+ New book</span>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={onNewBook}
+                      aria-label="Add a new subject"
+                      className="book-spine book-spine--compact book-spine-new"
+                      style={{
+                        width: 26,
+                        height: "calc(var(--spine-base) - 8px)",
+                      }}
+                    >
+                      <span className="book-spine-label">+ New book</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
