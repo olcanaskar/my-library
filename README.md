@@ -94,5 +94,3 @@ Kurulum veya hesap gerekmez.
 
 Kaynaktan çalıştırma, derleme komutları, mimari ve klasör yapısı:
 [DEVELOPMENT.md](DEVELOPMENT.md).
-
-Yol haritası: [PLAN.md](PLAN.md).
