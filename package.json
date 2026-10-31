@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "desktop:install": "npm --prefix desktop install",
+    "desktop:build": "npm run build && npm --prefix desktop run build",
+    "desktop:start": "npm --prefix desktop run sync && npm --prefix desktop run start"
   },
   "dependencies": {
     "jspdf": "^4.2.1",

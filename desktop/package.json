@@ -1,0 +1,47 @@
+{
+  "name": "my-library-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local desktop build of My Library",
+  "main": "main.cjs",
+  "author": "Abdullah Olcan",
+  "scripts": {
+    "sync": "node sync-out.mjs",
+    "start": "electron .",
+    "build": "node sync-out.mjs && electron-builder --win portable",
+    "build:dir": "node sync-out.mjs && electron-builder --win dir"
+  },
+  "build": {
+    "appId": "com.olcanaskar.mylibrary",
+    "productName": "My Library",
+    "asar": true,
+    "npmRebuild": false,
+    "files": [
+      "main.cjs",
+      "icon.png",
+      "out/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.png"
+    },
+    "portable": {
+      "artifactName": "MyLibrary-${version}-portable.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0"
+  }
+}

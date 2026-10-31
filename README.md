@@ -18,6 +18,23 @@ npx vercel --prod # deploy (project: my-library)
 Pushes to `master` are deployed automatically by Vercel; the command above is
 only the manual fallback.
 
+## Desktop app (Windows)
+
+The Electron shell in `desktop/` serves the exported site from a local HTTP
+server (`127.0.0.1:47823`), so the desktop app runs without the Next.js dev
+server. It is a separate build and does not affect the web deployment.
+
+```bash
+npm run desktop:install # install Electron dependencies (once)
+npm run desktop:build   # Next build + portable exe
+# -> desktop/release/MyLibrary-0.1.0-portable.exe
+npm run desktop:start   # run from source (needs out/ from npm run build)
+```
+
+The portable exe stores its library under its own app data folder; browser and
+desktop `localStorage` are independent. The build is unsigned, so Windows may
+show a SmartScreen warning on first launch.
+
 ## What's inside
 
 - **Library:** subjects as book spines; the spine grows thicker with the page count
