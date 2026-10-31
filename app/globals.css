@@ -418,74 +418,20 @@ html[data-theme="dark"] .library-scene {
 .window-stars {
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(circle at 55.9% 34.9%, rgba(255, 255, 255, 0.58) 0 1.5px, transparent 2.2px),
-    radial-gradient(circle at 19.1% 48.8%, rgba(255, 255, 255, 0.58) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 44.8% 11.9%, rgba(214, 230, 255, 0.31) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 5.1% 60.6%, rgba(255, 255, 255, 0.93) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 16.4% 51.9%, rgba(255, 255, 255, 0.83) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 87.2% 3.1%, rgba(255, 255, 255, 0.27) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 83.6% 33.7%, rgba(255, 255, 255, 0.41) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 9.3% 2.1%, rgba(188, 255, 226, 0.44) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 83.3% 96%, rgba(214, 230, 255, 0.43) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 3.9% 41.0%, rgba(255, 255, 255, 0.79) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 38.9% 78.7%, rgba(255, 255, 255, 0.84) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 90.2% 13.7%, rgba(214, 230, 255, 0.51) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 56.5% 31.7%, rgba(255, 255, 255, 0.79) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 33.6% 5.6%, rgba(255, 255, 255, 0.78) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 10.9% 16.5%, rgba(255, 255, 255, 0.58) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 19.5% 59.3%, rgba(214, 230, 255, 0.38) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 64.1% 8.2%, rgba(188, 255, 226, 0.53) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 85.7% 2.0%, rgba(188, 255, 226, 0.66) 0 1.5px, transparent 2.2px),
-    radial-gradient(circle at 19.4% 2.5%, rgba(255, 255, 255, 0.67) 0 1.5px, transparent 2.2px),
-    radial-gradient(circle at 15.3% 3.3%, rgba(214, 230, 255, 0.43) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 30.0% 23.4%, rgba(255, 255, 255, 0.3) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 2.5% 54.2%, rgba(255, 255, 255, 0.51) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 48.4% 92.7%, rgba(255, 255, 255, 0.35) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 31.5% 53.1%, rgba(255, 255, 255, 0.82) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 73.5% 12.2%, rgba(222, 204, 255, 0.39) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 60.1% 83.1%, rgba(255, 255, 255, 0.28) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 26.0% 40.9%, rgba(255, 255, 255, 0.74) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 59.5% 75.9%, rgba(222, 204, 255, 0.61) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 13.4% 95.1%, rgba(190, 240, 255, 0.64) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 28.5% 51.7%, rgba(255, 255, 255, 0.77) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 25.4% 30.9%, rgba(255, 255, 255, 0.37) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 13.9% 47.2%, rgba(255, 255, 255, 0.35) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 72.8% 23.6%, rgba(255, 255, 255, 0.66) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 2.8% 3.0%, rgba(188, 255, 226, 0.74) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 63.3% 2.5%, rgba(255, 255, 255, 0.3) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 8.1% 8.5%, rgba(214, 230, 255, 0.63) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 73.2% 85.3%, rgba(188, 255, 226, 0.34) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 9.3% 24.5%, rgba(190, 240, 255, 0.88) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 78.5% 31.5%, rgba(255, 255, 255, 0.6) 0 1.5px, transparent 2.2px),
-    radial-gradient(circle at 38.2% 57.0%, rgba(255, 255, 255, 0.68) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 98.3% 54.5%, rgba(255, 255, 255, 0.76) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 57.9% 65.4%, rgba(255, 255, 255, 0.57) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 51.4% 41.6%, rgba(255, 255, 255, 0.67) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 69.4% 15.2%, rgba(255, 255, 255, 0.8) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 88.8% 38.3%, rgba(255, 255, 255, 0.46) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 17.6% 13.1%, rgba(255, 255, 255, 0.71) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 33.0% 84.2%, rgba(255, 255, 255, 0.43) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 75.0% 73.5%, rgba(255, 255, 255, 0.87) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 32.0% 48.3%, rgba(255, 255, 255, 0.34) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 5.0% 84.7%, rgba(255, 255, 255, 0.92) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 45.2% 10.7%, rgba(190, 240, 255, 0.9) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 52.0% 28.2%, rgba(190, 240, 255, 0.47) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 45.3% 95.7%, rgba(255, 255, 255, 0.83) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 67.5% 51.0%, rgba(255, 255, 255, 0.65) 0 0.75px, transparent 1.45px),
-    radial-gradient(circle at 2.9% 72.0%, rgba(255, 255, 255, 0.53) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 27.1% 69.4%, rgba(255, 255, 255, 0.35) 0 1.5px, transparent 2.2px),
-    radial-gradient(circle at 44.8% 53.4%, rgba(255, 255, 255, 0.62) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 8.6% 27.0%, rgba(255, 255, 255, 0.39) 0 0.65px, transparent 1.35px),
-    radial-gradient(circle at 2.1% 11.4%, rgba(255, 255, 255, 0.62) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 77.3% 14.9%, rgba(255, 255, 255, 0.74) 0 1.0px, transparent 1.7px),
-    radial-gradient(circle at 75.1% 51.7%, rgba(255, 255, 255, 0.84) 0 0.85px, transparent 1.5499999999999998px),
-    radial-gradient(circle at 41.2% 14.7%, rgba(255, 255, 255, 0.52) 0 1.2px, transparent 1.9px),
-    radial-gradient(circle at 88.0% 12.7%, rgba(255, 255, 255, 0.51) 0 0.55px, transparent 1.25px),
-    radial-gradient(circle at 79.1% 82.7%, rgba(255, 255, 255, 0.57) 0 0.75px, transparent 1.45px);
-  background-repeat: no-repeat;
+  pointer-events: none;
   opacity: var(--stars-opacity);
   transition: opacity 2200ms cubic-bezier(0.45, 0.05, 0.2, 1);
+}
+
+.window-stars-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.window-star--twinkle {
+  animation: star-twinkle 4.4s ease-in-out infinite;
 }
 
 html[data-theme="dark"] .window-stars {
@@ -497,36 +443,6 @@ html[data-theme="light"] .window-stars {
 }
 
 /* a soft dust of faint stars behind the bright ones */
-.window-stars::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.4) 0.5px, transparent 1px),
-    radial-gradient(circle, rgba(205, 222, 255, 0.32) 0.5px, transparent 1px);
-  background-size:
-    61px 67px,
-    97px 89px;
-  background-position:
-    13px 19px,
-    41px 7px;
-}
-
-/* and a few stars that actually glow */
-.window-stars::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 18% 8%, rgba(200, 240, 255, 1) 0 1.5px, transparent 2.4px),
-    radial-gradient(circle at 71% 14%, rgba(235, 226, 255, 1) 0 1.4px, transparent 2.2px),
-    radial-gradient(circle at 44% 38%, rgba(190, 255, 232, 1) 0 1.3px, transparent 2.1px),
-    radial-gradient(circle at 86% 52%, rgba(255, 255, 255, 0.95) 0 1.6px, transparent 2.5px),
-    radial-gradient(circle at 9% 62%, rgba(210, 232, 255, 1) 0 1.3px, transparent 2.1px);
-  background-repeat: no-repeat;
-  filter: drop-shadow(0 0 3px rgba(180, 220, 255, 0.9));
-}
-
 .window-cloud {
   position: absolute;
   height: 10%;
@@ -2236,36 +2152,6 @@ html[data-theme="dark"] .room-light--night {
   opacity: 0.95;
 }
 
-.window-sky--night::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.6px, transparent 1.2px),
-    radial-gradient(circle, rgba(200, 214, 255, 0.75) 0.5px, transparent 1px);
-  background-size:
-    19px 23px,
-    31px 29px;
-  background-position:
-    3px 5px,
-    11px 17px;
-  opacity: 0.5;
-  -webkit-mask-image: linear-gradient(
-    118deg,
-    transparent 30%,
-    #000 46%,
-    #000 58%,
-    transparent 74%
-  );
-  mask-image: linear-gradient(
-    118deg,
-    transparent 30%,
-    #000 46%,
-    #000 58%,
-    transparent 74%
-  );
-}
-
 /* the day sky never fades: the night layer simply covers it, so the glass
    keeps one solid sky behind the crossfade instead of two ghosts */
 html[data-theme="dark"] .window-sky--day {
@@ -2628,23 +2514,6 @@ html[data-theme="dark"] .window-lake-glow--moon {
   will-change: transform;
 }
 
-@keyframes star-dust-drift {
-  from {
-    background-position:
-      13px 19px,
-      41px 7px;
-  }
-  to {
-    background-position:
-      74px 86px,
-      138px 96px;
-  }
-}
-
-.window-stars::before {
-  animation: star-dust-drift 55s linear infinite;
-}
-
 @keyframes star-twinkle {
   0%,
   100% {
@@ -2655,10 +2524,6 @@ html[data-theme="dark"] .window-lake-glow--moon {
     opacity: 1;
     filter: drop-shadow(0 0 7px rgba(180, 220, 255, 0.95));
   }
-}
-
-.window-stars::after {
-  animation: star-twinkle 3.8s ease-in-out infinite;
 }
 
 @keyframes shooting-star-flight {
@@ -2720,8 +2585,7 @@ html[data-theme="light"] .window-shooting-star {
   .library-room .window-cloud-a,
   .library-room .window-cloud-b,
   .library-room .window-cloud-c,
-  .window-stars::before,
-  .window-stars::after,
+  .window-star--twinkle,
   .window-shooting-star,
   .window-lake::after,
   .window-lake-glow {

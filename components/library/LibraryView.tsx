@@ -12,6 +12,7 @@ import {
 import type { BookRect } from "./BookOpening";
 import { BookSpine } from "./BookSpine";
 import { ArtShelf, PlantShelf } from "./ShelfDecor";
+import { WindowStars } from "./WindowStars";
 
 type LibraryViewProps = {
   subjects: Subject[];
@@ -131,7 +132,7 @@ export function LibraryView({
               <span className="window-shooting-star" />
               <span className="window-sun" />
               <span className="window-moon" />
-              <span className="window-stars" />
+              <WindowStars />
               <span className="window-cloud window-cloud-a" />
               <span className="window-cloud window-cloud-b" />
               <span className="window-cloud window-cloud-c" />
