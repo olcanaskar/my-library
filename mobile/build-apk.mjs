@@ -9,23 +9,25 @@ const isWindows = process.platform === "win32";
 const capBin = path.join(
   root,
   "node_modules",
-  ".bin",
-  isWindows ? "cap.cmd" : "cap",
+  "@capacitor",
+  "cli",
+  "bin",
+  "capacitor",
 );
-const sync = spawnSync(capBin, ["sync", "android"], {
+const sync = spawnSync(process.execPath, [capBin, "sync", "android"], {
   cwd: root,
   stdio: "inherit",
-  shell: isWindows,
 });
 if (sync.status !== 0) process.exit(sync.status ?? 1);
 
 const gradle = spawnSync(
-  isWindows ? "gradlew.bat" : "sh",
-  isWindows ? ["assembleDebug"] : ["gradlew", "assembleDebug"],
+  isWindows ? (process.env.ComSpec ?? "cmd.exe") : "sh",
+  isWindows
+    ? ["/d", "/s", "/c", "gradlew.bat assembleDebug"]
+    : ["gradlew", "assembleDebug"],
   {
     cwd: path.join(root, "android"),
     stdio: "inherit",
-    shell: isWindows,
   },
 );
 if (gradle.status !== 0) process.exit(gradle.status ?? 1);
