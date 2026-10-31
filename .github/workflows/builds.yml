@@ -35,10 +35,29 @@ jobs:
       - name: Install Electron dependencies
         run: npm ci --prefix desktop
 
-      - name: Build universal DMG and ZIP
-        run: npm run desktop:build:mac
+      - name: Build universal app
+        run: npm run desktop:build:mac:dir
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+      - name: Ad-hoc sign and package DMG/ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP="desktop/release/mac-universal/My Library.app"
+          test -d "$APP"
+          codesign --force --deep --sign - "$APP"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          STAGE="$RUNNER_TEMP/mylibrary-dmg"
+          rm -rf "$STAGE"
+          mkdir -p "$STAGE"
+          cp -R "$APP" "$STAGE/"
+          ln -s /Applications "$STAGE/Applications"
+          rm -f desktop/release/*.dmg desktop/release/*.zip
+          ditto -c -k --sequesterRsrc --keepParent "$APP" \
+            "desktop/release/MyLibrary-0.1.0-mac-universal.zip"
+          hdiutil create -volname "My Library" -srcfolder "$STAGE" \
+            -ov -format UDZO "desktop/release/MyLibrary-0.1.0-mac-universal.dmg"
 
       - uses: actions/upload-artifact@v4
         with:

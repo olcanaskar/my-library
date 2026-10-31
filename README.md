@@ -43,9 +43,10 @@ gh run download <run-id> -D desktop/release/ci
 ```
 
 The desktop app stores its library under its own app data folder; browser and
-desktop `localStorage` are independent. Builds are unsigned, so Windows may
-show a SmartScreen warning and macOS Gatekeeper may block the first launch
-(right-click **Open**, or `xattr -cr "/Applications/My Library.app"`).
+desktop `localStorage` are independent. Windows builds are unsigned, so
+SmartScreen may warn. The CI macOS build is ad-hoc signed but not notarized, so
+Gatekeeper may still block the first launch (right-click **Open**, or
+`xattr -cr "/Applications/My Library.app"`).
 
 ## Android app
 

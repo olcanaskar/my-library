@@ -10,7 +10,8 @@
     "start": "electron .",
     "build": "node sync-out.mjs && electron-builder --win portable",
     "build:dir": "node sync-out.mjs && electron-builder --win dir",
-    "build:mac": "node sync-out.mjs && electron-builder --mac"
+    "build:mac": "node sync-out.mjs && electron-builder --mac --universal",
+    "build:mac:dir": "node sync-out.mjs && electron-builder --mac --universal --dir"
   },
   "build": {
     "appId": "com.olcanaskar.mylibrary",
