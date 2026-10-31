@@ -3133,6 +3133,8 @@ html[data-theme="light"] .window-shooting-star {
     height: 100dvh;
     min-height: 0;
     overflow: hidden;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: border-box;
   }
 
   .library-head {
