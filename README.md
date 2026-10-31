@@ -9,9 +9,15 @@ grows thicker as you add pages.
 [Open the web app](https://my-library-pi-one.vercel.app) ·
 [Download the latest release](https://github.com/olcanaskar/my-library/releases/latest)
 
-| Desktop | Android |
+## Screenshots
+
+| Desktop library | Android library |
 |:---:|:---:|
 | <img src="docs/screenshot-desktop.png" alt="My Library desktop view" width="640" /> | <img src="docs/screenshot-android.png" alt="My Library Android view" width="220" /> |
+
+| Desktop note editor | Mobile note editor |
+|:---:|:---:|
+| <img src="docs/screenshot-editor-desktop.png" alt="My Library desktop note editor" width="640" /> | <img src="docs/screenshot-editor-mobile.png" alt="My Library mobile note editor" width="220" /> |
 
 ## Download
 
